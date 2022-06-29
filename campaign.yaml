@@ -1,0 +1,28 @@
+project_id: PROJECT_ID
+name: New AB test
+description: My new AB test
+type: ab
+variation_groups:
+  - variations:
+      - name: My variation 1
+        allocation: 50
+        reference: true
+        modifications:
+          value:
+            color: blue
+      - name: My variation 2
+        allocation: 50
+        reference: false
+        modifications:
+          value:
+            color: red
+    targeting:
+      targeting_groups:
+        - targetings:
+            - operator: CONTAINS
+              key: isVIP
+              value: "true"
+scheduler:
+  start_date: "2022-02-01 10:00:00"
+  stop_date: "2022-02-02 08:00:00"
+  timezone: Europe/Paris

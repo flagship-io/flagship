@@ -11,11 +11,14 @@ import (
 )
 
 var (
-	nameGet string
+	projectIdGet string
 )
 
 func getProject(project string) string {
 	return "get project " + project
+}
+func getAllProject() string {
+	return "get All projects"
 }
 
 // createCmd represents the create command
@@ -24,17 +27,24 @@ var editCmd = &cobra.Command{
 	Short: "this get project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(getProject(nameGet))
+		getAll, _ := cmd.Flags().GetBool("all")
+		if getAll {
+			fmt.Println(getAllProject())
+		} else if projectIdGet == "" {
+			fmt.Println("project id required")
+		} else {
+			fmt.Println(getProject(projectIdGet))
+		}
+
 	},
 }
 
 func init() {
 
-	editCmd.Flags().StringVarP(&nameGet, "name", "n", "", "the name")
+	editCmd.Flags().StringVarP(&projectIdGet, "project_id", "i", "", "get project by project id")
+	//editCmd.Flags().BoolVarP(&getAll, "all", "", true, "get all project")
+	editCmd.Flags().BoolP("all", "", false, "get All Project")
 
-	if err := editCmd.MarkFlagRequired("name"); err != nil {
-		fmt.Println(err)
-	}
 	// Here you will define your flags and configuration settings.
 	ProjectCmd.AddCommand(editCmd)
 	// Cobra supports Persistent Flags which will work for this command

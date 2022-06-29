@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 )
 
 func createProject(project string) string {
-	return "create project " + project
+	return "create project " + project + "in the account id " + viper.GetViper().GetString("account_id")
 }
 
 // createCmd represents the create command

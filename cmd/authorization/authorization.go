@@ -5,16 +5,29 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
 // campaignCmd represents the campaign command
 var AuthorizationCmd = &cobra.Command{
-	Use:   "auth",
-	Short: "auth short desc",
-	Long:  `auth long desc`,
+	Use:     "auth [login|logout|check]",
+	Short:   "auth short desc",
+	Aliases: []string{"au", "a"},
+	Long:    `auth long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
+		switch args[0] {
+		case "bash":
+			cmd.Root().GenBashCompletion(os.Stdout)
+		case "zsh":
+			cmd.Root().GenZshCompletion(os.Stdout)
+		case "fish":
+			cmd.Root().GenFishCompletion(os.Stdout, true)
+		case "powershell":
+			cmd.Root().GenPowerShellCompletionWithDesc(os.Stdout)
+		}
 	},
 }
 

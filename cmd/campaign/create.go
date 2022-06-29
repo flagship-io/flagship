@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -15,7 +16,10 @@ var (
 )
 
 func createCampaign(campaign string) string {
-	return "create campaign " + campaign
+	if viper.GetViper().GetString("token") != "" || viper.GetViper().GetString("account_id") != "" {
+		return "create campaign " + campaign + " with token " + viper.GetViper().GetString("token") + " and account_id " + viper.GetViper().GetString("account_id") + " from account env id " + viper.GetViper().GetString("account_environment_id")
+	}
+	return "create campaign " + campaign + " from account env id " + viper.GetViper().GetString("account_environment_id")
 }
 
 // createCmd represents the create command

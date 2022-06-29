@@ -11,11 +11,12 @@ import (
 )
 
 var (
-	nameEdit string
+	nameEdit      string
+	projectIdEdit string
 )
 
-func editProject(project string) string {
-	return "edit project " + project
+func editProject(name string) string {
+	return "edit project that had id " + projectIdEdit + " with new name " + name
 }
 
 // createCmd represents the create command
@@ -30,7 +31,13 @@ var getCmd = &cobra.Command{
 
 func init() {
 
-	getCmd.Flags().StringVarP(&nameEdit, "name", "n", "", "the name")
+	getCmd.Flags().StringVarP(&projectIdEdit, "project_id", "i", "", "the project id")
+
+	getCmd.Flags().StringVarP(&nameEdit, "name", "n", "", "the project new name")
+
+	if err := getCmd.MarkFlagRequired("project_id"); err != nil {
+		fmt.Println(err)
+	}
 
 	if err := getCmd.MarkFlagRequired("name"); err != nil {
 		fmt.Println(err)

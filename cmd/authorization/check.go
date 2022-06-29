@@ -2,41 +2,38 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package project
+package authorization
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var (
-	projectIdDelete string
-)
-
-func deleteProject(project string) string {
-	return "delete project with the id " + project
+func check(token string) string {
+	return "checking the token " + token
 }
 
-// createCmd represents the create command
-var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "this delete project",
+// checkCmd represents the check command
+var checkCmd = &cobra.Command{
+	Use:   "check",
+	Short: "this authorization check the token",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(deleteProject(projectIdDelete))
+		if viper.GetViper().GetString("token") != "" {
+			fmt.Println(check(viper.GetViper().GetString("token")))
+		} else {
+			fmt.Println("token required")
+		}
 	},
 }
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&projectIdDelete, "project_id", "i", "", "the projectid")
-
-	if err := deleteCmd.MarkFlagRequired("project_id"); err != nil {
-		fmt.Println(err)
-	}
 	// Here you will define your flags and configuration settings.
-	ProjectCmd.AddCommand(deleteCmd)
+	AuthorizationCmd.AddCommand(checkCmd)
+
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
