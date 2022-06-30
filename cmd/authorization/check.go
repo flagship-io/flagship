@@ -12,7 +12,7 @@ import (
 )
 
 func check(token string) string {
-	return "checking the token " + token
+	return "checking the token: " + token
 }
 
 // checkCmd represents the check command

@@ -86,12 +86,8 @@ func initConfig() {
 		viper.SetConfigFile(workingDir + "/mock.yaml")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	// read in environment variables that match
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		if cfgFile != "" {
-
-		}
-	}
+	viper.MergeInConfig()
 }

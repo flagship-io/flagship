@@ -1,4 +1,4 @@
-project_id: PROJECT_ID
+project_id: project_id
 name: New AB test
 description: My new AB test
 type: ab

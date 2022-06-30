@@ -15,7 +15,7 @@ var (
 )
 
 func deleteProject(project string) string {
-	return "delete project with the id " + project
+	return "delete project \n id: " + project
 }
 
 // createCmd represents the create command

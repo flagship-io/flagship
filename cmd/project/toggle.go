@@ -16,7 +16,7 @@ var (
 )
 
 func toggleProject(project string) string {
-	return "toggle project " + project + " with status " + projectStatus
+	return "toggle project \n id: " + project + " \n status: " + projectStatus
 }
 
 // createCmd represents the create command
@@ -26,7 +26,7 @@ var toggleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(projectStatus == "TRUE" || projectIdToggle == "FALSE") {
-			fmt.Println("Status can have only 2 value TRUE or FALSE")
+			fmt.Println("Status can only have 2 value: TRUE or FALSE")
 		} else {
 			fmt.Println(toggleProject(projectIdToggle))
 		}
@@ -36,7 +36,7 @@ var toggleCmd = &cobra.Command{
 func init() {
 
 	toggleCmd.Flags().StringVarP(&projectIdToggle, "project_id", "i", "", "the project id")
-	toggleCmd.Flags().StringVarP(&projectStatus, "status", "s", "", "the project id")
+	toggleCmd.Flags().StringVarP(&projectStatus, "status", "s", "", "the project status")
 
 	if err := toggleCmd.MarkFlagRequired("project_id"); err != nil {
 		fmt.Println(err)

@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	deleteName string
+	deleteCampaignId string
 )
 
-func deleteCampaign(campaign string) string {
-	return "delete campaign " + campaign
+func deleteCampaign(campaign_id string) string {
+	return "delete campaign \n campaign_id: " + campaign_id
 }
 
 // createCmd represents the create command
@@ -24,15 +24,15 @@ var deleteCmd = &cobra.Command{
 	Short: "this delete campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(deleteCampaign(deleteName))
+		fmt.Println(deleteCampaign(deleteCampaignId))
 	},
 }
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&deleteName, "name", "n", "", "the url to path")
+	deleteCmd.Flags().StringVarP(&deleteCampaignId, "campaign_id", "i", "", "delete the campaign")
 
-	if err := deleteCmd.MarkFlagRequired("name"); err != nil {
+	if err := deleteCmd.MarkFlagRequired("campaign_id"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.

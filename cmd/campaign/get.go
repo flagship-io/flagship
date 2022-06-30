@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	getName string
+	getCampaignId string
 )
 
-func getCampaign(campaign string) string {
-	return "get campaign " + campaign
+func getCampaign(campaign_id string) string {
+	return "get campaign \n campaign_id: " + campaign_id
 }
 
 // createCmd represents the create command
@@ -24,15 +24,15 @@ var getCmd = &cobra.Command{
 	Short: "this get campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(getCampaign(getName))
+		fmt.Println(getCampaign(getCampaignId))
 	},
 }
 
 func init() {
 
-	getCmd.Flags().StringVarP(&getName, "name", "n", "", "the url to path")
+	getCmd.Flags().StringVarP(&getCampaignId, "campaign_id", "i", "", "edit campaign by campaign_id")
 
-	if err := getCmd.MarkFlagRequired("name"); err != nil {
+	if err := getCmd.MarkFlagRequired("campaign_id"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.

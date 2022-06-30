@@ -16,7 +16,7 @@ var (
 )
 
 func editProject(name string) string {
-	return "edit project that had id " + projectIdEdit + " with new name " + name
+	return "edit project \n id: " + projectIdEdit + "\n new name: " + name
 }
 
 // createCmd represents the create command

@@ -8,14 +8,15 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
-	editName string
+	editCampaignId string
 )
 
-func editCampaign(campaign string) string {
-	return "edit campaign " + campaign
+func editCampaign(campaign_id string) string {
+	return "edit campaign \n campaign_id: " + campaign_id + "\n name: " + viper.GetViper().GetString("name") + "\n project_id: " + viper.GetViper().GetString("project_id") + "\n description: " + viper.GetViper().GetString("description") + "\n type: " + viper.GetViper().GetString("type") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
 }
 
 // createCmd represents the create command
@@ -24,15 +25,15 @@ var editCmd = &cobra.Command{
 	Short: "this edit campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(editCampaign(editName))
+		fmt.Println(editCampaign(editCampaignId))
 	},
 }
 
 func init() {
 
-	editCmd.Flags().StringVarP(&editName, "name", "n", "", "the url to path")
+	editCmd.Flags().StringVarP(&editCampaignId, "campaign_id", "i", "", "edit the campaign")
 
-	if err := editCmd.MarkFlagRequired("name"); err != nil {
+	if err := editCmd.MarkFlagRequired("campaign_id"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.

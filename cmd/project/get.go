@@ -15,7 +15,7 @@ var (
 )
 
 func getProject(project string) string {
-	return "get project " + project
+	return "get project \n id: " + project
 }
 func getAllProject() string {
 	return "get All projects"

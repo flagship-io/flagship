@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	nameToggle string
+	toggleCampaignId, statusCampaign string
 )
 
-func toggleCampaign(campaign string) string {
-	return "toggle campaign " + campaign
+func toggleCampaign(toggleCampaignId, statusCampaign string) string {
+	return "toggle campaign \n campaign_id: " + toggleCampaignId + "\n status: " + statusCampaign
 }
 
 // createCmd represents the create command
@@ -24,15 +24,25 @@ var toggleCmd = &cobra.Command{
 	Short: "this toggle campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(toggleCampaign(nameToggle))
+		if !(statusCampaign == "active" || statusCampaign == "paused" || statusCampaign == "interrupted") {
+			fmt.Println("Status can only have 3 values : active or paused or interrupted")
+		} else {
+			fmt.Println(toggleCampaign(toggleCampaignId, statusCampaign))
+		}
+
 	},
 }
 
 func init() {
 
-	toggleCmd.Flags().StringVarP(&nameToggle, "name", "n", "", "the name")
+	toggleCmd.Flags().StringVarP(&toggleCampaignId, "campaign_id", "i", "", "toggle campaign id")
+	toggleCmd.Flags().StringVarP(&statusCampaign, "status", "s", "", "status")
 
-	if err := toggleCmd.MarkFlagRequired("name"); err != nil {
+	if err := toggleCmd.MarkFlagRequired("campaign_id"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := toggleCmd.MarkFlagRequired("status"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.
