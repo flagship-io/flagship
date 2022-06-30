@@ -2,41 +2,33 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package campaign
+package variation_group
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
-var (
-	getCampaignId string
-)
-
-func getCampaign(campaign_id string) string {
-	return "get campaign \n campaign_id: " + campaign_id
+func ListVariationGroup() string {
+	return "list variation groups of all campaign: \n campaign_id: " + viper.GetViper().GetString("campaign_id") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
 }
 
 // createCmd represents the create command
-var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "this get campaign",
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "this list variation group",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(getCampaign(getCampaignId))
+		fmt.Println(ListVariationGroup())
 	},
 }
 
 func init() {
 
-	getCmd.Flags().StringVarP(&getCampaignId, "campaign_id", "i", "", "get campaign by campaign_id")
-
-	if err := getCmd.MarkFlagRequired("campaign_id"); err != nil {
-		fmt.Println(err)
-	}
 	// Here you will define your flags and configuration settings.
-	CampaignCmd.AddCommand(getCmd)
+	VariationGroupCmd.AddCommand(listCmd)
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// createCmd.PersistentFlags().String("foo", "", "A help for foo")

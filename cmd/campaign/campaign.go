@@ -76,5 +76,5 @@ func initLocalConfig() {
 	// read in environment variables that match
 
 	// If a config file is found, read it in.
-	viper.MergeInConfig()
+	viper.ReadInConfig()
 }

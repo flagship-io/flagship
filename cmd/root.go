@@ -10,6 +10,7 @@ import (
 	"github.com/Chadiii/flagship-mock/cmd/authorization"
 	"github.com/Chadiii/flagship-mock/cmd/campaign"
 	"github.com/Chadiii/flagship-mock/cmd/project"
+	"github.com/Chadiii/flagship-mock/cmd/variation_group"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -51,6 +52,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
 	rootCmd.AddCommand(authorization.AuthorizationCmd)
+	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
