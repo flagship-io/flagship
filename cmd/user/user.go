@@ -2,18 +2,18 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package authorization
+package user
 
 import (
+	"github.com/Chadiii/flagship-mock/cmd/user/right"
 	"github.com/spf13/cobra"
 )
 
 // campaignCmd represents the campaign command
-var AuthorizationCmd = &cobra.Command{
-	Use:     "auth [login|logout|check]",
-	Short:   "auth short desc",
-	Aliases: []string{"au", "a"},
-	Long:    `auth long desc`,
+var UserCmd = &cobra.Command{
+	Use:   "user",
+	Short: "user short desc",
+	Long:  `user long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -21,6 +21,7 @@ var AuthorizationCmd = &cobra.Command{
 
 func init() {
 
+	UserCmd.AddCommand(right.RightCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

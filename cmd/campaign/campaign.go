@@ -36,9 +36,6 @@ var CampaignCmd = &cobra.Command{
 func init() {
 
 	cobra.OnInitialize(initLocalConfig)
-	CampaignCmd.PersistentFlags().StringVarP(&Account_environment_id, "account_environment_id", "a", "", "account environment id")
-	viper.BindPFlag("account_environment_id", CampaignCmd.PersistentFlags().Lookup("account_environment_id"))
-
 	CampaignCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "the campaign name")
 	CampaignCmd.PersistentFlags().StringVarP(&Project_id, "project_id", "p", "", "the projact id")
 	CampaignCmd.PersistentFlags().StringVarP(&Description, "description", "d", "", "the campaign description")
@@ -76,5 +73,5 @@ func initLocalConfig() {
 	// read in environment variables that match
 
 	// If a config file is found, read it in.
-	viper.ReadInConfig()
+	viper.MergeInConfig()
 }

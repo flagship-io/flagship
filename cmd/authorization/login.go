@@ -35,14 +35,6 @@ var loginCmd = &cobra.Command{
 		}
 		fmt.Println(login(loginClientId, loginClientSecret))
 
-		/* if viper.GetViper().GetString("client_id") == "8f469786-27da-4390-8c1f-3d1b3367a4bc" && viper.GetViper().GetString("client_secret") == "6c3238675e8f50f5fd90f5267301969ebe89382ac5cb965b85f0489bb0e45500" {
-			viper.SetDefault("token", "eyJhbGciOiJIUzUxMiIsImtpZCI6ImMwbjQ4am41dGh2MDFrMGlqbW5nIiwidHlwIjoiSldUIn0.eyJhdWQiOiI4ZjQ2OTc4Ni0yN2RhLTQzOTAtOGMxZi0zZDFiMzM2N2E0YmMiLCJleHAiOjE2NTYxNDcxOTl9.1tccOfqgqHfsjrZAUy0r_tPCTDjNgaLLLV6Jo0rpn5H3vdf76odt1drV2-SMxicoOs3-iWn1-WTXcc3kOpgbCA")
-		}
-
-		err := viper.WriteConfigAs("token.yaml")
-		if err != nil {
-			fmt.Println(err)
-		} */
 	},
 }
 

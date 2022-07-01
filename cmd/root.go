@@ -9,16 +9,20 @@ import (
 
 	"github.com/Chadiii/flagship-mock/cmd/authorization"
 	"github.com/Chadiii/flagship-mock/cmd/campaign"
+	"github.com/Chadiii/flagship-mock/cmd/panic"
 	"github.com/Chadiii/flagship-mock/cmd/project"
+	"github.com/Chadiii/flagship-mock/cmd/user"
 	"github.com/Chadiii/flagship-mock/cmd/variation_group"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	cfgFile    string
-	Token      string
-	Account_id string
+	cfgFile                string
+	Token                  string
+	Account_id             string
+	Account_environment_id string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -53,14 +57,18 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(project.ProjectCmd)
 	rootCmd.AddCommand(authorization.AuthorizationCmd)
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
+	rootCmd.AddCommand(panic.PanicCmd)
+	rootCmd.AddCommand(user.UserCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVarP(&Token, "token", "", "", "authorization token")
 	rootCmd.PersistentFlags().StringVarP(&Account_id, "account_id", "", "", "account id")
+	rootCmd.PersistentFlags().StringVarP(&Account_environment_id, "account_environment_id", "", "", "account env id")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("account_id", rootCmd.PersistentFlags().Lookup("account_id"))
+	viper.BindPFlag("account_environment_id", rootCmd.PersistentFlags().Lookup("account_environment_id"))
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

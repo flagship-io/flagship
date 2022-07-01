@@ -13,12 +13,12 @@ import (
 )
 
 var (
-	Account_environment_id  string
+	Account_environement_id string
 	cfgFile_variation_group string
 	campaign_id             string
 )
 
-// campaignCmd represents the campaign command
+// VariationGroupCmd represents the variation command
 var VariationGroupCmd = &cobra.Command{
 	Use:   "variation_group",
 	Short: "variation group short desc",
@@ -31,9 +31,6 @@ var VariationGroupCmd = &cobra.Command{
 func init() {
 
 	cobra.OnInitialize(initLocalConfig)
-	VariationGroupCmd.PersistentFlags().StringVarP(&Account_environment_id, "account_environment_id", "a", "", "account environment id")
-	viper.BindPFlag("account_environment_id", VariationGroupCmd.PersistentFlags().Lookup("account_environment_id"))
-
 	VariationGroupCmd.PersistentFlags().StringVarP(&campaign_id, "campaign_id", "", "", "campaign_id")
 	viper.BindPFlag("campaign_id", VariationGroupCmd.PersistentFlags().Lookup("campaign_id"))
 

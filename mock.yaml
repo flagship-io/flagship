@@ -1,12 +1,17 @@
 Hacker: true
-name: steve
+name1: steve
 hobbies:
-- skateboarding
-- snowboarding
-- go
+  - skateboarding
+  - snowboarding
+  - go
 clothing:
   jacket: leather
   trousers: denim
 age: 35
-eyes : brown
+eyes: brown
 beard: true
+client_id: ci
+client_secret: cs
+account_id: from conf
+token: from conf
+account_environment_id: from conf

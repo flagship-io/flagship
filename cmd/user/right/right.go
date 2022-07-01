@@ -2,18 +2,17 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package authorization
+package right
 
 import (
 	"github.com/spf13/cobra"
 )
 
 // campaignCmd represents the campaign command
-var AuthorizationCmd = &cobra.Command{
-	Use:     "auth [login|logout|check]",
-	Short:   "auth short desc",
-	Aliases: []string{"au", "a"},
-	Long:    `auth long desc`,
+var RightCmd = &cobra.Command{
+	Use:   "right",
+	Short: "right short desc",
+	Long:  `right long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
