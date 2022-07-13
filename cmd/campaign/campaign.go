@@ -23,6 +23,8 @@ var (
 	Campaign_type string
 )
 
+var v = viper.New()
+
 // campaignCmd represents the campaign command
 var CampaignCmd = &cobra.Command{
 	Use:   "campaign",
@@ -41,10 +43,10 @@ func init() {
 	CampaignCmd.PersistentFlags().StringVarP(&Description, "description", "d", "", "the campaign description")
 	CampaignCmd.PersistentFlags().StringVarP(&Campaign_type, "type", "t", "", "the campaign type")
 
-	viper.BindPFlag("name", CampaignCmd.PersistentFlags().Lookup("name"))
-	viper.BindPFlag("project_id", CampaignCmd.PersistentFlags().Lookup("project_id"))
-	viper.BindPFlag("description", CampaignCmd.PersistentFlags().Lookup("description"))
-	viper.BindPFlag("type", CampaignCmd.PersistentFlags().Lookup("type"))
+	v.BindPFlag("name", CampaignCmd.PersistentFlags().Lookup("name"))
+	v.BindPFlag("project_id", CampaignCmd.PersistentFlags().Lookup("project_id"))
+	v.BindPFlag("description", CampaignCmd.PersistentFlags().Lookup("description"))
+	v.BindPFlag("type", CampaignCmd.PersistentFlags().Lookup("type"))
 
 	CampaignCmd.PersistentFlags().StringVarP(&cfgFile_campaign, "config_campaign", "", "", "config file (default is $PWD/campaign.yaml)")
 	// Here you will define your flags and configuration settings.
@@ -62,16 +64,17 @@ func initLocalConfig() {
 
 	if cfgFile_campaign != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile_campaign)
+		v.SetConfigFile(cfgFile_campaign)
 	} else {
 		// Find home directory.
 		workingDir, err := os.Getwd()
 		cobra.CheckErr(err)
 		// Search config in home directory with name ".flagship-mock" (without extension).
-		viper.SetConfigFile(workingDir + "/campaign.json")
+		v.SetConfigFile(workingDir + "/campaign.yaml")
 	}
+
 	// read in environment variables that match
 
 	// If a config file is found, read it in.
-	viper.MergeInConfig()
+	v.MergeInConfig()
 }

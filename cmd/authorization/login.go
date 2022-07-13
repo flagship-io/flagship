@@ -7,6 +7,7 @@ package authorization
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -14,11 +15,10 @@ import (
 var (
 	loginClientId     string
 	loginClientSecret string
-	cfgFile           string
 )
 
 func login(loginClientId, loginClientSecret string) string {
-	return "login with id: " + loginClientId + ", secret: " + loginClientSecret
+	return "login with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
 }
 
 // loginCmd represents the login command
@@ -33,7 +33,16 @@ var loginCmd = &cobra.Command{
 		if loginClientSecret == "" {
 			loginClientSecret = viper.GetViper().GetString("client_secret")
 		}
-		fmt.Println(login(loginClientId, loginClientSecret))
+
+		if loginClientId == "" || loginClientSecret == "" {
+
+			fmt.Println("required client_id and client_secret")
+
+		} else {
+			fmt.Println(login(loginClientId, loginClientSecret))
+			httprequest.HttpToken(loginClientId, loginClientSecret, "*", "client_credentials")
+
+		}
 
 	},
 }
@@ -43,13 +52,6 @@ func init() {
 	loginCmd.Flags().StringVarP(&loginClientId, "client_id", "i", "", "the client id")
 	loginCmd.Flags().StringVarP(&loginClientSecret, "client_secret", "s", "", "the client secret")
 
-	if err := loginCmd.MarkFlagRequired("client_id"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := loginCmd.MarkFlagRequired("client_secret"); err != nil {
-		fmt.Println(err)
-	}
 	// Here you will define your flags and configuration settings.
 	AuthorizationCmd.AddCommand(loginCmd)
 	// Cobra supports Persistent Flags which will work for this command

@@ -1,0 +1,5 @@
+account_environment_id: aei_from_conf
+account_id: ai_from_conf
+client_id: ci_from_conf
+client_secret: cs_from_conf
+token: token_from_conf

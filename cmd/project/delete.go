@@ -7,6 +7,7 @@ package project
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +16,7 @@ var (
 )
 
 func deleteProject(project string) string {
-	return "delete project \n id: " + project
+	return "delete project id: " + project
 }
 
 // createCmd represents the create command
@@ -25,6 +26,7 @@ var deleteCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(deleteProject(projectIdDelete))
+		httprequest.HttpDeleteProject(projectIdDelete)
 	},
 }
 

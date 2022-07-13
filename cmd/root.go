@@ -12,7 +12,6 @@ import (
 	"github.com/Chadiii/flagship-mock/cmd/panic"
 	"github.com/Chadiii/flagship-mock/cmd/project"
 	"github.com/Chadiii/flagship-mock/cmd/user"
-	"github.com/Chadiii/flagship-mock/cmd/variation_group"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -56,7 +55,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
 	rootCmd.AddCommand(authorization.AuthorizationCmd)
-	rootCmd.AddCommand(variation_group.VariationGroupCmd)
+	//rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
 	rootCmd.AddCommand(user.UserCmd)
 }
@@ -74,7 +73,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $PWD/mock.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $PWD/config.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -93,7 +92,7 @@ func initConfig() {
 		workingDir, err := os.Getwd()
 		cobra.CheckErr(err)
 		// Search config in home directory with name ".flagship-mock" (without extension).
-		viper.SetConfigFile(workingDir + "/mock.yaml")
+		viper.SetConfigFile(workingDir + "/config.yaml")
 	}
 
 	// read in environment variables that match

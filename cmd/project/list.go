@@ -2,33 +2,34 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package campaign
+package project
 
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-func createCampaign() string {
-	return "create campaign \n name: " + v.GetString("name") + "\n project_id: " + v.GetString("project_id") + "\n description: " + v.GetString("description") + "\n type: " + v.GetString("type") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
+func listProject() string {
+	return "list projects"
 }
 
 // createCmd represents the create command
-var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "this create campaign",
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "this list project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(createCampaign())
+		fmt.Println(listProject())
+		httprequest.HttpListProject()
 	},
 }
 
 func init() {
 
 	// Here you will define your flags and configuration settings.
-	CampaignCmd.AddCommand(createCmd)
+	ProjectCmd.AddCommand(listCmd)
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// createCmd.PersistentFlags().String("foo", "", "A help for foo")

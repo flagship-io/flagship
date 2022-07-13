@@ -5,9 +5,12 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func logout() string {
@@ -21,6 +24,14 @@ var logoutCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(logout())
+		configMap := viper.AllSettings()
+		delete(configMap, "token")
+		encodedConfig, _ := json.MarshalIndent(configMap, "", " ")
+		err := viper.ReadConfig(bytes.NewReader(encodedConfig))
+		if err != nil {
+			fmt.Println(err)
+		}
+		viper.WriteConfigAs("config.yaml")
 	},
 }
 

@@ -7,6 +7,7 @@ package project
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,6 +27,7 @@ var createCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(createProject(name))
+		httprequest.HttpCreateProject(name)
 	},
 }
 
