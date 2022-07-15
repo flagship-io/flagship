@@ -89,10 +89,10 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		workingDir, err := os.Getwd()
+		homeDir, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 		// Search config in home directory with name ".flagship-mock" (without extension).
-		viper.SetConfigFile(workingDir + "/config.yaml")
+		viper.SetConfigFile(homeDir + "/.flagship/credentials.yaml")
 	}
 
 	// read in environment variables that match

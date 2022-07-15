@@ -1,6 +1,6 @@
 {
-    "project_id": "project_id",
-    "name": "New AB test",
+    "project_id": "project_id_json",
+    "name": "New AB test_json",
     "description": "My new AB test",
     "type": "ab",
     "variation_groups": [

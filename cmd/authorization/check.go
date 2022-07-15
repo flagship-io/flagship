@@ -7,6 +7,7 @@ package authorization
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -23,6 +24,7 @@ var checkCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if viper.GetViper().GetString("token") != "" {
 			fmt.Println(check(viper.GetViper().GetString("token")))
+			httprequest.HttpCheckToken(viper.GetViper().GetString("token"))
 		} else {
 			fmt.Println("token required")
 		}

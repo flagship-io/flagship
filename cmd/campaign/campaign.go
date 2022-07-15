@@ -21,6 +21,7 @@ var (
 	Project_id    string
 	Description   string
 	Campaign_type string
+	Data_raw      string
 )
 
 var v = viper.New()
@@ -42,11 +43,13 @@ func init() {
 	CampaignCmd.PersistentFlags().StringVarP(&Project_id, "project_id", "p", "", "the projact id")
 	CampaignCmd.PersistentFlags().StringVarP(&Description, "description", "d", "", "the campaign description")
 	CampaignCmd.PersistentFlags().StringVarP(&Campaign_type, "type", "t", "", "the campaign type")
+	CampaignCmd.PersistentFlags().StringVarP(&Data_raw, "data_raw", "", "", "the campaign data")
 
 	v.BindPFlag("name", CampaignCmd.PersistentFlags().Lookup("name"))
 	v.BindPFlag("project_id", CampaignCmd.PersistentFlags().Lookup("project_id"))
 	v.BindPFlag("description", CampaignCmd.PersistentFlags().Lookup("description"))
 	v.BindPFlag("type", CampaignCmd.PersistentFlags().Lookup("type"))
+	v.BindPFlag("data_raw", CampaignCmd.PersistentFlags().Lookup("data_raw"))
 
 	CampaignCmd.PersistentFlags().StringVarP(&cfgFile_campaign, "config_campaign", "", "", "config file (default is $PWD/campaign.yaml)")
 	// Here you will define your flags and configuration settings.

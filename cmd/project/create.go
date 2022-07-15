@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	name string
+	name     string
+	Data_raw string
 )
 
 func createProject(project string) string {
@@ -34,6 +35,7 @@ var createCmd = &cobra.Command{
 func init() {
 
 	createCmd.Flags().StringVarP(&name, "name", "n", "", "the name")
+	createCmd.Flags().StringVarP(&Data_raw, "data_raw", "", "", "the raw data")
 
 	if err := createCmd.MarkFlagRequired("name"); err != nil {
 		fmt.Println(err)
