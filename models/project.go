@@ -6,7 +6,8 @@ type Project struct {
 }
 
 type ProjectResponse struct {
-	Items []Project `json:"items"`
+	Items       []Project `json:"items"`
+	CurrentPage string    `json:"current_page"`
 }
 
 type ProjectRequest struct {

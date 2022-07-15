@@ -77,10 +77,18 @@ func HttpListProject() {
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
+	projectsModel := models.ProjectResponse{}
+
+	err = json.Unmarshal(body, &projectsModel)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("%s \n", body)
+	fmt.Println(projectsModel.Items)
 }
 
-func HttpToken(client_id, client_secret, scope, grant_type string) {
+func HttpCreateToken(client_id, client_secret, scope, grant_type string) string {
 
 	var authenticationResponse models.AuthenticationResponse
 
@@ -93,36 +101,43 @@ func HttpToken(client_id, client_secret, scope, grant_type string) {
 	authRequestJSON, err := json.Marshal(authRequest)
 	if err != nil {
 		fmt.Printf("%s", err)
-		return
+		return "error."
 	}
 
 	c := http.Client{Timeout: time.Duration(100) * time.Second}
 	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in=0", bytes.NewBuffer(authRequestJSON))
 	if err != nil {
 		fmt.Printf("error %s", err)
-		return
+		return "error."
 	}
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Content-Type", `application/json`)
 	resp, err := c.Do(req)
 	if err != nil {
 		fmt.Printf("error %s", err)
-		return
+		return "error."
 	}
 	defer resp.Body.Close()
 
 	json.NewDecoder(resp.Body).Decode(&authenticationResponse)
 
-	fmt.Println("token: " + authenticationResponse.Access_token)
+	return authenticationResponse.Access_token
+}
 
-	if authenticationResponse.Access_token == "" {
-		fmt.Println("required valid client_id and client_secret")
+func HttpCheckToken(token string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.HostAuth+"/token?access_token="+token, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
 		return
 	}
-
-	viper.Set("token", authenticationResponse.Access_token)
-	dir_err := viper.WriteConfigAs("config.yaml")
-	if dir_err != nil {
-		fmt.Println(dir_err)
+	req.Header.Add("Accept", `*/*`)
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
 	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
 }

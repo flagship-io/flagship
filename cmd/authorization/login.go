@@ -6,19 +6,28 @@ package authorization
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var (
-	loginClientId     string
-	loginClientSecret string
-)
-
 func login(loginClientId, loginClientSecret string) string {
-	return "login with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
+	return "login 1with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
+}
+
+func writeToken(token string) {
+	homeDir, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
+	viper.SetConfigFile(filepath)
+	viper.Set("token", token)
+	dir_err := viper.WriteConfigAs(filepath)
+	if dir_err != nil {
+		fmt.Println(dir_err)
+	}
 }
 
 // loginCmd represents the login command
@@ -27,30 +36,21 @@ var loginCmd = &cobra.Command{
 	Short: "this authorization login",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if loginClientId == "" {
-			loginClientId = viper.GetViper().GetString("client_id")
+
+		fmt.Println(login(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
+		token := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
+		fmt.Println("token: " + token)
+
+		if token == "" {
+			fmt.Println("required valid client_id and client_secret")
+			return
 		}
-		if loginClientSecret == "" {
-			loginClientSecret = viper.GetViper().GetString("client_secret")
-		}
-
-		if loginClientId == "" || loginClientSecret == "" {
-
-			fmt.Println("required client_id and client_secret")
-
-		} else {
-			fmt.Println(login(loginClientId, loginClientSecret))
-			httprequest.HttpToken(loginClientId, loginClientSecret, "*", "client_credentials")
-
-		}
+		writeToken(token)
 
 	},
 }
 
 func init() {
-
-	loginCmd.Flags().StringVarP(&loginClientId, "client_id", "i", "", "the client id")
-	loginCmd.Flags().StringVarP(&loginClientSecret, "client_secret", "s", "", "the client secret")
 
 	// Here you will define your flags and configuration settings.
 	AuthorizationCmd.AddCommand(loginCmd)

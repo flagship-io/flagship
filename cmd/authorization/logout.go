@@ -8,6 +8,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,15 +25,18 @@ var logoutCmd = &cobra.Command{
 	Short: "this authorization logout",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		homeDir, err := os.UserHomeDir()
+		cobra.CheckErr(err)
+		filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
 		fmt.Println(logout())
 		configMap := viper.AllSettings()
 		delete(configMap, "token")
 		encodedConfig, _ := json.MarshalIndent(configMap, "", " ")
-		err := viper.ReadConfig(bytes.NewReader(encodedConfig))
+		err = viper.ReadConfig(bytes.NewReader(encodedConfig))
 		if err != nil {
 			fmt.Println(err)
 		}
-		viper.WriteConfigAs("config.yaml")
+		viper.WriteConfigAs(filepath)
 	},
 }
 
