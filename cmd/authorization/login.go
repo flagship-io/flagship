@@ -6,6 +6,7 @@ package authorization
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -38,7 +39,11 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println(login(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
-		token := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
+		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
+		if err != nil {
+			log.Fatalf("%s", err)
+			return
+		}
 		fmt.Println("token: " + token)
 
 		if token == "" {

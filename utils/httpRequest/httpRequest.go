@@ -88,7 +88,7 @@ func HttpListProject() {
 	fmt.Println(projectsModel.Items)
 }
 
-func HttpCreateToken(client_id, client_secret, scope, grant_type string) string {
+func HttpCreateToken(client_id, client_secret, scope, grant_type string) (string, error) {
 
 	var authenticationResponse models.AuthenticationResponse
 
@@ -101,27 +101,27 @@ func HttpCreateToken(client_id, client_secret, scope, grant_type string) string 
 	authRequestJSON, err := json.Marshal(authRequest)
 	if err != nil {
 		//fmt.Printf("%s", err)
-		return err.Error()
+		return "", err
 	}
 
 	c := http.Client{Timeout: time.Duration(100) * time.Second}
 	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in=0", bytes.NewBuffer(authRequestJSON))
 	if err != nil {
-		fmt.Printf("error %s", err)
-		return "error."
+		//fmt.Printf("error %s", err)
+		return "", err
 	}
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Content-Type", `application/json`)
 	resp, err := c.Do(req)
 	if err != nil {
 		//fmt.Printf("error %s", err)
-		return err.Error()
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	json.NewDecoder(resp.Body).Decode(&authenticationResponse)
 
-	return authenticationResponse.Access_token
+	return authenticationResponse.Access_token, err
 }
 
 func HttpCheckToken(token string) {
