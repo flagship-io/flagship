@@ -13,3 +13,7 @@ type ProjectResponse struct {
 type ProjectRequest struct {
 	Name string `json:"name"`
 }
+
+type ProjectToggleRequest struct {
+	State string `json:"state"`
+}

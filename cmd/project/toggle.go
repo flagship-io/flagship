@@ -7,6 +7,7 @@ package project
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
@@ -25,10 +26,11 @@ var toggleCmd = &cobra.Command{
 	Short: "this toggle project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !(projectStatus == "TRUE" || projectIdToggle == "FALSE") {
-			fmt.Println("Status can only have 2 value: TRUE or FALSE")
+		if !(projectStatus == "active" || projectStatus == "paused" || projectStatus == "interrupted") {
+			fmt.Println("Status can only have 3 value: active or paused or interrupted")
 		} else {
 			fmt.Println(toggleProject(projectIdToggle))
+			httprequest.HttpToggleProject(projectIdToggle, projectStatus)
 		}
 	},
 }

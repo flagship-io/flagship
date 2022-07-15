@@ -100,8 +100,8 @@ func HttpCreateToken(client_id, client_secret, scope, grant_type string) string 
 	}
 	authRequestJSON, err := json.Marshal(authRequest)
 	if err != nil {
-		fmt.Printf("%s", err)
-		return "error."
+		//fmt.Printf("%s", err)
+		return err.Error()
 	}
 
 	c := http.Client{Timeout: time.Duration(100) * time.Second}
@@ -114,8 +114,8 @@ func HttpCreateToken(client_id, client_secret, scope, grant_type string) string 
 	req.Header.Add("Content-Type", `application/json`)
 	resp, err := c.Do(req)
 	if err != nil {
-		fmt.Printf("error %s", err)
-		return "error."
+		//fmt.Printf("error %s", err)
+		return err.Error()
 	}
 	defer resp.Body.Close()
 
@@ -140,4 +140,33 @@ func HttpCheckToken(token string) {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Printf("%s \n", body)
+}
+
+func HttpToggleProject(id, state string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+
+	projectRequest := models.ProjectToggleRequest{
+		State: state,
+	}
+
+	projectRequestJSON, err := json.Marshal(projectRequest)
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+
+	req, err := http.NewRequest("PATCH", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id+"/toggle", bytes.NewBuffer(projectRequestJSON))
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("status: " + resp.Status)
 }
