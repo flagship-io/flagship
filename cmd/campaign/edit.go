@@ -24,13 +24,13 @@ var editCmd = &cobra.Command{
 func init() {
 
 	editCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "edit the campaign")
-	editCmd.Flags().StringVarP(&DataRaw, "data_raw", "", "", "the data")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
 		fmt.Println(err)
 	}
 
-	if err := editCmd.MarkFlagRequired("data_raw"); err != nil {
+	if err := editCmd.MarkFlagRequired("data-raw"); err != nil {
 		fmt.Println(err)
 	}
 

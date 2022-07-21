@@ -23,9 +23,9 @@ var createCmd = &cobra.Command{
 
 func init() {
 
-	createCmd.Flags().StringVarP(&DataRaw, "data_raw", "", "", "the data")
+	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
 
-	if err := createCmd.MarkFlagRequired("data_raw"); err != nil {
+	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
 		fmt.Println(err)
 	}
 
