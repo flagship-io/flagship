@@ -56,6 +56,8 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(project.ProjectCmd)
 	rootCmd.AddCommand(authorization.AuthorizationCmd)
 	//rootCmd.AddCommand(variation_group.VariationGroupCmd)
+	rootCmd.AddCommand(authorization.ConfigureCmd)
+	rootCmd.AddCommand(authorization.AuthenticateCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
 	rootCmd.AddCommand(user.UserCmd)
 }

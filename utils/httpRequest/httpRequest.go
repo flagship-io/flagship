@@ -88,7 +88,7 @@ func HttpListProject() {
 	fmt.Println(projectsModel.Items)
 }
 
-func HttpCreateToken(client_id, client_secret, scope, grant_type string) (string, error) {
+func HttpCreateToken(client_id, client_secret, grant_type, scope, expiration string) (string, error) {
 
 	var authenticationResponse models.AuthenticationResponse
 
@@ -105,7 +105,8 @@ func HttpCreateToken(client_id, client_secret, scope, grant_type string) (string
 	}
 
 	c := http.Client{Timeout: time.Duration(100) * time.Second}
-	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in=0", bytes.NewBuffer(authRequestJSON))
+	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in="+expiration, bytes.NewBuffer(authRequestJSON))
+
 	if err != nil {
 		//fmt.Printf("error %s", err)
 		return "", err

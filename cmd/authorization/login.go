@@ -16,10 +16,10 @@ import (
 )
 
 func login(loginClientId, loginClientSecret string) string {
-	return "login 1with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
+	return "login with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
 }
 
-func writeToken(token string) {
+func writeToken1(token string) {
 	homeDir, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
@@ -39,7 +39,7 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println(login(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
-		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
+		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "client_credentials", "*", "0")
 		if err != nil {
 			log.Fatalf("%s", err)
 			return
@@ -50,7 +50,7 @@ var loginCmd = &cobra.Command{
 			fmt.Println("required valid client_id and client_secret")
 			return
 		}
-		writeToken(token)
+		writeToken1(token)
 
 	},
 }
