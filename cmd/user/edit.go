@@ -2,7 +2,7 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package right
+package user
 
 import (
 	"fmt"
@@ -12,39 +12,39 @@ import (
 )
 
 var (
-	email string
-	role  string
+	editEmail string
+	editRole  string
 )
 
-func addRight(email, role string) string {
-	return "add right \n email: " + email + "\n with role: " + role + "\n the account id: " + viper.GetViper().GetString("account_id")
+func editRight(email, role string) string {
+	return "edit right \n email: " + editEmail + "\n with role: " + editRole + "\n the account id: " + viper.GetViper().GetString("account_id")
 }
 
 // createCmd represents the create command
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "this add right",
+var editCmd = &cobra.Command{
+	Use:   "edit",
+	Short: "this edit right",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(addRight(email, role))
+		fmt.Println(editRight(email, role))
 	},
 }
 
 func init() {
 
-	addCmd.Flags().StringVarP(&email, "email", "e", "", "the email")
+	editCmd.Flags().StringVarP(&editEmail, "email", "e", "", "the email")
 
-	if err := addCmd.MarkFlagRequired("email"); err != nil {
+	if err := editCmd.MarkFlagRequired("email"); err != nil {
 		fmt.Println(err)
 	}
 
-	addCmd.Flags().StringVarP(&role, "role", "r", "", "the role")
+	editCmd.Flags().StringVarP(&editRole, "role", "r", "", "the role")
 
-	if err := addCmd.MarkFlagRequired("role"); err != nil {
+	if err := editCmd.MarkFlagRequired("role"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.
-	RightCmd.AddCommand(addCmd)
+	UserCmd.AddCommand(editCmd)
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// createCmd.PersistentFlags().String("foo", "", "A help for foo")

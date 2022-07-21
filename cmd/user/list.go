@@ -12,7 +12,7 @@ import (
 )
 
 func ListUser() string {
-	return "list users: \n campaign_id: " + viper.GetViper().GetString("campaign_id") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
+	return "list users:" + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
 }
 
 // createCmd represents the create command
