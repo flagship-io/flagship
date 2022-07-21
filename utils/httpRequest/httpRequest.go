@@ -85,7 +85,55 @@ func HttpListProject() {
 		fmt.Println(err)
 	}
 	fmt.Printf("%s \n", body)
-	fmt.Println(projectsModel.Items)
+	//fmt.Println(projectsModel.Items)
+}
+
+func HttpGetProject(id string) {
+
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
+}
+
+func HttpEditProject(id, name string) {
+	projectRequest := models.ProjectRequest{
+		Name: name,
+	}
+	projectRequestJSON, err := json.Marshal(projectRequest)
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("PATCH", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, bytes.NewBuffer(projectRequestJSON))
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
 }
 
 func HttpCreateToken(client_id, client_secret, grant_type, scope, expiration string) (string, error) {
