@@ -7,41 +7,27 @@ package campaign
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
-var (
-	getCampaignId string
-)
-
-func getCampaign(campaign_id string) string {
-	return "get campaign \n campaign_id: " + campaign_id
-}
-
-// createCmd represents the create command
+// getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "this get campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(getCampaign(getCampaignId))
+		httprequest.HttpGetCampaign(CampaignID)
 	},
 }
 
 func init() {
 
-	getCmd.Flags().StringVarP(&getCampaignId, "campaign_id", "i", "", "get campaign by campaign_id")
+	getCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "get campaign by campaign_id")
 
-	if err := getCmd.MarkFlagRequired("campaign_id"); err != nil {
+	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		fmt.Println(err)
 	}
-	// Here you will define your flags and configuration settings.
-	CampaignCmd.AddCommand(getCmd)
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	CampaignCmd.AddCommand(getCmd)
 }

@@ -7,32 +7,25 @@ package campaign
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
-var (
-	deleteCampaignId string
-)
-
-func deleteCampaign(campaign_id string) string {
-	return "delete campaign \n campaign_id: " + campaign_id
-}
-
-// createCmd represents the create command
+// deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "this delete campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(deleteCampaign(deleteCampaignId))
+		httprequest.HttpDeleteCampaign(CampaignID)
 	},
 }
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&deleteCampaignId, "campaign_id", "i", "", "delete the campaign")
+	deleteCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "delete the campaign")
 
-	if err := deleteCmd.MarkFlagRequired("campaign_id"); err != nil {
+	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
 		fmt.Println(err)
 	}
 	// Here you will define your flags and configuration settings.

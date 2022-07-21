@@ -5,26 +5,29 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package campaign
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var (
+/* var (
 	Account_environment_id string
-	cfgFile_campaign       string
-)
+	//cfgFile_campaign       string
+) */
 
-var (
+/* var (
 	Name          string
 	Project_id    string
 	Description   string
 	Campaign_type string
 	Data_raw      string
+) */
+
+var (
+	CampaignID string
+	Status     string
+	DataRaw    string
 )
 
-var v = viper.New()
+//var v = viper.New()
 
 // campaignCmd represents the campaign command
 var CampaignCmd = &cobra.Command{
@@ -38,20 +41,20 @@ var CampaignCmd = &cobra.Command{
 
 func init() {
 
-	cobra.OnInitialize(initLocalConfig)
-	CampaignCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "the campaign name")
+	//cobra.OnInitialize(initLocalConfig)
+	/* CampaignCmd.PersistentFlags().StringVarP(&Name, "name", "n", "", "the campaign name")
 	CampaignCmd.PersistentFlags().StringVarP(&Project_id, "project_id", "p", "", "the projact id")
 	CampaignCmd.PersistentFlags().StringVarP(&Description, "description", "d", "", "the campaign description")
 	CampaignCmd.PersistentFlags().StringVarP(&Campaign_type, "type", "t", "", "the campaign type")
 	CampaignCmd.PersistentFlags().StringVarP(&Data_raw, "data_raw", "", "", "the campaign data")
-
-	v.BindPFlag("name", CampaignCmd.PersistentFlags().Lookup("name"))
+	*/
+	/* v.BindPFlag("name", CampaignCmd.PersistentFlags().Lookup("name"))
 	v.BindPFlag("project_id", CampaignCmd.PersistentFlags().Lookup("project_id"))
 	v.BindPFlag("description", CampaignCmd.PersistentFlags().Lookup("description"))
 	v.BindPFlag("type", CampaignCmd.PersistentFlags().Lookup("type"))
 	v.BindPFlag("data_raw", CampaignCmd.PersistentFlags().Lookup("data_raw"))
-
-	CampaignCmd.PersistentFlags().StringVarP(&cfgFile_campaign, "config_campaign", "", "", "config file (default is $PWD/campaign.yaml)")
+	*/
+	//CampaignCmd.PersistentFlags().StringVarP(&cfgFile_campaign, "config_campaign", "", "", "config file (default is $PWD/campaign.yaml)")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -63,7 +66,7 @@ func init() {
 	// campaignCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func initLocalConfig() {
+/* func initLocalConfig() {
 
 	if cfgFile_campaign != "" {
 		// Use config file from the flag.
@@ -80,4 +83,4 @@ func initLocalConfig() {
 
 	// If a config file is found, read it in.
 	v.MergeInConfig()
-}
+} */

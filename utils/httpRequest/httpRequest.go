@@ -171,3 +171,134 @@ func HttpToggleProject(id, state string) {
 	defer resp.Body.Close()
 	fmt.Println("status: " + resp.Status)
 }
+
+func HttpToggleCampaign(id, state string) {
+	c := http.Client{Timeout: time.Duration(100) * time.Second}
+
+	campaignToggleRequest := models.CampaignToggleRequest{
+		State: state,
+	}
+
+	campaignToggleRequestJSON, err := json.Marshal(campaignToggleRequest)
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+
+	req, err := http.NewRequest("PATCH", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id+"/toggle", bytes.NewBuffer(campaignToggleRequestJSON))
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
+
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 200 {
+		fmt.Println("Campaign is " + state + " successfully.")
+	}
+
+}
+
+func HttpListCampaign() {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns", nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
+}
+
+func HttpCreateCampaign(data string) {
+
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("POST", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns", bytes.NewBuffer([]byte(data)))
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("\n%s \n", body)
+}
+
+func HttpGetCampaign(id string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
+}
+
+func HttpDeleteCampaign(id string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("DELETE", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 204 {
+		fmt.Println("Campaign deleted successfully.")
+	}
+}
+
+func HttpEditCampaign(id, data string) {
+
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("PATCH", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, bytes.NewBuffer([]byte(data)))
+
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("\n%s \n", body)
+}
