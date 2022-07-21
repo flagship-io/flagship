@@ -57,19 +57,8 @@ var AuthenticateCmd = &cobra.Command{
 
 func init() {
 
-	AuthenticateCmd.Flags().StringVarP(&grantType, "grant_type", "", "", "the grant_type")
-	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", "", "the scope")
-	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "", "the expiration")
+	AuthenticateCmd.Flags().StringVarP(&grantType, "grant-type", "", "client_credentials", "the grant type")
+	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", "*", "the scope")
+	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "0", "the expiration")
 
-	if err := AuthenticateCmd.MarkFlagRequired("grant_type"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := AuthenticateCmd.MarkFlagRequired("scope"); err != nil {
-		fmt.Println(err)
-	}
-
-	if err := AuthenticateCmd.MarkFlagRequired("expiration"); err != nil {
-		fmt.Println(err)
-	}
 }

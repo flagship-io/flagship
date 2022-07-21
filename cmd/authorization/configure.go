@@ -25,10 +25,6 @@ var (
 
 var v = viper.New()
 
-func configure(clientId, clientSecret, accountId, accountEnvId string) string {
-	return "login with client_id: " + clientId + ", client_secret: " + clientSecret + ", account id: " + accountId + ", account env id: " + accountEnvId
-}
-
 func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 	homeDir, err := os.UserHomeDir()
 	cobra.CheckErr(err)
@@ -55,7 +51,7 @@ func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 // loginCmd represents the login command
 var ConfigureCmd = &cobra.Command{
 	Use:   "configure",
-	Short: "this configure client_id and client_secret and account_id",
+	Short: "this configure client-id and client-secret and account-id",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if clientId == "" {
@@ -73,7 +69,7 @@ var ConfigureCmd = &cobra.Command{
 
 		if clientId == "" || clientSecret == "" || accountId == "" {
 
-			fmt.Println("required client_id and client_secret")
+			fmt.Println("required client-id and client-secret and account-id")
 
 		} else {
 			//httprequest.HttpCreateToken(loginClientId, loginClientSecret, "*", "client_credentials")
@@ -88,17 +84,17 @@ func init() {
 
 	cobra.OnInitialize(initLocalConfig)
 
-	ConfigureCmd.Flags().StringVarP(&clientId, "client_id", "i", "", "the client id")
-	ConfigureCmd.Flags().StringVarP(&clientSecret, "client_secret", "s", "", "the client secret")
-	ConfigureCmd.Flags().StringVarP(&accountId, "account_id", "", "", "the account id")
-	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account_environment_id", "", "", "the account env id")
+	ConfigureCmd.Flags().StringVarP(&clientId, "client-id", "i", "", "the client id")
+	ConfigureCmd.Flags().StringVarP(&clientSecret, "client-secret", "s", "", "the client secret")
+	ConfigureCmd.Flags().StringVarP(&accountId, "account-id", "", "", "the account id")
+	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account-environment-id", "", "", "the account env id")
 
-	v.BindPFlag("client_id", ConfigureCmd.PersistentFlags().Lookup("client_id"))
-	v.BindPFlag("client_secret", ConfigureCmd.PersistentFlags().Lookup("client_secret"))
-	v.BindPFlag("account_id", ConfigureCmd.PersistentFlags().Lookup("account_id"))
-	v.BindPFlag("account_environment_id", ConfigureCmd.PersistentFlags().Lookup("account_environment_id"))
+	v.BindPFlag("client-id", ConfigureCmd.PersistentFlags().Lookup("client_id"))
+	v.BindPFlag("client-secret", ConfigureCmd.PersistentFlags().Lookup("client_secret"))
+	v.BindPFlag("account-id", ConfigureCmd.PersistentFlags().Lookup("account_id"))
+	v.BindPFlag("account-environment-id", ConfigureCmd.PersistentFlags().Lookup("account_environment_id"))
 
-	ConfigureCmd.PersistentFlags().StringVarP(&credentialsFile, "credentials_file", "", "", "config file (default is $HOME/.flagship/credentials.yaml)")
+	ConfigureCmd.PersistentFlags().StringVarP(&credentialsFile, "credentials-file", "", "", "config file (default is $HOME/.flagship/credentials.yaml)")
 
 }
 

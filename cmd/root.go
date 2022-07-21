@@ -27,13 +27,10 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "flagship-mock",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Cli to manage your usecases, project, users etc...",
+	Long: `
+	The goal of the cli is to give the user the ability to manage his account
+	`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -55,7 +52,6 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
 	rootCmd.AddCommand(authorization.AuthorizationCmd)
-	//rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(authorization.ConfigureCmd)
 	rootCmd.AddCommand(authorization.AuthenticateCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
@@ -65,11 +61,11 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVarP(&Token, "token", "", "", "authorization token")
-	rootCmd.PersistentFlags().StringVarP(&Account_id, "account_id", "", "", "account id")
-	rootCmd.PersistentFlags().StringVarP(&Account_environment_id, "account_environment_id", "", "", "account env id")
+	rootCmd.PersistentFlags().StringVarP(&Account_id, "account-id", "", "", "account id")
+	rootCmd.PersistentFlags().StringVarP(&Account_environment_id, "account-environment-id", "", "", "account env id")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
-	viper.BindPFlag("account_id", rootCmd.PersistentFlags().Lookup("account_id"))
-	viper.BindPFlag("account_environment_id", rootCmd.PersistentFlags().Lookup("account_environment_id"))
+	viper.BindPFlag("account_id", rootCmd.PersistentFlags().Lookup("account-id"))
+	viper.BindPFlag("account_environment_id", rootCmd.PersistentFlags().Lookup("account-environment-id"))
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
