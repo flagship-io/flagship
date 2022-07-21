@@ -15,11 +15,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func login(loginClientId, loginClientSecret string) string {
+func authenticate(loginClientId, loginClientSecret string) string {
 	return "login with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
 }
 
-func writeToken1(token string) {
+func writeToken(token string) {
 	homeDir, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
@@ -31,39 +31,25 @@ func writeToken1(token string) {
 	}
 }
 
-// loginCmd represents the login command
-var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "this authorization login",
-	Long:  ``,
+var AuthenticateCmd = &cobra.Command{
+	Use:   "authenticate",
+	Short: "authenticate",
+	Long:  `authenticate long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		fmt.Println(login(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
+		//fmt.Println(authenticate(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
 		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
 		if err != nil {
 			log.Fatalf("%s", err)
 			return
 		}
-		fmt.Println("token: " + token)
+		//fmt.Println("token: " + token)
 
 		if token == "" {
-			fmt.Println("required valid client_id and client_secret")
+			fmt.Println("client_id or client_secret not valid")
 			return
+		} else {
+			fmt.Println("Token generated successfully")
 		}
 		writeToken(token)
-
 	},
-}
-
-func init() {
-
-	// Here you will define your flags and configuration settings.
-	AuthorizationCmd.AddCommand(loginCmd)
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

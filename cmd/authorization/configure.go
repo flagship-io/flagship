@@ -53,7 +53,7 @@ func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 }
 
 // loginCmd represents the login command
-var configureCmd = &cobra.Command{
+var ConfigureCmd = &cobra.Command{
 	Use:   "configure",
 	Short: "this configure client_id and client_secret and account_id",
 	Long:  ``,
@@ -88,27 +88,18 @@ func init() {
 
 	cobra.OnInitialize(initLocalConfig)
 
-	configureCmd.Flags().StringVarP(&clientId, "client_id", "i", "", "the client id")
-	configureCmd.Flags().StringVarP(&clientSecret, "client_secret", "s", "", "the client secret")
-	configureCmd.Flags().StringVarP(&accountId, "account_id", "", "", "the account id")
-	configureCmd.Flags().StringVarP(&accountEnvId, "account_environment_id", "", "", "the account env id")
+	ConfigureCmd.Flags().StringVarP(&clientId, "client_id", "i", "", "the client id")
+	ConfigureCmd.Flags().StringVarP(&clientSecret, "client_secret", "s", "", "the client secret")
+	ConfigureCmd.Flags().StringVarP(&accountId, "account_id", "", "", "the account id")
+	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account_environment_id", "", "", "the account env id")
 
-	v.BindPFlag("client_id", configureCmd.PersistentFlags().Lookup("client_id"))
-	v.BindPFlag("client_secret", configureCmd.PersistentFlags().Lookup("client_secret"))
-	v.BindPFlag("account_id", configureCmd.PersistentFlags().Lookup("account_id"))
-	v.BindPFlag("account_environment_id", configureCmd.PersistentFlags().Lookup("account_environment_id"))
+	v.BindPFlag("client_id", ConfigureCmd.PersistentFlags().Lookup("client_id"))
+	v.BindPFlag("client_secret", ConfigureCmd.PersistentFlags().Lookup("client_secret"))
+	v.BindPFlag("account_id", ConfigureCmd.PersistentFlags().Lookup("account_id"))
+	v.BindPFlag("account_environment_id", ConfigureCmd.PersistentFlags().Lookup("account_environment_id"))
 
-	configureCmd.PersistentFlags().StringVarP(&credentialsFile, "credentials_file", "", "", "config file (default is $HOME/.flagship/credentials.yaml)")
+	ConfigureCmd.PersistentFlags().StringVarP(&credentialsFile, "credentials_file", "", "", "config file (default is $HOME/.flagship/credentials.yaml)")
 
-	// Here you will define your flags and configuration settings.
-	AuthorizationCmd.AddCommand(configureCmd)
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func initLocalConfig() {
