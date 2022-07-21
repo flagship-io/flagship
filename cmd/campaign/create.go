@@ -7,13 +7,9 @@ package campaign
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
-
-func createCampaign() string {
-	return "create campaign \n name: " + v.GetString("name") + "\n project_id: " + v.GetString("project_id") + "\n description: " + v.GetString("description") + "\n type: " + v.GetString("type") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
-}
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -21,11 +17,17 @@ var createCmd = &cobra.Command{
 	Short: "this create campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(createCampaign())
+		httprequest.HttpCreateCampaign(DataRaw)
 	},
 }
 
 func init() {
+
+	createCmd.Flags().StringVarP(&DataRaw, "data_raw", "", "", "the data")
+
+	if err := createCmd.MarkFlagRequired("data_raw"); err != nil {
+		fmt.Println(err)
+	}
 
 	// Here you will define your flags and configuration settings.
 	CampaignCmd.AddCommand(createCmd)
