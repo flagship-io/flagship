@@ -76,9 +76,9 @@ var ConfigureCmd = &cobra.Command{
 			fmt.Println("required client_id and client_secret")
 
 		} else {
-			fmt.Println(configure(clientId, clientSecret, accountId, accountEnvId))
 			//httprequest.HttpCreateToken(loginClientId, loginClientSecret, "*", "client_credentials")
 			writeCredentials(clientId, clientSecret, accountId, accountEnvId)
+			fmt.Println("Credentials wrote successfully")
 		}
 
 	},

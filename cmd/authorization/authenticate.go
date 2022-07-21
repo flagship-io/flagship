@@ -15,9 +15,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func authenticate(loginClientId, loginClientSecret string) string {
-	return "login with client_id: " + loginClientId + ", client_secret: " + loginClientSecret
-}
+var (
+	grantType  string
+	scope      string
+	expiration string
+)
 
 func writeToken(token string) {
 	homeDir, err := os.UserHomeDir()
@@ -31,18 +33,17 @@ func writeToken(token string) {
 	}
 }
 
+// AuthenticateCmd represents the authenticate command
 var AuthenticateCmd = &cobra.Command{
 	Use:   "authenticate",
-	Short: "authenticate",
+	Short: "authenticate shot desc",
 	Long:  `authenticate long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//fmt.Println(authenticate(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret")))
-		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), "*", "client_credentials")
+		token, err := httprequest.HttpCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)
 			return
 		}
-		//fmt.Println("token: " + token)
 
 		if token == "" {
 			fmt.Println("client_id or client_secret not valid")
@@ -52,4 +53,23 @@ var AuthenticateCmd = &cobra.Command{
 		}
 		writeToken(token)
 	},
+}
+
+func init() {
+
+	AuthenticateCmd.Flags().StringVarP(&grantType, "grant_type", "", "", "the grant_type")
+	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", "", "the scope")
+	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "", "the expiration")
+
+	if err := AuthenticateCmd.MarkFlagRequired("grant_type"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := AuthenticateCmd.MarkFlagRequired("scope"); err != nil {
+		fmt.Println(err)
+	}
+
+	if err := AuthenticateCmd.MarkFlagRequired("expiration"); err != nil {
+		fmt.Println(err)
+	}
 }

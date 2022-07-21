@@ -9,7 +9,7 @@ import (
 )
 
 var AuthorizationCmd = &cobra.Command{
-	Use:     "auth [configure|login|logout|check]",
+	Use:     "auth [login|logout|check]",
 	Short:   "auth short desc",
 	Aliases: []string{"au"},
 	Long:    `auth long desc`,
