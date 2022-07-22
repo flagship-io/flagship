@@ -8,7 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// campaignCmd represents the campaign command
+var (
+	UserEmail string
+	UserRole  string
+	DataRaw   string
+)
+
+// userCmd represents the user command
 var UserCmd = &cobra.Command{
 	Use:   "user",
 	Short: "user short desc",

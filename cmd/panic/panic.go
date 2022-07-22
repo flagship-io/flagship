@@ -7,11 +7,11 @@ package panic
 import (
 	"fmt"
 
+	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var status string
+var panicStatus string
 
 func panicMessage(status string) string {
 	return "panic the account env id: " + status
@@ -23,13 +23,18 @@ var PanicCmd = &cobra.Command{
 	Short: "panic short desc",
 	Long:  `panic long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(panicMessage(viper.GetViper().GetString("account_environment_id")))
+		if !(panicStatus == "on" || panicStatus == "off") {
+			fmt.Println("Status can only have 2 values: on or off ")
+		} else {
+			httprequest.HttpPanic(panicStatus)
+		}
 	},
 }
 
 func init() {
 
-	PanicCmd.Flags().StringVarP(&status, "status", "s", "", "panic mode")
+	PanicCmd.Flags().StringVarP(&panicStatus, "status", "s", "", "panic mode")
+
 	if err := PanicCmd.MarkFlagRequired("status"); err != nil {
 		fmt.Println(err)
 	}

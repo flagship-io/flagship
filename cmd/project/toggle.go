@@ -18,7 +18,7 @@ var toggleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(ProjectStatus == "active" || ProjectStatus == "paused" || ProjectStatus == "interrupted") {
-			fmt.Println("Status can only have 3 value: active or paused or interrupted")
+			fmt.Println("Status can only have 3 values: active or paused or interrupted")
 		} else {
 			httprequest.HttpToggleProject(ProjectId, ProjectStatus)
 		}

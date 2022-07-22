@@ -13,6 +13,37 @@ import (
 	"github.com/spf13/viper"
 )
 
+func HttpPanic(panic string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+
+	panicRequest := models.PanicRequest{
+		Panic: panic,
+	}
+
+	panicRequestJSON, err := json.Marshal(panicRequest)
+	if err != nil {
+		fmt.Printf("%s", err)
+		return
+	}
+
+	req, err := http.NewRequest("PATCH", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/panic", bytes.NewBuffer(panicRequestJSON))
+	fmt.Println(utils.Host + "/v1/accounts/" + viper.GetViper().GetString("account_id") + "/account_environments/" + viper.GetViper().GetString("account_environment_id") + "/panic")
+
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("status: " + resp.Status)
+}
+
 func HttpCreateProject(name string) {
 	projectRequest := models.ProjectRequest{
 		Name: name,
@@ -136,61 +167,6 @@ func HttpEditProject(id, name string) {
 	fmt.Printf("%s \n", body)
 }
 
-func HttpCreateToken(client_id, client_secret, grant_type, scope, expiration string) (string, error) {
-
-	var authenticationResponse models.AuthenticationResponse
-
-	authRequest := models.AuthenticationRequest{
-		Client_id:     client_id,
-		Client_secret: client_secret,
-		Scope:         scope,
-		Grant_type:    grant_type,
-	}
-	authRequestJSON, err := json.Marshal(authRequest)
-	if err != nil {
-		//fmt.Printf("%s", err)
-		return "", err
-	}
-
-	c := http.Client{Timeout: time.Duration(100) * time.Second}
-	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in="+expiration, bytes.NewBuffer(authRequestJSON))
-
-	if err != nil {
-		//fmt.Printf("error %s", err)
-		return "", err
-	}
-	req.Header.Add("Accept", `*/*`)
-	req.Header.Add("Content-Type", `application/json`)
-	resp, err := c.Do(req)
-	if err != nil {
-		//fmt.Printf("error %s", err)
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	json.NewDecoder(resp.Body).Decode(&authenticationResponse)
-
-	return authenticationResponse.Access_token, err
-}
-
-func HttpCheckToken(token string) {
-	c := http.Client{Timeout: time.Duration(10) * time.Second}
-	req, err := http.NewRequest("GET", utils.HostAuth+"/token?access_token="+token, nil)
-	if err != nil {
-		fmt.Printf("error %s", err)
-		return
-	}
-	req.Header.Add("Accept", `*/*`)
-	resp, err := c.Do(req)
-	if err != nil {
-		fmt.Printf("error %s", err)
-		return
-	}
-	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Printf("%s \n", body)
-}
-
 func HttpToggleProject(id, state string) {
 	c := http.Client{Timeout: time.Duration(10) * time.Second}
 
@@ -218,6 +194,58 @@ func HttpToggleProject(id, state string) {
 	}
 	defer resp.Body.Close()
 	fmt.Println("status: " + resp.Status)
+}
+
+func HttpCreateToken(client_id, client_secret, grant_type, scope, expiration string) (string, error) {
+
+	var authenticationResponse models.AuthenticationResponse
+
+	authRequest := models.AuthenticationRequest{
+		Client_id:     client_id,
+		Client_secret: client_secret,
+		Scope:         scope,
+		Grant_type:    grant_type,
+	}
+	authRequestJSON, err := json.Marshal(authRequest)
+	if err != nil {
+		return "", err
+	}
+
+	c := http.Client{Timeout: time.Duration(100) * time.Second}
+	req, err := http.NewRequest("POST", utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in="+expiration, bytes.NewBuffer(authRequestJSON))
+
+	if err != nil {
+		return "", err
+	}
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("Content-Type", `application/json`)
+	resp, err := c.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	json.NewDecoder(resp.Body).Decode(&authenticationResponse)
+
+	return authenticationResponse.Access_token, err
+}
+
+func HttpCheckToken(token string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.HostAuth+"/token?access_token="+token, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Accept", `*/*`)
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
 }
 
 func HttpToggleCampaign(id, state string) {
@@ -349,4 +377,68 @@ func HttpEditCampaign(id, data string) {
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Printf("\n%s \n", body)
+}
+
+func HttpListUsers() {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("GET", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/users", nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Printf("%s \n", body)
+}
+
+func HttpManageUsers(data string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("PUT", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/users", bytes.NewBuffer([]byte(data)))
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	req.Header.Add("Content-Type", "application/json")
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 204 {
+		fmt.Println("Users added.")
+	} else {
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Printf("%s \n", body)
+	}
+}
+
+func HttpDeleteUsers(email string) {
+	c := http.Client{Timeout: time.Duration(10) * time.Second}
+	req, err := http.NewRequest("DELETE", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/users?emails[]="+email, nil)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	resp, err := c.Do(req)
+	if err != nil {
+		fmt.Printf("error %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 204 {
+		fmt.Println("Users deleted.")
+	} else {
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Printf("%s \n", body)
+	}
+
 }
