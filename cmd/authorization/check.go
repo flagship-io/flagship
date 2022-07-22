@@ -7,7 +7,7 @@ package authorization
 import (
 	"fmt"
 
-	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
+	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

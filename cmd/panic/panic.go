@@ -11,12 +11,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	Account_environment_id string
-)
+var status string
 
-func panicMessage(account_environment_id string) string {
-	return "panic the account env id: " + account_environment_id
+func panicMessage(status string) string {
+	return "panic the account env id: " + status
 }
 
 // campaignCmd represents the campaign command
@@ -31,22 +29,8 @@ var PanicCmd = &cobra.Command{
 
 func init() {
 
-	cobra.OnInitialize(initLocalConfig)
-
-	PanicCmd.PersistentFlags().StringVarP(&Account_environment_id, "account_environment_id", "a", "", "account environment id")
-	viper.BindPFlag("account_environment_id", PanicCmd.PersistentFlags().Lookup("account_environment_id"))
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// campaignCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// campaignCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-func initLocalConfig() {
-	viper.MergeInConfig()
+	PanicCmd.Flags().StringVarP(&status, "status", "s", "", "panic mode")
+	if err := PanicCmd.MarkFlagRequired("status"); err != nil {
+		fmt.Println(err)
+	}
 }

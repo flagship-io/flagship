@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Chadiii/flagship-mock/models"
-	"github.com/Chadiii/flagship-mock/utils"
+	"github.com/Chadiii/flagship/models"
+	"github.com/Chadiii/flagship/utils"
 	"github.com/spf13/viper"
 )
 

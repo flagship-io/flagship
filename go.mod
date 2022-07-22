@@ -1,4 +1,4 @@
-module github.com/Chadiii/flagship-mock
+module github.com/Chadiii/flagship
 
 go 1.17
 

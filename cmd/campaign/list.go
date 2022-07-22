@@ -5,7 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package campaign
 
 import (
-	httprequest "github.com/Chadiii/flagship-mock/utils/httpRequest"
+	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 

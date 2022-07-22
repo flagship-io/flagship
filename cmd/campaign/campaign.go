@@ -75,7 +75,7 @@ func init() {
 		// Find home directory.
 		workingDir, err := os.Getwd()
 		cobra.CheckErr(err)
-		// Search config in home directory with name ".flagship-mock" (without extension).
+		// Search config in home directory with name ".flagship" (without extension).
 		v.SetConfigFile(workingDir + "/campaign.yaml")
 	}
 

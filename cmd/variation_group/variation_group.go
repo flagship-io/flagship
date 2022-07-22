@@ -55,7 +55,7 @@ func initLocalConfig() {
 		// Find home directory.
 		workingDir, err := os.Getwd()
 		cobra.CheckErr(err)
-		// Search config in home directory with name ".flagship-mock" (without extension).
+		// Search config in home directory with name ".flagship" (without extension).
 		viper.SetConfigFile(workingDir + "/variation_group.json")
 	}
 	// read in environment variables that match

@@ -7,11 +7,11 @@ package cmd
 import (
 	"os"
 
-	"github.com/Chadiii/flagship-mock/cmd/authorization"
-	"github.com/Chadiii/flagship-mock/cmd/campaign"
-	"github.com/Chadiii/flagship-mock/cmd/panic"
-	"github.com/Chadiii/flagship-mock/cmd/project"
-	"github.com/Chadiii/flagship-mock/cmd/user"
+	"github.com/Chadiii/flagship/cmd/authorization"
+	"github.com/Chadiii/flagship/cmd/campaign"
+	"github.com/Chadiii/flagship/cmd/panic"
+	"github.com/Chadiii/flagship/cmd/project"
+	"github.com/Chadiii/flagship/cmd/user"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,7 +26,7 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "flagship-mock",
+	Use:   "flagship",
 	Short: "Cli to manage your usecases, project, users etc...",
 	Long: `
 	The goal of the cli is to give the user the ability to manage his account
@@ -89,7 +89,7 @@ func initConfig() {
 		// Find home directory.
 		homeDir, err := os.UserHomeDir()
 		cobra.CheckErr(err)
-		// Search config in home directory with name ".flagship-mock" (without extension).
+		// Search config in home directory with name ".flagship" (without extension).
 		viper.SetConfigFile(homeDir + "/.flagship/credentials.yaml")
 	}
 
