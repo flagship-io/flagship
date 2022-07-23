@@ -5,6 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
+	"log"
+
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +17,11 @@ var listCmd = &cobra.Command{
 	Short: "this list project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpListProject()
+		body, err := httprequest.HTTPListProject()
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("%s", body)
 	},
 }
 

@@ -6,6 +6,7 @@ package project
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,8 +18,11 @@ var deleteCmd = &cobra.Command{
 	Short: "this delete project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpDeleteProject(ProjectId)
-		fmt.Println("Project deleted successfully.")
+		err := httprequest.HTTPDeleteProject(ProjectId)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Println("project deleted")
 	},
 }
 

@@ -6,6 +6,7 @@ package campaign
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,7 +18,11 @@ var editCmd = &cobra.Command{
 	Short: "this edit campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpEditCampaign(CampaignID, DataRaw)
+		body, err := httprequest.HTTPEditCampaign(CampaignID, DataRaw)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("campaign updated: %s", body)
 	},
 }
 
