@@ -2,6 +2,8 @@ package httprequest
 
 import (
 	"bytes"
+	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -20,7 +22,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		bodyIO = bytes.NewBuffer(body)
 	}
 
-	req, err := http.NewRequest("DELETE", resource, bodyIO)
+	req, err := http.NewRequest(method, resource, bodyIO)
 	if err != nil {
 		log.Panicf("error occured on request creation: %v", err)
 	}
@@ -37,7 +39,19 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	respBody, err := ioutil.ReadAll(resp.Body)
+
+	var reader io.ReadCloser
+	switch resp.Header.Get("Content-Encoding") {
+	case "gzip":
+		reader, err = gzip.NewReader(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+	default:
+		reader = resp.Body
+	}
+	respBody, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
@@ -45,4 +59,39 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		err = fmt.Errorf("error occured when calling request: %v", resp.StatusCode)
 	}
 	return respBody, err
+}
+
+type PageResult struct {
+	Items      json.RawMessage `json:"items"`
+	TotalCount int             `json:"total_count"`
+}
+
+func HTTPGetAllPages[T any](resource string) ([]T, error) {
+	currentPage := 1
+	results := []T{}
+	for {
+		log.Printf("calling resource for page %d", currentPage)
+		respBody, err := HTTPRequest(http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
+		if err != nil {
+			return nil, err
+		}
+		pageResult := &PageResult{}
+		err = json.Unmarshal(respBody, pageResult)
+		if err != nil {
+			return nil, err
+		}
+
+		typedItems := []T{}
+		err = json.Unmarshal(pageResult.Items, &typedItems)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, typedItems...)
+
+		if len(results) >= pageResult.TotalCount || len(pageResult.Items) == 0 {
+			break
+		}
+		currentPage++
+	}
+	return results, nil
 }

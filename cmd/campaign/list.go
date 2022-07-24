@@ -21,7 +21,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("%s", body)
+		log.Printf("%v", body)
 	},
 }
 

@@ -9,6 +9,15 @@ import (
 	"github.com/spf13/viper"
 )
 
+func HTTPListProject() ([]models.Project, error) {
+	return HTTPGetAllPages[models.Project](utils.Host + "/v1/accounts/" + viper.GetViper().GetString("account_id") + "/projects")
+}
+
+func HTTPGetProject(id string) ([]byte, error) {
+	respBody, err := HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
+	return respBody, err
+}
+
 func HTTPCreateProject(name string) error {
 	projectRequest := models.ProjectRequest{
 		Name: name,
@@ -19,21 +28,6 @@ func HTTPCreateProject(name string) error {
 	}
 	_, err = HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects", projectRequestJSON)
 	return err
-}
-
-func HTTPDeleteProject(id string) error {
-	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
-	return err
-}
-
-func HTTPListProject() ([]byte, error) {
-	respBody, err := HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects", nil)
-	return respBody, err
-}
-
-func HTTPGetProject(id string) ([]byte, error) {
-	respBody, err := HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
-	return respBody, err
 }
 
 func HTTPEditProject(id, name string) error {
@@ -59,5 +53,10 @@ func HTTPToggleProject(id, state string) error {
 	}
 
 	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
+	return err
+}
+
+func HTTPDeleteProject(id string) error {
+	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
 	return err
 }

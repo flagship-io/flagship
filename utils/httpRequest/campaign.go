@@ -23,9 +23,8 @@ func HTTPToggleCampaign(id, state string) error {
 	return err
 }
 
-func HTTPListCampaign() ([]byte, error) {
-	respBody, err := HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns", nil)
-	return respBody, err
+func HTTPListCampaign() ([]models.Campaign, error) {
+	return HTTPGetAllPages[models.Campaign](utils.Host + "/v1/accounts/" + viper.GetViper().GetString("account_id") + "/account_environments/" + viper.GetViper().GetString("account_environment_id") + "/campaigns")
 }
 
 func HTTPCreateCampaign(data string) ([]byte, error) {
