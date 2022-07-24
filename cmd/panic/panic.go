@@ -6,6 +6,7 @@ package panic
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -26,7 +27,11 @@ var PanicCmd = &cobra.Command{
 		if !(panicStatus == "on" || panicStatus == "off") {
 			fmt.Println("Status can only have 2 values: on or off ")
 		} else {
-			httprequest.HttpPanic(panicStatus)
+			err := httprequest.HTTPUpdatePanic(panicStatus)
+			if err != nil {
+				log.Fatalf("error occured: %v", err)
+			}
+			fmt.Printf("Panic set to %v", panicStatus)
 		}
 	},
 }

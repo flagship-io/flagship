@@ -5,6 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package user
 
 import (
+	"log"
+
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +17,11 @@ var editCmd = &cobra.Command{
 	Short: "this edit right",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpManageUsers(DataRaw)
+		body, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("%s", body)
 	},
 }
 

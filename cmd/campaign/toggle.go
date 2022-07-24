@@ -6,6 +6,7 @@ package campaign
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -20,7 +21,11 @@ var toggleCmd = &cobra.Command{
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			fmt.Println("Status can only have 3 values : active or paused or interrupted")
 		} else {
-			httprequest.HttpToggleCampaign(CampaignID, Status)
+			err := httprequest.HTTPToggleCampaign(CampaignID, Status)
+			if err != nil {
+				log.Fatalf("error occured: %v", err)
+			}
+			log.Printf("campaign status set to %s", Status)
 		}
 
 	},
