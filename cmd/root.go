@@ -51,7 +51,7 @@ func Execute() {
 func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
-	rootCmd.AddCommand(authorization.AuthorizationCmd)
+	//rootCmd.AddCommand(authorization.AuthorizationCmd)
 	rootCmd.AddCommand(authorization.ConfigureCmd)
 	rootCmd.AddCommand(authorization.AuthenticateCmd)
 	rootCmd.AddCommand(panic.PanicCmd)

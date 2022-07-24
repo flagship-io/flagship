@@ -92,31 +92,33 @@ func HttpDeleteProject(id string) {
 	fmt.Printf("%s", body)
 }
 
-func HttpListProject() {
+func HttpListProjectFormat(body []byte) ([]models.Project, error) {
+	projectsModel := models.ProjectResponse{}
+
+	err := json.Unmarshal(body, &projectsModel)
+
+	if err != nil {
+		return nil, err
+	}
+	return projectsModel.Items, nil
+}
+
+func HttpListProject() ([]byte, error) {
 	c := http.Client{Timeout: time.Duration(10) * time.Second}
 	req, err := http.NewRequest("GET", utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects", nil)
 	if err != nil {
-		fmt.Printf("error %s", err)
-		return
+		return nil, err
 	}
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
 	resp, err := c.Do(req)
 	if err != nil {
-		fmt.Printf("error %s", err)
-		return
+		return nil, err
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)
-	projectsModel := models.ProjectResponse{}
 
-	err = json.Unmarshal(body, &projectsModel)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Printf("%s \n", body)
-	//fmt.Println(projectsModel.Items)
+	return body, nil
 }
 
 func HttpGetProject(id string) {
