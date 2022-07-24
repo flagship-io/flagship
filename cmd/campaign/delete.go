@@ -6,6 +6,7 @@ package campaign
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,7 +18,11 @@ var deleteCmd = &cobra.Command{
 	Short: "this delete campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpDeleteCampaign(CampaignID)
+		err := httprequest.HTTPDeleteCampaign(CampaignID)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Println("campaign deleted")
 	},
 }
 

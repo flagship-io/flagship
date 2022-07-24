@@ -7,6 +7,7 @@ package project
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"text/tabwriter"
 
@@ -29,19 +30,20 @@ var listCmd = &cobra.Command{
 	Short: "this list project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HttpListProject()
+		body, err := httprequest.HTTPListProject()
 		if err != nil {
-			fmt.Printf("%s\n", err)
-			return
+			log.Fatalf("error occured: %v", err)
 		}
-		projects, err := httprequest.HttpListProjectFormat(body)
-		if err != nil {
-			fmt.Printf("%s\n", err)
-			return
-		}
+		log.Printf("%s", body)
+		// old code
+		/* 		projects, err := httprequest.HttpListProjectFormat(bodyJSON)
+		   		if err != nil {
+		   			fmt.Printf("%s\n", err)
+		   			return
+		   		} */
 
 		if outputFormat == "json" {
-			projectJSON, err := json.Marshal(projects)
+			projectJSON, err := json.Marshal(body)
 			if err != nil {
 				fmt.Printf("%s\n", err)
 				return
@@ -50,7 +52,7 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		formatTable(models.ProjectItems(projects))
+		formatTable(models.ProjectItems(body))
 	},
 }
 

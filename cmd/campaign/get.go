@@ -6,6 +6,7 @@ package campaign
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,7 +18,11 @@ var getCmd = &cobra.Command{
 	Short: "this get campaign",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpGetCampaign(CampaignID)
+		body, err := httprequest.HTTPGetCampaign(CampaignID)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("%s", body)
 	},
 }
 

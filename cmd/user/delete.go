@@ -6,6 +6,7 @@ package user
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,7 +18,11 @@ var deleteCmd = &cobra.Command{
 	Short: "this ldelete user",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpDeleteUsers(UserEmail)
+		err := httprequest.HTTPDeleteUsers(UserEmail)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		fmt.Println("Users deleted.")
 	},
 }
 

@@ -6,6 +6,7 @@ package project
 
 import (
 	"fmt"
+	"log"
 
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -17,7 +18,11 @@ var getCmd = &cobra.Command{
 	Short: "this get project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		httprequest.HttpGetProject(ProjectId)
+		body, err := httprequest.HTTPGetProject(ProjectId)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("%s", body)
 	},
 }
 
