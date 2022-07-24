@@ -14,8 +14,7 @@ func HTTPListProject() ([]models.Project, error) {
 }
 
 func HTTPGetProject(id string) ([]byte, error) {
-	respBody, err := HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
-	return respBody, err
+	return HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
 }
 
 func HTTPCreateProject(name string) error {

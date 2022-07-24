@@ -16,6 +16,11 @@ import (
 
 var c = http.Client{Timeout: time.Duration(10) * time.Second}
 
+type PageResult struct {
+	Items      json.RawMessage `json:"items"`
+	TotalCount int             `json:"total_count"`
+}
+
 func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	var bodyIO io.Reader = nil
 	if body != nil {
@@ -59,11 +64,6 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		err = fmt.Errorf("error occured when calling request: %v", resp.StatusCode)
 	}
 	return respBody, err
-}
-
-type PageResult struct {
-	Items      json.RawMessage `json:"items"`
-	TotalCount int             `json:"total_count"`
 }
 
 func HTTPGetAllPages[T any](resource string) ([]T, error) {

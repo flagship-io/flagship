@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func HTTPPanic(panic string) error {
+func HTTPUpdatePanic(panic string) error {
 	panicRequestJSON, err := json.Marshal(models.PanicRequest{Panic: panic})
 	if err != nil {
 		return err
