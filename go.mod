@@ -1,4 +1,4 @@
-module github.com/Chadiii/flagship
+module github.com/flagship-io/flagship
 
 go 1.18
 

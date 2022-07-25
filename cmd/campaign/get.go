@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Chadiii/flagship/utils"
-	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
+	"github.com/flagship-io/flagship/utils"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

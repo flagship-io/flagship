@@ -10,7 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
-	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
