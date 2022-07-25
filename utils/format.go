@@ -27,6 +27,7 @@ func FormatItem[T any](columns []string, item T, outputFormat string) {
 			return
 		}
 		fmt.Println(string(projectJSON))
+		return
 	}
 
 	if outputFormat == "table" {
