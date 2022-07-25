@@ -22,6 +22,7 @@ var (
 	Token                  string
 	Account_id             string
 	Account_environment_id string
+	Output_format          string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -63,9 +64,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&Token, "token", "", "", "authorization token")
 	rootCmd.PersistentFlags().StringVarP(&Account_id, "account-id", "", "", "account id")
 	rootCmd.PersistentFlags().StringVarP(&Account_environment_id, "account-environment-id", "", "", "account env id")
+	rootCmd.PersistentFlags().StringVarP(&Output_format, "output-format", "f", "table", "output format")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("account_id", rootCmd.PersistentFlags().Lookup("account-id"))
 	viper.BindPFlag("account_environment_id", rootCmd.PersistentFlags().Lookup("account-environment-id"))
+	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

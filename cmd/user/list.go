@@ -7,14 +7,11 @@ package user
 import (
 	"log"
 
+	"github.com/Chadiii/flagship/utils"
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
-
-func ListUser() string {
-	return "list users:" + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
-}
 
 // createCmd represents the create command
 var listCmd = &cobra.Command{
@@ -26,7 +23,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("%s", body)
+		utils.FormatItem([]string{"Email", "Role"}, body, viper.GetString("output_format"))
 	},
 }
 

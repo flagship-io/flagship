@@ -16,7 +16,7 @@ var (
 )
 
 func editVariationGroup(variationGroupId string) string {
-	return "edit variation group \n campaign_id: " + viper.GetViper().GetString("campaign_id") + "\n variation_group_id: " + variationGroupId + "\n new variation group from the data " + viper.GetViper().GetString("variation_groups") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
+	return "edit variation group \n campaign_id: " + viper.GetString("campaign_id") + "\n variation_group_id: " + variationGroupId + "\n new variation group from the data " + viper.GetString("variation_groups") + "\n account_env_id: " + viper.GetString("account_environment_id")
 }
 
 // createCmd represents the create command

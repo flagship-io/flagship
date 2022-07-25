@@ -12,7 +12,7 @@ import (
 )
 
 func createVariationGroup() string {
-	return "create variation group \n name: " + viper.GetViper().GetString("variation_groups") + "\n campaign id: " + viper.GetViper().GetString("campaign_id") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
+	return "create variation group \n name: " + viper.GetString("variation_groups") + "\n campaign id: " + viper.GetString("campaign_id") + "\n account_env_id: " + viper.GetString("account_environment_id")
 }
 
 // createCmd represents the create command

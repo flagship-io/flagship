@@ -22,7 +22,7 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope, expiration str
 		return "", err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.HostAuth+"/"+viper.GetViper().GetString("account_id")+"/token?expires_in="+expiration, authRequestJSON)
+	respBody, err := HTTPRequest(http.MethodPost, utils.HostAuth+"/"+viper.GetString("account_id")+"/token?expires_in="+expiration, authRequestJSON)
 	if err != nil {
 		return "", err
 	}

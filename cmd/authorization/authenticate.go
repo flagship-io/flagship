@@ -39,7 +39,7 @@ var AuthenticateCmd = &cobra.Command{
 	Short: "authenticate shot desc",
 	Long:  `authenticate long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-		token, err := httprequest.HTTPCreateToken(viper.GetViper().GetString("client_id"), viper.GetViper().GetString("client_secret"), grantType, scope, expiration)
+		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)
 			return

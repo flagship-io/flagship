@@ -14,6 +14,6 @@ func HTTPUpdatePanic(panic string) error {
 	if err != nil {
 		return err
 	}
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/panic", panicRequestJSON)
+	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/panic", panicRequestJSON)
 	return err
 }
