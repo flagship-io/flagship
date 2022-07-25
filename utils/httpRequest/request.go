@@ -33,7 +33,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	}
 
 	req.Header.Add("Accept", `*/*`)
-	req.Header.Add("Authorization", "Bearer "+viper.GetViper().GetString("token"))
+	req.Header.Add("Authorization", "Bearer "+viper.GetString("token"))
 	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
 	if body != nil {
 		req.Header.Add("Content-Type", `application/json`)
@@ -64,6 +64,16 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		err = fmt.Errorf("error occured when calling request: %v", resp.StatusCode)
 	}
 	return respBody, err
+}
+
+func HTTPGetItem[T any](resource string) (T, error) {
+	var result T
+	respBody, err := HTTPRequest(http.MethodGet, resource, nil)
+	if err != nil {
+		return result, err
+	}
+	err = json.Unmarshal(respBody, &result)
+	return result, err
 }
 
 func HTTPGetAllPages[T any](resource string) ([]T, error) {

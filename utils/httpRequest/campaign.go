@@ -10,19 +10,19 @@ import (
 )
 
 func HTTPListCampaign() ([]models.Campaign, error) {
-	return HTTPGetAllPages[models.Campaign](utils.Host + "/v1/accounts/" + viper.GetViper().GetString("account_id") + "/account_environments/" + viper.GetViper().GetString("account_environment_id") + "/campaigns")
+	return HTTPGetAllPages[models.Campaign](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns")
 }
 
-func HTTPGetCampaign(id string) ([]byte, error) {
-	return HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, nil)
+func HTTPGetCampaign(id string) (models.Campaign, error) {
+	return HTTPGetItem[models.Campaign](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + id)
 }
 
 func HTTPCreateCampaign(data string) ([]byte, error) {
-	return HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns", []byte(data))
+	return HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns", []byte(data))
 }
 
 func HTTPEditCampaign(id, data string) ([]byte, error) {
-	return HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, []byte(data))
+	return HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id, []byte(data))
 }
 
 func HTTPToggleCampaign(id, state string) error {
@@ -35,11 +35,11 @@ func HTTPToggleCampaign(id, state string) error {
 		return err
 	}
 
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id+"/toggle", campaignToggleRequestJSON)
+	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id+"/toggle", campaignToggleRequestJSON)
 	return err
 }
 
 func HTTPDeleteCampaign(id string) error {
-	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/account_environments/"+viper.GetViper().GetString("account_environment_id")+"/campaigns/"+id, nil)
+	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id, nil)
 	return err
 }

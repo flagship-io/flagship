@@ -5,24 +5,13 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
-	"os"
-	"text/tabwriter"
 
-	"github.com/Chadiii/flagship/models"
+	"github.com/Chadiii/flagship/utils"
 	httprequest "github.com/Chadiii/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
-
-var outputFormat string
-
-func formatTable(items models.FormatableItem) {
-	w := tabwriter.NewWriter(os.Stdout, 10, 1, 5, ' ', 0)
-	items.FormatTable(w)
-	w.Flush()
-}
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -34,31 +23,10 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("%s", body)
-		// old code
-		/* 		projects, err := httprequest.HttpListProjectFormat(bodyJSON)
-		   		if err != nil {
-		   			fmt.Printf("%s\n", err)
-		   			return
-		   		} */
-
-		if outputFormat == "json" {
-			projectJSON, err := json.Marshal(body)
-			if err != nil {
-				fmt.Printf("%s\n", err)
-				return
-			}
-			fmt.Println(string(projectJSON))
-			return
-		}
-
-		formatTable(models.ProjectItems(body))
+		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"))
 	},
 }
 
 func init() {
-
-	listCmd.Flags().StringVarP(&outputFormat, "output-format", "f", "table", "the output format")
-
 	ProjectCmd.AddCommand(listCmd)
 }

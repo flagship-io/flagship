@@ -55,16 +55,16 @@ var ConfigureCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if clientId == "" {
-			clientId = viper.GetViper().GetString("client_id")
+			clientId = viper.GetString("client_id")
 		}
 		if clientSecret == "" {
-			clientSecret = viper.GetViper().GetString("client_secret")
+			clientSecret = viper.GetString("client_secret")
 		}
 		if accountId == "" {
-			accountId = viper.GetViper().GetString("account_id")
+			accountId = viper.GetString("account_id")
 		}
 		if accountEnvId == "" {
-			accountEnvId = viper.GetViper().GetString("account_environment_id")
+			accountEnvId = viper.GetString("account_environment_id")
 		}
 
 		if clientId == "" || clientSecret == "" || accountId == "" {

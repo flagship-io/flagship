@@ -19,8 +19,8 @@ var checkCmd = &cobra.Command{
 	Short: "this authorization check the token",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		if viper.GetViper().GetString("token") != "" {
-			err := httprequest.HTTPCheckToken(viper.GetViper().GetString("token"))
+		if viper.GetString("token") != "" {
+			err := httprequest.HTTPCheckToken(viper.GetString("token"))
 			if err != nil {
 				log.Fatalf("error occured: %v", err)
 			}

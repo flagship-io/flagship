@@ -12,7 +12,7 @@ import (
 )
 
 func ListVariationGroup() string {
-	return "list variation groups of all campaign: \n campaign_id: " + viper.GetViper().GetString("campaign_id") + "\n account_env_id: " + viper.GetViper().GetString("account_environment_id")
+	return "list variation groups of all campaign: \n campaign_id: " + viper.GetString("campaign_id") + "\n account_env_id: " + viper.GetString("account_environment_id")
 }
 
 // createCmd represents the create command

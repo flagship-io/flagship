@@ -10,11 +10,11 @@ import (
 )
 
 func HTTPListProject() ([]models.Project, error) {
-	return HTTPGetAllPages[models.Project](utils.Host + "/v1/accounts/" + viper.GetViper().GetString("account_id") + "/projects")
+	return HTTPGetAllPages[models.Project](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/projects")
 }
 
 func HTTPGetProject(id string) ([]byte, error) {
-	return HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
+	return HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
 }
 
 func HTTPCreateProject(name string) error {
@@ -25,7 +25,7 @@ func HTTPCreateProject(name string) error {
 	if err != nil {
 		return err
 	}
-	_, err = HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects", projectRequestJSON)
+	_, err = HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects", projectRequestJSON)
 	return err
 }
 
@@ -37,7 +37,7 @@ func HTTPEditProject(id, name string) error {
 	if err != nil {
 		return err
 	}
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, projectRequestJSON)
+	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, projectRequestJSON)
 	return err
 }
 
@@ -51,11 +51,11 @@ func HTTPToggleProject(id, state string) error {
 		return err
 	}
 
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
+	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
 	return err
 }
 
 func HTTPDeleteProject(id string) error {
-	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetViper().GetString("account_id")+"/projects/"+id, nil)
+	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
 	return err
 }
