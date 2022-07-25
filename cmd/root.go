@@ -18,11 +18,9 @@ import (
 )
 
 var (
-	cfgFile                string
-	Token                  string
-	Account_id             string
-	Account_environment_id string
-	Output_format          string
+	cfgFile      string
+	token        string
+	outputFormat string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -32,9 +30,6 @@ var rootCmd = &cobra.Command{
 	Long: `
 	The goal of the cli is to give the user the ability to manage his account
 	`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Root().Help()
 	},
@@ -52,7 +47,6 @@ func Execute() {
 func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
-	//rootCmd.AddCommand(authorization.AuthorizationCmd)
 	rootCmd.AddCommand(authorization.ConfigureCmd)
 	rootCmd.AddCommand(authorization.AuthenticateCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
@@ -61,24 +55,13 @@ func addSubCommandPalettes() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVarP(&Token, "token", "", "", "authorization token")
-	rootCmd.PersistentFlags().StringVarP(&Account_id, "account-id", "", "", "account id")
-	rootCmd.PersistentFlags().StringVarP(&Account_environment_id, "account-environment-id", "", "", "account env id")
-	rootCmd.PersistentFlags().StringVarP(&Output_format, "output-format", "f", "table", "output format")
+	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "authorization token")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", "table", "output format")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
-	viper.BindPFlag("account_id", rootCmd.PersistentFlags().Lookup("account-id"))
-	viper.BindPFlag("account_environment_id", rootCmd.PersistentFlags().Lookup("account-environment-id"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.flagship/credentials.yaml)")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	addSubCommandPalettes()
 }
 
@@ -97,7 +80,6 @@ func initConfig() {
 	}
 
 	// read in environment variables that match
-
 	// If a config file is found, read it in.
 	viper.MergeInConfig()
 }
