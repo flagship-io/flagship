@@ -13,8 +13,8 @@ func HTTPListProject() ([]models.Project, error) {
 	return HTTPGetAllPages[models.Project](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/projects")
 }
 
-func HTTPGetProject(id string) ([]byte, error) {
-	return HTTPRequest(http.MethodGet, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
+func HTTPGetProject(id string) (models.Project, error) {
+	return HTTPGetItem[models.Project](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/projects/" + id)
 }
 
 func HTTPCreateProject(name string) error {
