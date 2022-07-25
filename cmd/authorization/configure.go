@@ -67,12 +67,11 @@ var ConfigureCmd = &cobra.Command{
 			accountEnvId = viper.GetString("account_environment_id")
 		}
 
-		if clientId == "" || clientSecret == "" || accountId == "" {
+		if clientId == "" || clientSecret == "" || accountId == "" || accountEnvId == "" {
 
-			fmt.Println("required client-id and client-secret and account-id")
+			fmt.Println("required client-id and client-secret and account-id and account-env-id")
 
 		} else {
-			//httprequest.HttpCreateToken(loginClientId, loginClientSecret, "*", "client_credentials")
 			writeCredentials(clientId, clientSecret, accountId, accountEnvId)
 			fmt.Println("Credentials wrote successfully")
 		}
@@ -86,8 +85,8 @@ func init() {
 
 	ConfigureCmd.Flags().StringVarP(&clientId, "client-id", "i", "", "the client id")
 	ConfigureCmd.Flags().StringVarP(&clientSecret, "client-secret", "s", "", "the client secret")
-	ConfigureCmd.Flags().StringVarP(&accountId, "account-id", "", "", "the account id")
-	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account-environment-id", "", "", "the account env id")
+	ConfigureCmd.Flags().StringVarP(&accountId, "account-id", "a", "", "the account id")
+	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account-environment-id", "e", "", "the account env id")
 
 	v.BindPFlag("client-id", ConfigureCmd.PersistentFlags().Lookup("client_id"))
 	v.BindPFlag("client-secret", ConfigureCmd.PersistentFlags().Lookup("client_secret"))
