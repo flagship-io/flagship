@@ -30,6 +30,16 @@ func FormatItem[T any](columns []string, item T, outputFormat string) {
 		return
 	}
 
+	if outputFormat == "json-pretty" {
+		projectJSON, err := json.MarshalIndent(item, "", "  ")
+		if err != nil {
+			fmt.Printf("%s\n", err)
+			return
+		}
+		fmt.Println(string(projectJSON))
+		return
+	}
+
 	if outputFormat == "table" {
 		w := tabwriter.NewWriter(os.Stdout, 10, 1, 5, ' ', 0)
 		fmt.Fprintln(w, strings.Join(columns, "\t"))
