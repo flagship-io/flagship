@@ -6,7 +6,6 @@ package authorization
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -41,9 +40,9 @@ func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 	v.Set("client_secret", clientSecret)
 	v.Set("account_id", accountId)
 	v.Set("account_environment_id", accountEnvId)
-	dir_err := v.WriteConfigAs(filepath)
-	if dir_err != nil {
-		fmt.Println(dir_err)
+	err = v.WriteConfigAs(filepath)
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
 	}
 
 }
@@ -69,11 +68,11 @@ var ConfigureCmd = &cobra.Command{
 
 		if clientId == "" || clientSecret == "" || accountId == "" || accountEnvId == "" {
 
-			fmt.Println("required client-id and client-secret and account-id and account-env-id")
+			log.Fatal("required client-id and client-secret and account-id and account-env-id")
 
 		} else {
 			writeCredentials(clientId, clientSecret, accountId, accountEnvId)
-			fmt.Println("Credentials wrote successfully")
+			log.Println("Credentials wrote successfully")
 		}
 
 	},

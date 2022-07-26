@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -27,9 +26,9 @@ func writeToken(token string) {
 	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
 	viper.SetConfigFile(filepath)
 	viper.Set("token", token)
-	dir_err := viper.WriteConfigAs(filepath)
-	if dir_err != nil {
-		fmt.Println(dir_err)
+	err = viper.WriteConfigAs(filepath)
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
 	}
 }
 
@@ -46,7 +45,7 @@ var AuthenticateCmd = &cobra.Command{
 		}
 
 		if token == "" {
-			log.Println("client_id or client_secret not valid")
+			log.Fatal("client_id or client_secret not valid")
 			return
 		} else {
 			log.Println("Token generated successfully")
