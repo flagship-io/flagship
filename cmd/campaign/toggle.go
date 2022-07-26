@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package campaign
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -19,7 +18,7 @@ var toggleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
-			fmt.Println("Status can only have 3 values : active or paused or interrupted")
+			log.Println("Status can only have 3 values : active or paused or interrupted")
 		} else {
 			err := httprequest.HTTPToggleCampaign(CampaignID, Status)
 			if err != nil {
@@ -37,11 +36,11 @@ func init() {
 	toggleCmd.Flags().StringVarP(&Status, "status", "s", "", "status")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	if err := toggleCmd.MarkFlagRequired("status"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	CampaignCmd.AddCommand(toggleCmd)

@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -26,7 +25,7 @@ var checkCmd = &cobra.Command{
 			}
 			log.Println("Token ok")
 		} else {
-			fmt.Println("token required")
+			log.Println("Token required")
 		}
 	},
 }

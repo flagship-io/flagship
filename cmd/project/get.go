@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
@@ -33,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "get project by project id")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 	ProjectCmd.AddCommand(getCmd)
 

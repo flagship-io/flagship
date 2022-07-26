@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package campaign
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
@@ -33,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "get campaign by campaign_id")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	CampaignCmd.AddCommand(getCmd)

@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package user
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -22,7 +21,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		fmt.Println("Users deleted.")
+		log.Println("Users deleted.")
 	},
 }
 
@@ -31,7 +30,7 @@ func init() {
 	deleteCmd.Flags().StringVarP(&UserEmail, "email", "e", "", "the email")
 
 	if err := deleteCmd.MarkFlagRequired("email"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	UserCmd.AddCommand(deleteCmd)

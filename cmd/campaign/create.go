@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package campaign
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -31,7 +30,7 @@ func init() {
 	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
 
 	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	CampaignCmd.AddCommand(createCmd)

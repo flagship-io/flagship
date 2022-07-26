@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -31,7 +30,7 @@ func init() {
 	deleteCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "the project id")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	ProjectCmd.AddCommand(deleteCmd)

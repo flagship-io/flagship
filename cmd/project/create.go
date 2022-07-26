@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -31,7 +30,7 @@ func init() {
 	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "the name")
 
 	if err := createCmd.MarkFlagRequired("name"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	ProjectCmd.AddCommand(createCmd)

@@ -46,10 +46,10 @@ var AuthenticateCmd = &cobra.Command{
 		}
 
 		if token == "" {
-			fmt.Println("client_id or client_secret not valid")
+			log.Println("client_id or client_secret not valid")
 			return
 		} else {
-			fmt.Println("Token generated successfully")
+			log.Println("Token generated successfully")
 		}
 		writeToken(token)
 	},

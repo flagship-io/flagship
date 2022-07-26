@@ -5,7 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
-	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -19,7 +18,7 @@ var toggleCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(ProjectStatus == "active" || ProjectStatus == "paused" || ProjectStatus == "interrupted") {
-			fmt.Println("Status can only have 3 values: active or paused or interrupted")
+			log.Println("Status can only have 3 values: active or paused or interrupted")
 			return
 		}
 
@@ -37,11 +36,11 @@ func init() {
 	toggleCmd.Flags().StringVarP(&ProjectStatus, "status", "s", "", "the project status")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	if err := toggleCmd.MarkFlagRequired("status"); err != nil {
-		fmt.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 
 	ProjectCmd.AddCommand(toggleCmd)
