@@ -2,6 +2,7 @@ package httprequest
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
@@ -17,6 +18,6 @@ func HTTPBatchUpdateUsers(data string) ([]byte, error) {
 }
 
 func HTTPDeleteUsers(email string) error {
-	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+email, nil)
+	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+url.QueryEscape(email), nil)
 	return err
 }
