@@ -15,7 +15,7 @@ import (
 // createCmd represents the create command
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "this ldelete user",
+	Short: "this delete user",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteUsers(UserEmail)

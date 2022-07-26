@@ -14,11 +14,7 @@ import (
 
 var panicStatus string
 
-func panicMessage(status string) string {
-	return "panic the account env id: " + status
-}
-
-// campaignCmd represents the campaign command
+// panicCmd represents the panic command
 var PanicCmd = &cobra.Command{
 	Use:   "panic",
 	Short: "panic short desc",
@@ -26,13 +22,14 @@ var PanicCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(panicStatus == "on" || panicStatus == "off") {
 			fmt.Println("Status can only have 2 values: on or off ")
-		} else {
-			err := httprequest.HTTPUpdatePanic(panicStatus)
-			if err != nil {
-				log.Fatalf("error occured: %v", err)
-			}
-			fmt.Printf("Panic set to %v", panicStatus)
+			return
 		}
+		err := httprequest.HTTPUpdatePanic(panicStatus)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		fmt.Printf("Panic set to %v", panicStatus)
+
 	},
 }
 
