@@ -10,13 +10,6 @@ type Campaign struct {
 	VariationGroups []VariationGroup `json:"variation_groups"`
 }
 
-type VariationGroup struct {
-	ID         string      `json:"id"`
-	Name       string      `json:"name"`
-	Variations []Variation `json:"variations"`
-	Targeting  Targeting   `json:"targeting"`
-}
-
 type Variation struct {
 	ID            string       `json:"id"`
 	Name          string       `json:"name"`
@@ -28,20 +21,6 @@ type Variation struct {
 type Modification struct {
 	Type  string      `json:"type"`
 	Value interface{} `json:"value"`
-}
-
-type Targeting struct {
-	TargetingGroups []TargetingGroup `json:"targeting_groups"`
-}
-
-type TargetingGroup struct {
-	Targetings []InnerTargeting `json:"targetings"`
-}
-
-type InnerTargeting struct {
-	Key      string      `json:"key"`
-	Operator string      `json:"operator"`
-	Value    interface{} `json:"value"`
 }
 
 type CampaignToggleRequest struct {
