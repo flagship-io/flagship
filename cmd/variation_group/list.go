@@ -28,12 +28,5 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-
-	listCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "campaign_id")
-
-	if err := listCmd.MarkFlagRequired("campaign-id"); err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
-
 	VariationGroupCmd.AddCommand(listCmd)
 }
