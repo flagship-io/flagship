@@ -5,15 +5,11 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package variation_group
 
 import (
-	"fmt"
+	"log"
 
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
-
-func createVariationGroup() string {
-	return "create variation group \n name: " + viper.GetString("variation_groups") + "\n campaign id: " + viper.GetString("campaign_id") + "\n account_env_id: " + viper.GetString("account_environment_id")
-}
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
@@ -21,19 +17,27 @@ var createCmd = &cobra.Command{
 	Short: "this create variation group",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(createVariationGroup())
+		body, err := httprequest.HTTPCreateVariationGroup(CampaignID, DataRaw)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("variation group created: %s", body)
 	},
 }
 
 func init() {
 
-	// Here you will define your flags and configuration settings.
-	VariationGroupCmd.AddCommand(createCmd)
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
+	createCmd.Flags().StringVarP(&CampaignID, "campaign-id", "i", "", "the campaign id")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	if err := createCmd.MarkFlagRequired("campaign-id"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+
+	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
+
+	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+
+	VariationGroupCmd.AddCommand(createCmd)
 }

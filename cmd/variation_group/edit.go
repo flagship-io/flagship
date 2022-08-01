@@ -5,45 +5,42 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package variation_group
 
 import (
-	"fmt"
+	"log"
 
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
-var (
-	editvariationGroupId string
-)
-
-func editVariationGroup(variationGroupId string) string {
-	return "edit variation group \n campaign_id: " + viper.GetString("campaign_id") + "\n variation_group_id: " + variationGroupId + "\n new variation group from the data " + viper.GetString("variation_groups") + "\n account_env_id: " + viper.GetString("account_environment_id")
-}
-
-// createCmd represents the create command
+// editCmd represents the edit command
 var editCmd = &cobra.Command{
 	Use:   "edit",
 	Short: "this edit variation group",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(editVariationGroup(editvariationGroupId))
+		body, err := httprequest.HTTPEditVariationGroup(CampaignID, VariationGroupID, DataRaw)
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+		log.Printf("campaign updated: %s", body)
 	},
 }
 
 func init() {
 
-	editCmd.Flags().StringVarP(&editvariationGroupId, "variation_group_id", "i", "", "edit variation group by id")
+	editCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "the campaign id")
+	editCmd.Flags().StringVarP(&VariationGroupID, "id", "i", "", "the variation group id")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data raw")
 
-	if err := editCmd.MarkFlagRequired("variation_group_id"); err != nil {
-		fmt.Println(err)
+	if err := editCmd.MarkFlagRequired("campaign-id"); err != nil {
+		log.Fatalf("error occured: %v", err)
 	}
 
-	// Here you will define your flags and configuration settings.
-	VariationGroupCmd.AddCommand(editCmd)
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
+	if err := editCmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	if err := editCmd.MarkFlagRequired("data-raw"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+	VariationGroupCmd.AddCommand(editCmd)
 }

@@ -14,6 +14,7 @@ import (
 var (
 	CampaignID       string
 	VariationGroupID string
+	DataRaw          string
 )
 
 // VariationGroupCmd represents the variation command
