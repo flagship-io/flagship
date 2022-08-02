@@ -21,7 +21,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("campaign updated: %s", body)
+		log.Printf("variation group updated: %s", body)
 	},
 }
 

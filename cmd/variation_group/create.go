@@ -27,7 +27,7 @@ var createCmd = &cobra.Command{
 
 func init() {
 
-	createCmd.Flags().StringVarP(&CampaignID, "campaign-id", "i", "", "the campaign id")
+	createCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "the campaign id")
 
 	if err := createCmd.MarkFlagRequired("campaign-id"); err != nil {
 		log.Fatalf("error occured: %v", err)

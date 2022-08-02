@@ -14,7 +14,7 @@ func FormatItemTable[T any](columns []string, item T, w *tabwriter.Writer) {
 	val := reflect.ValueOf(item)
 	values := []string{}
 	for _, column := range columns {
-		values = append(values, val.FieldByName(column).String())
+		values = append(values, fmt.Sprintf("%v", val.FieldByName(column)))
 	}
 	fmt.Fprintf(w, "%s\n", strings.Join(values, "\t"))
 }
