@@ -12,6 +12,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
 	"github.com/flagship-io/flagship/cmd/user"
+	"github.com/flagship-io/flagship/cmd/variation_group"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -51,6 +52,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(authorization.AuthenticateCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
 	rootCmd.AddCommand(user.UserCmd)
+	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
