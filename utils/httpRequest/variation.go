@@ -12,7 +12,7 @@ func HTTPListVariation(campaignID, variationGroupID string) ([]models.Variation,
 	return HTTPGetAllPages[models.Variation](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + campaignID + "/variation_groups/" + variationGroupID + "/variations")
 }
 
-func HTTPGetVariation(id, campaignID, variationGroupID string) (models.Variation, error) {
+func HTTPGetVariation(campaignID, variationGroupID, id string) (models.Variation, error) {
 	return HTTPGetItem[models.Variation](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + campaignID + "/variation_groups/" + variationGroupID + "/variations/" + id)
 }
 

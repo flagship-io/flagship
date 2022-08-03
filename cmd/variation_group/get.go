@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 	Short: "this get variation group",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPGetVariationGroup(VariationGroupID, CampaignID)
+		body, err := httprequest.HTTPGetVariationGroup(CampaignID, VariationGroupID)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
