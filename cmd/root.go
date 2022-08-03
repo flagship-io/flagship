@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/authorization"
@@ -14,6 +15,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
+	"github.com/flagship-io/flagship/cmd/version"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -33,6 +35,15 @@ var rootCmd = &cobra.Command{
 	The goal of the cli is to give the user the ability to manage his account
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		getVersion, err := cmd.Flags().GetBool("version")
+		if err != nil {
+			log.Fatalf("error occured: %v", err)
+		}
+
+		if getVersion {
+			version.DisplayVersion()
+			return
+		}
 		cmd.Root().Help()
 	},
 }
@@ -55,9 +66,12 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(user.UserCmd)
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
+	rootCmd.AddCommand(version.VersionCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
+
+	rootCmd.Flags().BoolP("version", "v", false, "CLI version")
 
 	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "authorization token")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", "table", "output format")
