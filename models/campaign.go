@@ -10,19 +10,6 @@ type Campaign struct {
 	VariationGroups []VariationGroup `json:"variation_groups"`
 }
 
-type Variation struct {
-	ID            string       `json:"id"`
-	Name          string       `json:"name"`
-	Reference     bool         `json:"reference"`
-	Allocation    int          `json:"allocation"`
-	Modifications Modification `json:"modifications"`
-}
-
-type Modification struct {
-	Type  string      `json:"type"`
-	Value interface{} `json:"value"`
-}
-
 type CampaignToggleRequest struct {
 	State string `json:"state"`
 }

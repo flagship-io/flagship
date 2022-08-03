@@ -2,7 +2,7 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
-package variation_group
+package variation
 
 import (
 	"log"
@@ -16,23 +16,23 @@ import (
 // getCmd represents get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "this get variation group",
+	Short: "this get variation",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPGetVariationGroup(CampaignID, VariationGroupID)
+		body, err := httprequest.HTTPGetVariation(CampaignID, VariationGroupID, VariationID)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"))
+		utils.FormatItem([]string{"ID", "Name", "Reference", "Allocation"}, body, viper.GetString("output_format"))
 
 	},
 }
 
 func init() {
-	getCmd.Flags().StringVarP(&VariationGroupID, "id", "i", "", "get variation group by id")
+	getCmd.Flags().StringVarP(&VariationID, "id", "i", "", "get variation by id")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Println(err)
 	}
-	VariationGroupCmd.AddCommand(getCmd)
+	VariationCmd.AddCommand(getCmd)
 }
