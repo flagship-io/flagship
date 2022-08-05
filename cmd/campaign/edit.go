@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-i <campaign-id> | --id=<campaign-id>] [ -d <data-raw> | --data-raw=<data-raw>]",
 	Short: "Edit a campaign",
-	Long:  `Edit a campaign in your account`,
+	Long:  `Edit a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPEditCampaign(CampaignID, DataRaw)
 		if err != nil {

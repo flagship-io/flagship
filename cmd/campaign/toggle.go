@@ -15,7 +15,7 @@ import (
 var toggleCmd = &cobra.Command{
 	Use:   "toggle [-i <campaign-id> | --id=<campaign-id>] [-s <status> | --status=<status>]",
 	Short: "Toggle a campaign",
-	Long:  `Toggle a campaign in your account`,
+	Long:  `Toggle a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			log.Println("Status can only have 3 values : active or paused or interrupted")
