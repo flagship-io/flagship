@@ -13,9 +13,9 @@ import (
 
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "this edit variation",
-	Long:  ``,
+	Use:   "edit [--campaign-id=<campaign-id>] [--variation-group-id=<variation-group-id>] [-i <variation-id> | --id=<variation-id>] [-d <data-raw> | --data-raw=<data-raw>]",
+	Short: "Edit a variation",
+	Long:  `Edit a variation in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPEditVariation(CampaignID, VariationGroupID, VariationID, DataRaw)
 		if err != nil {
@@ -27,18 +27,8 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "the campaign id")
-	editCmd.Flags().StringVarP(&VariationGroupID, "variation-group-id", "", "", "the variation group id")
-	editCmd.Flags().StringVarP(&VariationID, "id", "i", "", "the variation id")
-	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data raw")
-
-	if err := editCmd.MarkFlagRequired("campaign-id"); err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
-
-	if err := editCmd.MarkFlagRequired("variation-group-id"); err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
+	editCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the variation you want to edit")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your variation, check the doc for details")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)
