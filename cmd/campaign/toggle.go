@@ -13,9 +13,9 @@ import (
 
 // toggleCmd represents the toggle command
 var toggleCmd = &cobra.Command{
-	Use:   "toggle",
-	Short: "this toggle campaign",
-	Long:  ``,
+	Use:   "toggle [-i <campaign-id> | --campaign-id=<campaign-id>] [-s <status> | --status=<status>]",
+	Short: "Toggle a campaign",
+	Long:  `Toggle a campaign of your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			log.Println("Status can only have 3 values : active or paused or interrupted")
@@ -32,8 +32,8 @@ var toggleCmd = &cobra.Command{
 
 func init() {
 
-	toggleCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "toggle campaign id")
-	toggleCmd.Flags().StringVarP(&Status, "status", "s", "", "status")
+	toggleCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "id of the campaign you want to toggle")
+	toggleCmd.Flags().StringVarP(&Status, "status", "s", "", "status you want set to the campaign. Only 3 value are possible: active, paused and interrupted")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)

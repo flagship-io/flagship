@@ -49,9 +49,13 @@ func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 
 // loginCmd represents the login command
 var ConfigureCmd = &cobra.Command{
-	Use:   "configure",
-	Short: "this configure client-id and client-secret and account-id",
-	Long:  ``,
+	Use:   "configure [-i <client-id> | --client-id=<client-id>] [-s <client-secret> | --client-secret=<client-secret>] [-a <account-id> | --account-id=<account-id>] [-e <account-env-id> | --account-environment-id=<account-env-id>]",
+	Short: "Set the credentials of your flagship account",
+	Long: `Set your credentials (account_id, account_env_id, client_id, client_secret) 
+	by managing the file credentials.yaml ($HOME/.flagship/credentials.yaml)
+	
+	The command create credentials file at $HOME/.flagship/credentials.yaml and write value of flag as key-value pairs.
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if clientId == "" {
 			clientId = viper.GetString("client_id")
@@ -82,10 +86,10 @@ func init() {
 
 	cobra.OnInitialize(initLocalConfig)
 
-	ConfigureCmd.Flags().StringVarP(&clientId, "client-id", "i", "", "the client id")
-	ConfigureCmd.Flags().StringVarP(&clientSecret, "client-secret", "s", "", "the client secret")
-	ConfigureCmd.Flags().StringVarP(&accountId, "account-id", "a", "", "the account id")
-	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account-environment-id", "e", "", "the account env id")
+	ConfigureCmd.Flags().StringVarP(&clientId, "client-id", "i", "", "client id of your flagship account")
+	ConfigureCmd.Flags().StringVarP(&clientSecret, "client-secret", "s", "", "client secret of your flagship account")
+	ConfigureCmd.Flags().StringVarP(&accountId, "account-id", "a", "", "account id of your flagship account")
+	ConfigureCmd.Flags().StringVarP(&accountEnvId, "account-environment-id", "e", "", "account environment id of managed environment")
 
 	v.BindPFlag("client-id", ConfigureCmd.PersistentFlags().Lookup("client_id"))
 	v.BindPFlag("client-secret", ConfigureCmd.PersistentFlags().Lookup("client_secret"))

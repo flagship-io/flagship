@@ -13,9 +13,9 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "this create campaign",
-	Long:  ``,
+	Use:   "create [--data-raw=<data-raw>]",
+	Short: "Create a campaign",
+	Long:  `Create a campaign for your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPCreateCampaign(DataRaw)
 		if err != nil {
@@ -27,7 +27,7 @@ var createCmd = &cobra.Command{
 
 func init() {
 
-	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
+	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to create your campaign, check the doc for details")
 
 	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
 		log.Fatalf("error occured: %v", err)

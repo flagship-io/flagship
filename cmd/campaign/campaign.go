@@ -31,9 +31,9 @@ var (
 
 // campaignCmd represents the campaign command
 var CampaignCmd = &cobra.Command{
-	Use:   "campaign",
-	Short: "campaign short desc",
-	Long:  `campaign long desc`,
+	Use:   "campaign [create|edit|get|list|delete|toggle]",
+	Short: "Manage your campaigns",
+	Long:  `Manage your campaigns`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

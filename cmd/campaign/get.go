@@ -15,9 +15,9 @@ import (
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "this get campaign",
-	Long:  ``,
+	Use:   "get [-i <campaign-id> | --campaign-id=<campaign-id>]",
+	Short: "Get a campaign",
+	Long:  `Get a campaign of your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetCampaign(CampaignID)
 		if err != nil {
@@ -29,7 +29,7 @@ var getCmd = &cobra.Command{
 
 func init() {
 
-	getCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "get campaign by campaign_id")
+	getCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "id of the campaign you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)
