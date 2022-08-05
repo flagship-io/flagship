@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [--data-raw=<data-raw>]",
 	Short: "Create a campaign",
-	Long:  `Create a campaign for your account`,
+	Long:  `Create a campaign in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPCreateCampaign(DataRaw)
 		if err != nil {

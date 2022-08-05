@@ -15,9 +15,9 @@ import (
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
-	Use:   "get [-i <campaign-id> | --campaign-id=<campaign-id>]",
+	Use:   "get [-i <campaign-id> | --id=<campaign-id>]",
 	Short: "Get a campaign",
-	Long:  `Get a campaign of your account`,
+	Long:  `Get a campaign in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetCampaign(CampaignID)
 		if err != nil {

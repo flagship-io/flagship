@@ -13,9 +13,9 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete [-i <campaign-id> | --campaign-id=<campaign-id>]",
+	Use:   "delete [-i <campaign-id> | --id=<campaign-id>]",
 	Short: "Delete a campaign",
-	Long:  `Delete a campaign of your account`,
+	Long:  `Delete a campaign in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteCampaign(CampaignID)
 		if err != nil {
