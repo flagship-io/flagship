@@ -15,9 +15,9 @@ import (
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "this get project",
-	Long:  ``,
+	Use:   "get [-i <project-id> | --id=<project-id>]",
+	Short: "Get a project",
+	Long:  `Get a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetProject(ProjectId)
 		if err != nil {
@@ -29,7 +29,7 @@ var getCmd = &cobra.Command{
 
 func init() {
 
-	getCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "get project by project id")
+	getCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)

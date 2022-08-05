@@ -13,9 +13,9 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "this create project",
-	Long:  ``,
+	Use:   "create [-n  <name> | --n=<name>]",
+	Short: "Create a project",
+	Long:  `Create a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPCreateProject(ProjectName)
 		if err != nil {
@@ -27,7 +27,7 @@ var createCmd = &cobra.Command{
 
 func init() {
 
-	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "the name")
+	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name of project you want to create")
 
 	if err := createCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("error occured: %v", err)

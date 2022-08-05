@@ -13,7 +13,7 @@ import (
 
 // toggleCmd represents the toggle command
 var toggleCmd = &cobra.Command{
-	Use:   "toggle",
+	Use:   "toggle [-i <project-id> | --id=<project-id>] [-s <status> | --status=<status>]",
 	Short: "this toggle project",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -32,8 +32,8 @@ var toggleCmd = &cobra.Command{
 
 func init() {
 
-	toggleCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "the project id")
-	toggleCmd.Flags().StringVarP(&ProjectStatus, "status", "s", "", "the project status")
+	toggleCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to toggle")
+	toggleCmd.Flags().StringVarP(&ProjectStatus, "status", "s", "", "status you want to set to the project. Only 3 values are possible: active, paused and interrupted")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)
