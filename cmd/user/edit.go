@@ -27,7 +27,7 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "a", "", "the raw data")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your user, check the doc for details")
 
 	UserCmd.AddCommand(editCmd)
 }
