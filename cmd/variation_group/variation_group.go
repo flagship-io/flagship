@@ -19,10 +19,10 @@ var (
 
 // VariationGroupCmd represents the variation command
 var VariationGroupCmd = &cobra.Command{
-	Use:     "variationgroup",
-	Short:   "variation group short desc",
+	Use:     "variationgroup [create|edit|get|list|delete]",
+	Short:   "Manage your variation groups",
+	Long:    `Manage your variation groups in your campaign`,
 	Aliases: []string{"vg"},
-	Long:    `variation group long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
