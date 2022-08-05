@@ -16,9 +16,9 @@ var (
 
 // userCmd represents the user command
 var UserCmd = &cobra.Command{
-	Use:   "user",
-	Short: "user short desc",
-	Long:  `user long desc`,
+	Use:   "user [create|edit|list|delete]",
+	Short: "Manage your users",
+	Long:  `Manage your users`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

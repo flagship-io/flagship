@@ -13,11 +13,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-// createCmd represents the create command
+// listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "this list users",
-	Long:  ``,
+	Short: "List all users",
+	Long:  `List all users in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPListUsers()
 		if err != nil {

@@ -13,9 +13,9 @@ import (
 
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "this edit right",
-	Long:  ``,
+	Use:   "edit [-d <data-raw> | --data-raw=<data-raw>]",
+	Short: "Edit a user with right",
+	Long:  `Edit a user with right in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {
@@ -27,10 +27,7 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&UserEmail, "email", "e", "", "the email")
 	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "a", "", "the raw data")
-
-	editCmd.Flags().StringVarP(&UserRole, "role", "r", "", "the role")
 
 	UserCmd.AddCommand(editCmd)
 }
