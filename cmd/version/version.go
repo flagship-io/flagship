@@ -21,8 +21,8 @@ func DisplayVersion() {
 // VersionCmd represents the version command
 var VersionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "version short desc",
-	Long:  `version long desc`,
+	Short: "Get Flagship CLI version",
+	Long:  `Get Flagship CLI version`,
 	Run: func(cmd *cobra.Command, args []string) {
 		DisplayVersion()
 	},
