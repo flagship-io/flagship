@@ -16,8 +16,8 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all campaign",
-	Long:  `List all campaign in your account`,
+	Short: "List all campaigns",
+	Long:  `List all campaigns`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPListCampaign()
 		if err != nil {

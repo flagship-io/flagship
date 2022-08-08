@@ -16,8 +16,8 @@ var panicStatus string
 // panicCmd represents the panic command
 var PanicCmd = &cobra.Command{
 	Use:   "panic",
-	Short: "panic short desc",
-	Long:  `panic long desc`,
+	Short: "Manage panic mode",
+	Long:  `Manage panic mode in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(panicStatus == "on" || panicStatus == "off") {
 			log.Println("Status can only have 2 values: on or off ")

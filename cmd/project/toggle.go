@@ -14,8 +14,8 @@ import (
 // toggleCmd represents the toggle command
 var toggleCmd = &cobra.Command{
 	Use:   "toggle [-i <project-id> | --id=<project-id>] [-s <status> | --status=<status>]",
-	Short: "this toggle project",
-	Long:  ``,
+	Short: "Toggle a project",
+	Long:  `Toggle a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(ProjectStatus == "active" || ProjectStatus == "paused" || ProjectStatus == "interrupted") {
 			log.Println("Status can only have 3 values: active or paused or interrupted")
