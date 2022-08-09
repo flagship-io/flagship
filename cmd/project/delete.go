@@ -13,9 +13,9 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "this delete project",
-	Long:  ``,
+	Use:   "delete [-i <project-id> | --id=<project-id>]",
+	Short: "Delete a project",
+	Long:  `Delete a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteProject(ProjectId)
 		if err != nil {
@@ -27,7 +27,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "the project id")
+	deleteCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)

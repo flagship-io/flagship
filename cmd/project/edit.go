@@ -13,9 +13,9 @@ import (
 
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "this edit project",
-	Long:  ``,
+	Use:   "edit [-i <project-id> | --id=<project-id>] [-n <name> | --name=<name>]",
+	Short: "Edit a project",
+	Long:  `Edit a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPEditProject(ProjectId, ProjectName)
 		if err != nil {
@@ -27,9 +27,9 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "the project id")
+	editCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to edit")
 
-	editCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "the project new name")
+	editCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name you want to set for the project")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)

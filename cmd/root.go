@@ -30,10 +30,13 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "flagship",
-	Short: "Cli to manage your usecases, project, users etc...",
-	Long: `
-	The goal of the cli is to give the user the ability to manage his account
-	`,
+	Short: "flagship manage your campaigns, project, users etc...",
+	Long: `flagship is the main command, used to manage campaigns, projects, users, variation groups and variations
+	
+	Flagship is a feature flagging platform for modern developers. 
+	Separate code deployments from feature releases to accelerate development cycles and mitigate risks.
+	
+	Complete documentation is available at http://flagship.io`,
 	Run: func(cmd *cobra.Command, args []string) {
 		getVersion, err := cmd.Flags().GetBool("version")
 		if err != nil {
@@ -72,10 +75,11 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.Flags().BoolP("version", "v", false, "CLI version")
-
-	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "authorization token")
+	
+  rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "access token")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", "table", "output format")
-	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	
+  viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.flagship/credentials.yaml)")

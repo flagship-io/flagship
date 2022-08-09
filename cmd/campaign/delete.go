@@ -13,9 +13,9 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "this delete campaign",
-	Long:  ``,
+	Use:   "delete [-i <campaign-id> | --id=<campaign-id>]",
+	Short: "Delete a campaign",
+	Long:  `Delete a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteCampaign(CampaignID)
 		if err != nil {
@@ -27,7 +27,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "delete the campaign")
+	deleteCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "id of the campaign you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)
