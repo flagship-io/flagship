@@ -13,9 +13,9 @@ import (
 
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
-	Use:   "edit",
-	Short: "this edit campaign",
-	Long:  ``,
+	Use:   "edit [-i <campaign-id> | --id=<campaign-id>] [ -d <data-raw> | --data-raw=<data-raw>]",
+	Short: "Edit a campaign",
+	Long:  `Edit a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPEditCampaign(CampaignID, DataRaw)
 		if err != nil {
@@ -27,8 +27,8 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "edit the campaign")
-	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "the data")
+	editCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "id of the campaign you want to edit")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your campaign, check the doc for details")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occured: %v", err)

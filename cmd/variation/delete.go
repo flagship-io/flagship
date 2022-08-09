@@ -14,9 +14,9 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "this delete variation",
-	Long:  ``,
+	Use:   "delete [--campaign-id=<campaign-id>] [--variation-group-id=<variation-group-id>] [-i <variation-id> | --id=<variation-id>]",
+	Short: "Delete a variation",
+	Long:  `Delete a variation in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteVariation(CampaignID, VariationGroupID, VariationID)
 		if err != nil {
@@ -28,7 +28,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&VariationID, "id", "i", "", "delete variation by id")
+	deleteCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the variation you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
 		fmt.Println(err)
