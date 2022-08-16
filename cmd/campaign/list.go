@@ -7,6 +7,7 @@ package campaign
 import (
 	"log"
 
+	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -21,7 +22,11 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPListCampaign()
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			authorization.AuthenticateCmd.Run(cmd, args)
+			body, err = httprequest.HTTPListCampaign()
+			if err != nil {
+				log.Fatalf("error occured: %v", err)
+			}
 		}
 		utils.FormatItem([]string{"ID", "ProjectID", "Name", "Description", "Type", "Status"}, body, viper.GetString("output_format"))
 	},

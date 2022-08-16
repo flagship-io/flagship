@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
@@ -30,6 +31,18 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	req, err := http.NewRequest(method, resource, bodyIO)
 	if err != nil {
 		log.Panicf("error occured on request creation: %v", err)
+	}
+
+	if !strings.Contains(resource, "token") && viper.GetString("account_id") == "" && viper.GetString("account_environment_id") == "" {
+		log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+	}
+
+	if strings.Contains(resource, "token") && viper.GetString("client_id") == "" && viper.GetString("client_secret") == "" {
+		log.Fatalf("client_id or client_secret required, Please configure your CLI")
+	}
+
+	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
+		log.Fatalf("Token required, Please configure & authenticate your CLI")
 	}
 
 	req.Header.Add("Accept", `*/*`)
