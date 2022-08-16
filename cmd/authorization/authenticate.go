@@ -6,8 +6,7 @@ package authorization
 
 import (
 	"log"
-	"os"
-	"path/filepath"
+	"strconv"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -20,16 +19,10 @@ var (
 	expiration string
 )
 
-func writeToken(token string) {
-	homeDir, err := os.UserHomeDir()
-	cobra.CheckErr(err)
-	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
-	viper.SetConfigFile(filepath)
-	viper.Set("token", token)
-	err = viper.WriteConfigAs(filepath)
-	if err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
+func setOptionalsDefault(grantType, scope string, expiration int) {
+	viper.Set("grant_type", grantType)
+	viper.Set("scope", scope)
+	viper.Set("expiration", expiration)
 }
 
 // AuthenticateCmd represents the authenticate command
@@ -38,19 +31,24 @@ var AuthenticateCmd = &cobra.Command{
 	Short: "authenticate shot desc",
 	Long:  `authenticate long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
+		exp, err := strconv.Atoi(expiration)
+		if err != nil {
+			log.Fatalf("%s", err)
+			return
+		}
+		setOptionalsDefault(grantType, scope, exp)
 		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)
 			return
 		}
-
 		if token == "" {
 			log.Fatal("client_id or client_secret not valid")
 			return
 		} else {
 			log.Println("Token generated successfully")
 		}
-		writeToken(token)
+		httprequest.WriteToken(token)
 	},
 }
 

@@ -22,7 +22,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("variation deleted")
+		log.Println("Variation deleted")
 	},
 }
 

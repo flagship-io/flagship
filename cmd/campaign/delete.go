@@ -21,7 +21,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("campaign deleted")
+		log.Println("Campaign deleted")
 	},
 }
 
