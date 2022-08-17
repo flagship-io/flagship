@@ -6,7 +6,6 @@ package authorization
 
 import (
 	"log"
-	"strconv"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -19,7 +18,7 @@ var (
 	expiration string
 )
 
-func setOptionalsDefault(grantType, scope string, expiration int) {
+func setOptionalsDefault(grantType, scope, expiration string) {
 	viper.Set("grant_type", grantType)
 	viper.Set("scope", scope)
 	viper.Set("expiration", expiration)
@@ -31,12 +30,7 @@ var AuthenticateCmd = &cobra.Command{
 	Short: "authenticate shot desc",
 	Long:  `authenticate long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-		exp, err := strconv.Atoi(expiration)
-		if err != nil {
-			log.Fatalf("%s", err)
-			return
-		}
-		setOptionalsDefault(grantType, scope, exp)
+		setOptionalsDefault(grantType, scope, expiration)
 		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)

@@ -50,7 +50,7 @@ func regenerateToken() {
 }
 
 var c = http.Client{Timeout: time.Duration(10) * time.Second}
-var counter = 0
+var counter = false
 
 type PageResult struct {
 	Items      json.RawMessage `json:"items"`
@@ -108,8 +108,8 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode == 403 && counter == 0 {
-		counter++
+	if resp.StatusCode == 403 && !counter {
+		counter = true
 		regenerateToken()
 		return HTTPRequest(method, resource, body)
 	}
