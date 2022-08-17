@@ -32,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the variation you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		log.Println(err)
+		log.Fatalf("error occured: %v", err)
 	}
 	VariationCmd.AddCommand(getCmd)
 }

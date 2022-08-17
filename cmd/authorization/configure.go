@@ -47,6 +47,28 @@ func writeCredentials(clientId, clientSecret, accountId, accountEnvId string) {
 
 }
 
+func writeOptionals(grantType, scope string, expiration int) {
+	homeDir, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	if _, err := os.Stat(homeDir + "/.flagship"); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(homeDir+"/.flagship", os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	filepath, _ := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
+	v.SetConfigFile(filepath)
+	v.Set("grant_type", grantType)
+	v.Set("scope", scope)
+	v.Set("expiration", expiration)
+	err = v.WriteConfigAs(filepath)
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+
+}
+
 // loginCmd represents the login command
 var ConfigureCmd = &cobra.Command{
 	Use:   "configure [-i <client-id> | --client-id=<client-id>] [-s <client-secret> | --client-secret=<client-secret>] [-a <account-id> | --account-id=<account-id>] [-e <account-env-id> | --account-environment-id=<account-env-id>]",
@@ -57,6 +79,7 @@ var ConfigureCmd = &cobra.Command{
 	The command create credentials file at $HOME/.flagship/credentials.yaml and write value of flag as key-value pairs.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		writeOptionals("client_credentials", "*", 86400)
 		if clientId == "" {
 			clientId = viper.GetString("client_id")
 		}
@@ -69,11 +92,8 @@ var ConfigureCmd = &cobra.Command{
 		if accountEnvId == "" {
 			accountEnvId = viper.GetString("account_environment_id")
 		}
-
 		if clientId == "" || clientSecret == "" || accountId == "" || accountEnvId == "" {
-
 			log.Fatal("required client-id and client-secret and account-id and account-env-id")
-
 		} else {
 			writeCredentials(clientId, clientSecret, accountId, accountEnvId)
 			log.Println("Credentials wrote successfully")

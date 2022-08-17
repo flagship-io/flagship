@@ -9,12 +9,48 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
+func WriteToken(token string) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+	cobra.CheckErr(err)
+	filepath, err := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+	viper.SetConfigFile(filepath)
+	viper.Set("token", token)
+	err = viper.WriteConfigAs(filepath)
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+}
+
+func regenerateToken() {
+	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetString("expiration"))
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	if token == "" {
+		log.Fatal("client_id or client_secret not valid")
+	} else {
+		log.Println("Token generated successfully")
+		WriteToken(token)
+	}
+}
+
 var c = http.Client{Timeout: time.Duration(10) * time.Second}
+var counter = false
 
 type PageResult struct {
 	Items      json.RawMessage `json:"items"`
@@ -30,6 +66,18 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	req, err := http.NewRequest(method, resource, bodyIO)
 	if err != nil {
 		log.Panicf("error occured on request creation: %v", err)
+	}
+
+	if !strings.Contains(resource, "token") && viper.GetString("account_id") == "" && viper.GetString("account_environment_id") == "" {
+		log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+	}
+
+	if strings.Contains(resource, "token") && viper.GetString("client_id") == "" && viper.GetString("client_secret") == "" {
+		log.Fatalf("client_id or client_secret required, Please configure your CLI")
+	}
+
+	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
+		regenerateToken()
 	}
 
 	req.Header.Add("Accept", `*/*`)
@@ -60,8 +108,10 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode >= 400 {
-		err = fmt.Errorf("error occured when calling request: %v", resp.StatusCode)
+	if resp.StatusCode == 403 && !counter {
+		counter = true
+		regenerateToken()
+		return HTTPRequest(method, resource, body)
 	}
 	return respBody, err
 }

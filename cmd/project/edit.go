@@ -21,7 +21,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("project updated")
+		log.Println("Project updated")
 	},
 }
 
