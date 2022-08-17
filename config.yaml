@@ -2,3 +2,4 @@ account_id: ai
 account_environment_id: aei
 client_id: ci
 client_secret: cs
+token: tk
