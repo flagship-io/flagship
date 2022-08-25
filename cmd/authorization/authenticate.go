@@ -6,6 +6,7 @@ package authorization
 
 import (
 	"log"
+	"strconv"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -19,9 +20,13 @@ var (
 )
 
 func setOptionalsDefault(grantType, scope, expiration string) {
+	exp, err := strconv.Atoi(expiration)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
 	viper.Set("grant_type", grantType)
 	viper.Set("scope", scope)
-	viper.Set("expiration", expiration)
+	viper.Set("expiration", exp)
 }
 
 // AuthenticateCmd represents the authenticate command
@@ -50,6 +55,6 @@ func init() {
 
 	AuthenticateCmd.Flags().StringVarP(&grantType, "grant-type", "", "client_credentials", "grant type of the token, DEFAULT value is client_credentials")
 	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", "*", "scope of the token, DEFAULT value is *")
-	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "0", "expiration time in second of the token, DEFAULT value is 0")
+	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "86400", "expiration time in second of the token, DEFAULT value is 86400")
 
 }
