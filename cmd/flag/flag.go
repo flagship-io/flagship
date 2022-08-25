@@ -4,7 +4,10 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 */
 package flag
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/flagship-io/flagship/cmd/flag/usage"
+	"github.com/spf13/cobra"
+)
 
 var (
 	FlagID  string
@@ -19,4 +22,8 @@ var FlagCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
+}
+
+func init() {
+	FlagCmd.AddCommand(usage.UsageCmd)
 }
