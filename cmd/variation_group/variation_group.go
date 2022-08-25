@@ -19,17 +19,17 @@ var (
 
 // VariationGroupCmd represents the variation command
 var VariationGroupCmd = &cobra.Command{
-	Use:     "variationgroup [create|edit|get|list|delete]",
+	Use:     "variation-group [create|edit|get|list|delete]",
+	Aliases: []string{"vg"},
 	Short:   "Manage your variation groups",
 	Long:    `Manage your variation groups in your campaign`,
-	Aliases: []string{"vg"},
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
 }
 
 func init() {
-	VariationGroupCmd.PersistentFlags().StringVarP(&CampaignID, "campaign-id", "", "", "campaign_id")
+	VariationGroupCmd.PersistentFlags().StringVarP(&CampaignID, "campaign-id", "", "", "id of the campaign where you want to manage your variation group")
 
 	if err := VariationGroupCmd.MarkPersistentFlagRequired("campaign-id"); err != nil {
 		log.Fatalf("error occured: %v", err)

@@ -27,7 +27,7 @@ var createCmd = &cobra.Command{
 
 func init() {
 
-	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name of project you want to create")
+	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name of the project you want to create")
 
 	if err := createCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("error occured: %v", err)

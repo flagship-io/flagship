@@ -27,7 +27,7 @@ var deleteCmd = &cobra.Command{
 
 func init() {
 
-	deleteCmd.Flags().StringVarP(&UserEmail, "email", "e", "", "the email")
+	deleteCmd.Flags().StringVarP(&UserEmail, "email", "e", "", "email you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("email"); err != nil {
 		log.Fatalf("error occured: %v", err)

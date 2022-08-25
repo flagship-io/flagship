@@ -13,7 +13,7 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create [--data-raw=<data-raw>]",
+	Use:   "create [-d <data-raw> | --data-raw=<data-raw>]",
 	Short: "Create a campaign",
 	Long:  `Create a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
