@@ -11,7 +11,7 @@ var (
 	DataRaw        string
 )
 
-// TargetingKeyCmd represents the project command
+// TargetingKeyCmd represents the targeting command
 var TargetingKeyCmd = &cobra.Command{
 	Use:     "targeting-key [create|edit|get|list|delete]",
 	Aliases: []string{"tk"},
