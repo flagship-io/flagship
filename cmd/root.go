@@ -12,6 +12,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
+	"github.com/flagship-io/flagship/cmd/targeting_key"
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
@@ -60,6 +61,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(flag.FlagCmd)
+	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
