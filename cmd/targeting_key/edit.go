@@ -21,7 +21,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("targeting key updated: %s", body)
+		log.Printf("Targeting key updated: %s", body)
 	},
 }
 
