@@ -1,0 +1,32 @@
+[
+    {
+        "type": "string",
+        "name": "Flag_created_with_cli_1",
+        "description": "my flag description 1",
+        "source": "manual"
+    },
+    {
+        "type": "string",
+        "name": "Flag_created_with_cli_2",
+        "description": "my flag description 2",
+        "source": "manual"
+    },
+    {
+        "type": "string",
+        "name": "Flag_created_with_cli_3",
+        "description": "my flag description 3",
+        "source": "manual"
+    },
+    {
+        "type": "string",
+        "name": "Flag_created_with_cli_4",
+        "description": "my flag description 4",
+        "source": "manual"
+    },
+    {
+        "type": "string",
+        "name": "Flag_created_with_cli_5",
+        "description": "my flag description 5",
+        "source": "manual"
+    }
+]
