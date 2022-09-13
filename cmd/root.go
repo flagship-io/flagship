@@ -60,6 +60,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
+	rootCmd.AddCommand(authorization.VersionCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
