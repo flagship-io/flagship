@@ -2,22 +2,38 @@
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 
 */
+
 package authorization
 
 import (
-	"fmt"
+	"io"
+	"log"
 
 	"github.com/spf13/cobra"
 )
 
-const flagshipVersion = "v0.2.0"
+// Version will match the tag
+var Version = "v0.2.1"
 
-// versionCmd represents the check command
+type Commad struct {
+	*cobra.Command
+}
+
+func CmdWriter(w io.Writer) error {
+	i := "Flagship CLI version : " + Version
+	_, err := w.Write([]byte(i))
+	return err
+}
+
+// VersionCmd represents the version command
 var VersionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "this show version",
-	Long:  ``,
+	Short: "version short desc",
+	Long:  `version long desc`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Flagship CLI version : %s", flagshipVersion)
+		err := CmdWriter(cmd.OutOrStdout())
+		if err != nil {
+			log.Fatalf("error occured: %s", err)
+		}
 	},
 }
