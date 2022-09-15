@@ -5,7 +5,7 @@ type=( $(jq -r '.[].type' $1) )
 readarray -t description <<< $(jq -r '.[].description' $1)
 source=( $(jq -r '.[].source' $1) )
 
-for (( i=0; i<${#type[@]}; i++))
+for (( i=0; i<${#name[@]}; i++))
 do 
-    eval $(echo flagship flag create -d \'{\"name\":\"${name[$i]}\",\"type\":\"${type[$i]}\", \"description\":\"${description[$i]}\", \"source\":\"${source[$i]}\"}\')
+    flagship flag create -d $"{\"name\":\"${name[$i]}\",\"type\":\"${type[$i]}\", \"description\":\"${description[$i]}\", \"source\":\"${source[$i]}\"}"
 done
