@@ -6,8 +6,8 @@ package authorization
 
 import (
 	"log"
-	"strconv"
 
+	"github.com/flagship-io/flagship/utils/config"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -16,18 +16,8 @@ import (
 var (
 	grantType  string
 	scope      string
-	expiration string
+	expiration int
 )
-
-func setOptionalsDefault(grantType, scope, expiration string) {
-	exp, err := strconv.Atoi(expiration)
-	if err != nil {
-		log.Fatalf("%s", err)
-	}
-	viper.Set("grant_type", grantType)
-	viper.Set("scope", scope)
-	viper.Set("expiration", exp)
-}
 
 // AuthenticateCmd represents the authenticate command
 var AuthenticateCmd = &cobra.Command{
@@ -35,7 +25,7 @@ var AuthenticateCmd = &cobra.Command{
 	Short: "Generate your access token",
 	Long:  `Generate the access token based on your credentials`,
 	Run: func(cmd *cobra.Command, args []string) {
-		setOptionalsDefault(grantType, scope, expiration)
+		config.SetOptionalsDefault(grantType, scope, expiration)
 		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)
@@ -47,14 +37,14 @@ var AuthenticateCmd = &cobra.Command{
 		} else {
 			log.Println("Token generated successfully")
 		}
-		httprequest.WriteToken(token)
+		config.WriteToken(config.CredentialsFile, token)
 	},
 }
 
 func init() {
 
-	AuthenticateCmd.Flags().StringVarP(&grantType, "grant-type", "", "client_credentials", "grant type of the token, DEFAULT value is client_credentials")
-	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", "*", "scope of the token, DEFAULT value is *")
-	AuthenticateCmd.Flags().StringVarP(&expiration, "expiration", "", "86400", "expiration time in second of the token, DEFAULT value is 86400")
+	AuthenticateCmd.Flags().StringVarP(&grantType, "grant-type", "", config.GrantType, "grant type of the token, DEFAULT value is client_credentials")
+	AuthenticateCmd.Flags().StringVarP(&scope, "scope", "", config.Scope, "scope of the token, DEFAULT value is *")
+	AuthenticateCmd.Flags().IntVarP(&expiration, "expiration", "", config.Expiration, "expiration time in second of the token, DEFAULT value is 86400")
 
 }

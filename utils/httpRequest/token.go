@@ -3,13 +3,14 @@ package httprequest
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/spf13/viper"
 )
 
-func HTTPCreateToken(client_id, client_secret, grant_type, scope, expiration string) (string, error) {
+func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (string, error) {
 	var authenticationResponse models.AuthenticationResponse
 	authRequest := models.AuthenticationRequest{
 		Client_id:     client_id,
@@ -22,7 +23,7 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope, expiration str
 		return "", err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.HostAuth+"/"+viper.GetString("account_id")+"/token?expires_in="+expiration, authRequestJSON)
+	respBody, err := HTTPRequest(http.MethodPost, utils.HostAuth+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
 	if err != nil {
 		return "", err
 	}

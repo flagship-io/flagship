@@ -9,35 +9,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
-	"github.com/spf13/cobra"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/spf13/viper"
 )
 
-func WriteToken(token string) {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
-	cobra.CheckErr(err)
-	filepath, err := filepath.Abs(homeDir + "/.flagship/credentials.yaml")
-	if err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
-	viper.SetConfigFile(filepath)
-	viper.Set("token", token)
-	err = viper.WriteConfigAs(filepath)
-	if err != nil {
-		log.Fatalf("error occured: %v", err)
-	}
-}
-
 func regenerateToken() {
-	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetString("expiration"))
+	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetInt("expiration"))
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
@@ -45,7 +25,7 @@ func regenerateToken() {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
 		log.Println("Token generated successfully")
-		WriteToken(token)
+		config.WriteToken(config.CredentialsFile, token)
 	}
 }
 

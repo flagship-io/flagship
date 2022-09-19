@@ -39,7 +39,7 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		fmt.Println(login(viper.GetString("client_id"), viper.GetString("client_secret")))
-		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), "client_credentials", "*", "0")
+		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), "client_credentials", "*", 0)
 		if err != nil {
 			log.Fatalf("%s", err)
 			return

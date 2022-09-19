@@ -15,6 +15,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
+	"github.com/flagship-io/flagship/utils/config"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -66,7 +67,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "access token")
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", "table", "output format")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 
