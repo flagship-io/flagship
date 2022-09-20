@@ -36,7 +36,6 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expirat
 	return authenticationResponse.Access_token, err
 }
 
-func HTTPCheckToken(token string) error {
-	_, err := HTTPRequest(http.MethodGet, utils.HostAuth+"/token?access_token="+token, nil)
-	return err
+func HTTPCheckToken(token string) (models.Token, error) {
+	return HTTPGetItem[models.Token](utils.HostAuth + "/token?access_token=" + token)
 }

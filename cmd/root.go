@@ -9,9 +9,11 @@ import (
 
 	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/cmd/campaign"
+	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
 	"github.com/flagship-io/flagship/cmd/targeting_key"
+	"github.com/flagship-io/flagship/cmd/token"
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
@@ -23,7 +25,7 @@ import (
 
 var (
 	cfgFile      string
-	token        string
+	cmdToken     string
 	outputFormat string
 )
 
@@ -36,7 +38,7 @@ var rootCmd = &cobra.Command{
 	Flagship is a feature flagging platform for modern developers. 
 	Separate code deployments from feature releases to accelerate development cycles and mitigate risks.
 	
-	Complete documentation is available at http://flagship.io`,
+	Complete documentation is available at https://docs.developers.flagship.io/docs/flagship-command-line-interface`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Root().Help()
 	},
@@ -60,18 +62,20 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(user.UserCmd)
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
+	rootCmd.AddCommand(flag.FlagCmd)
 	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
 	rootCmd.AddCommand(authorization.VersionCmd)
+	rootCmd.AddCommand(token.TokenCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "access token")
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format")
+	rootCmd.PersistentFlags().StringVarP(&cmdToken, "token", "t", "", "access token to manage flagship resources")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.flagship/credentials.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file that contains your credentials (default is $HOME/.flagship/credentials.yaml)")
 
 	addSubCommandPalettes()
 }
