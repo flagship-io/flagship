@@ -9,6 +9,7 @@ import (
 
 	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/cmd/campaign"
+	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
 	"github.com/flagship-io/flagship/cmd/targeting_key"
@@ -35,7 +36,7 @@ var rootCmd = &cobra.Command{
 	Flagship is a feature flagging platform for modern developers. 
 	Separate code deployments from feature releases to accelerate development cycles and mitigate risks.
 	
-	Complete documentation is available at http://flagship.io`,
+	Complete documentation is available at https://docs.developers.flagship.io/docs/flagship-command-line-interface`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Root().Help()
 	},
@@ -59,6 +60,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(user.UserCmd)
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
+	rootCmd.AddCommand(flag.FlagCmd)
 	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
 }
 func init() {

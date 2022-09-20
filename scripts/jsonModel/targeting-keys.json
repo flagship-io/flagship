@@ -1,0 +1,27 @@
+[
+    {
+        "type": "string",
+        "name": "keyname001",
+        "description": "I'm targeting key1"
+    },
+    {
+        "type": "string",
+        "name": "keyname002",
+        "description": "I'm targeting key2"
+    },
+    {
+        "type": "string",
+        "name": "keyname003",
+        "description": "I'm targeting key3"
+    },
+    {
+        "type": "string",
+        "name": "keyname004",
+        "description": "I'm targeting key4"
+    },
+    {
+        "type": "string",
+        "name": "keyname005",
+        "description": "I'm targeting key5"
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Flag_created_with_cli_1",
+        "type": "string",
+        "description": "I'am flag number 1, i have been created by the CLI",
+        "source": "manual"
+    },
+    {
+        "name": "Flag_created_with_cli_2",
+        "type": "string",
+        "description": "I'am flag number 2, i have been created by the CLI",
+        "source": "manual"
+    },
+    {
+        "name": "Flag_created_with_cli_3",
+        "type": "string",
+        "description": "I'am flag number 3, i have been created by the CLI",
+        "source": "manual"
+    },
+    {
+        "name": "Flag_created_with_cli_4",
+        "type": "string",
+        "description": "I'am flag number 4, i have been created by the CLI",
+        "source": "manual"
+    },
+    {
+        "name": "Flag_created_with_cli_5",
+        "type": "string",
+        "description": "I'am flag number 5, i have been created by the CLI",
+        "source": "manual"
+    }
+]
