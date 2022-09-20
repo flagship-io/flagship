@@ -24,7 +24,7 @@ var infoCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalf("error occured: %v", err)
 			}
-			utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"))
+			utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 		} else {
 			log.Println("Token required")
 		}
