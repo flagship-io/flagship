@@ -21,7 +21,7 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("Targeting key created: %s", body)
+		log.Printf("targeting key created: %s", body)
 	},
 }
 

@@ -17,11 +17,11 @@ var createCmd = &cobra.Command{
 	Short: "Create a project",
 	Long:  `Create a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPCreateProject(ProjectName)
+		body, err := httprequest.HTTPCreateProject(ProjectName)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Project created")
+		log.Printf("Project created: %s", body)
 	},
 }
 

@@ -15,6 +15,15 @@ type TestRequest struct {
 	Name string `json:"name"`
 }
 
+type HTTPListResponse[T any] struct {
+	Items             []T `json:"items"`
+	CurrentItemsCount int `json:"current_items_count"`
+	CurrentPage       int `json:"current_page"`
+	TotalCount        int `json:"total_count"`
+	ItemsPerPage      int `json:"items_per_page"`
+	LastPage          int `json:"last_page"`
+}
+
 func New(exit Func) *Exit {
 	return &Exit{exit: exit}
 }
@@ -35,7 +44,7 @@ func (e *Exit) Exit(code int) {
 	}
 }
 
-func viperNotSet(t *testing.T) {
+func ViperNotSet(t *testing.T) {
 	exiter := New(func(int) {})
 	exiter.Exit(1)
 
@@ -68,7 +77,7 @@ func viperNotSet(t *testing.T) {
 
 func TestHTTPRequestGet(t *testing.T) {
 
-	viperNotSet(t)
+	ViperNotSet(t)
 
 	var result TestRequest
 
@@ -99,7 +108,7 @@ func TestHTTPRequestGet(t *testing.T) {
 
 func TestHTTPGetItem(t *testing.T) {
 
-	viperNotSet(t)
+	ViperNotSet(t)
 
 	testRequest := TestRequest{
 		Name: "TestName",
@@ -123,9 +132,9 @@ func TestHTTPGetItem(t *testing.T) {
 	assert.Equal(t, "TestName", result.Name)
 }
 
-/* func TestHTTPGetAllPages(t *testing.T) {
+func TestHTTPGetAllPages(t *testing.T) {
 
-	viperNotSet(t)
+	ViperNotSet(t)
 
 	testRequest1 := TestRequest{
 		Name: "TestName1",
@@ -135,9 +144,17 @@ func TestHTTPGetItem(t *testing.T) {
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rows := []TestRequest{testRequest1, testRequest2}
 
-		testRequestsJson, err := json.Marshal(rows)
+		resp := HTTPListResponse[TestRequest]{
+			Items:             []TestRequest{testRequest1, testRequest2},
+			CurrentItemsCount: 2,
+			CurrentPage:       1,
+			TotalCount:        2,
+			ItemsPerPage:      10,
+			LastPage:          1,
+		}
+
+		testRequestsJson, err := json.Marshal(resp)
 
 		assert.Nil(t, err)
 
@@ -152,5 +169,6 @@ func TestHTTPGetItem(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, result)
 
-	//assert.Equal(t, "TestName", result)
-} */
+	assert.Equal(t, "TestName1", result[0].Name)
+	assert.Equal(t, "TestName2", result[1].Name)
+}

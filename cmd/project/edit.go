@@ -17,11 +17,11 @@ var editCmd = &cobra.Command{
 	Short: "Edit a project",
 	Long:  `Edit a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPEditProject(ProjectId, ProjectName)
+		body, err := httprequest.HTTPEditProject(ProjectId, ProjectName)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Project updated")
+		log.Printf("project updated: %s", body)
 	},
 }
 

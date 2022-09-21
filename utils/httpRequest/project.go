@@ -2,6 +2,7 @@ package httprequest
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/flagship-io/flagship/models"
@@ -17,28 +18,26 @@ func HTTPGetProject(id string) (models.Project, error) {
 	return HTTPGetItem[models.Project](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/projects/" + id)
 }
 
-func HTTPCreateProject(name string) error {
+func HTTPCreateProject(name string) ([]byte, error) {
 	projectRequest := models.ProjectRequest{
 		Name: name,
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
 	if err != nil {
-		return err
+		log.Fatalf("error occured: %s", err)
 	}
-	_, err = HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects", projectRequestJSON)
-	return err
+	return HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects", projectRequestJSON)
 }
 
-func HTTPEditProject(id, name string) error {
+func HTTPEditProject(id, name string) ([]byte, error) {
 	projectRequest := models.ProjectRequest{
 		Name: name,
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
 	if err != nil {
-		return err
+		log.Fatalf("error occured: %s", err)
 	}
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, projectRequestJSON)
-	return err
+	return HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, projectRequestJSON)
 }
 
 func HTTPToggleProject(id, state string) error {
