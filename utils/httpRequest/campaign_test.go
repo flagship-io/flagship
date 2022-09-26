@@ -216,7 +216,7 @@ func TestHTTPEditCampaign(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	testCampaign := models.Campaign{
-		ID:              "campaignID1",
+		ID:              "campaignID2",
 		Name:            "newTestingCampaign1",
 		ProjectID:       "projectIDTest1",
 		Description:     "descriptionTest1",
@@ -225,9 +225,9 @@ func TestHTTPEditCampaign(t *testing.T) {
 		Scheduler:       scheduler,
 	}
 
-	dataCampaign := "{\"project_id\":\"projectIDTest\",\"name\":\"newTestingCampaign\",\"description\":\"descriptionTest\",\"type\":\"toggle\",\"variation_groups\":[{\"name\":\"variationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"allocation\":50,\"reference\":true,\"modifications\":{\"value\":{\"color\":\"blue\"}}},{\"name\":\"My variation 2\",\"allocation\":50,\"reference\":false,\"modifications\":{\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"operator\":\"CONTAINS\",\"key\":\"isVIP\",\"value\":\"true\"}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"
+	dataCampaign := "{\"project_id\":\"projectIDTest1\",\"name\":\"newTestingCampaign1\",\"description\":\"descriptionTest1\",\"type\":\"toggle\",\"variation_groups\":[{\"name\":\"variationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"allocation\":50,\"reference\":true,\"modifications\":{\"value\":{\"color\":\"blue\"}}},{\"name\":\"My variation 2\",\"allocation\":50,\"reference\":false,\"modifications\":{\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"operator\":\"CONTAINS\",\"key\":\"isVIP\",\"value\":\"true\"}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns",
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID,
 		func(req *http.Request) (*http.Response, error) {
 			resp, err := httpmock.NewJsonResponse(200, testCampaign)
 			if err != nil {
@@ -237,12 +237,12 @@ func TestHTTPEditCampaign(t *testing.T) {
 		},
 	)
 
-	respBody, err := HTTPCreateCampaign(dataCampaign)
+	respBody, err := HTTPEditCampaign("campaignID2", dataCampaign)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"campaignID1\",\"project_id\":\"projectIDTest\",\"name\":\"newTestingCampaign\",\"description\":\"descriptionTest\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"id\":\"\",\"name\":\"variationGroupName\",\"variations\":[{\"id\":\"\",\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"id\":\"\",\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"campaignID2\",\"project_id\":\"projectIDTest1\",\"name\":\"newTestingCampaign1\",\"description\":\"descriptionTest1\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"id\":\"\",\"name\":\"variationGroupName\",\"variations\":[{\"id\":\"\",\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"id\":\"\",\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
 }
 
 func TestHTTPDeleteCampaign(t *testing.T) {
@@ -251,19 +251,24 @@ func TestHTTPDeleteCampaign(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+	testCampaign := models.Campaign{
+		ID:              "campaignID",
+		Name:            "newTestingCampaign",
+		ProjectID:       "projectIDTest",
+		Description:     "descriptionTest",
+		Type:            "toggle",
+		VariationGroups: variationGroupsTest,
+		Scheduler:       scheduler,
 	}
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 
 		},
 	)
 
-	err := HTTPDeleteProject("1")
+	err := HTTPDeleteCampaign("campaignID")
 
 	assert.Nil(t, err)
 }
@@ -274,18 +279,23 @@ func TestHTTPToggleCampaign(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+	testCampaign := models.Campaign{
+		ID:              "campaignID",
+		Name:            "newTestingCampaign",
+		ProjectID:       "projectIDTest",
+		Description:     "descriptionTest",
+		Type:            "toggle",
+		VariationGroups: variationGroupsTest,
+		Scheduler:       scheduler,
 	}
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID+"/toggle",
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID+"/toggle",
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(200, ""), nil
 		},
 	)
 
-	err := HTTPToggleProject(testProject.ID, "active")
+	err := HTTPToggleCampaign(testCampaign.ID, "active")
 
 	assert.Nil(t, err)
 }
