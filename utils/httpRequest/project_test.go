@@ -17,14 +17,12 @@ func TestHTTPGetProject(t *testing.T) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	testProjectID := "1"
-
 	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+		ID:   "testProjectID",
+		Name: "testProjectName",
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProjectID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID,
 		func(req *http.Request) (*http.Response, error) {
 			resp, err := httpmock.NewJsonResponse(200, testProject)
 			if err != nil {
@@ -34,13 +32,13 @@ func TestHTTPGetProject(t *testing.T) {
 		},
 	)
 
-	respBody, err := HTTPGetProject("1")
+	respBody, err := HTTPGetProject("testProjectID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, testProjectID, respBody.ID)
-	assert.Equal(t, "newTestingProject", respBody.Name)
+	assert.Equal(t, "testProjectID", respBody.ID)
+	assert.Equal(t, "testProjectName", respBody.Name)
 }
 
 func TestHTTPListProject(t *testing.T) {
@@ -52,12 +50,12 @@ func TestHTTPListProject(t *testing.T) {
 
 	testProjectList := []models.Project{
 		{
-			ID:   "1",
-			Name: "newTestingProject1",
+			ID:   "testProjectID",
+			Name: "testProjectName",
 		},
 		{
-			ID:   "2",
-			Name: "newTestingProject2",
+			ID:   "testProjectID1",
+			Name: "testProjectName1",
 		},
 	}
 
@@ -85,11 +83,11 @@ func TestHTTPListProject(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "1", respBody[0].ID)
-	assert.Equal(t, "newTestingProject1", respBody[0].Name)
+	assert.Equal(t, "testProjectID", respBody[0].ID)
+	assert.Equal(t, "testProjectName", respBody[0].Name)
 
-	assert.Equal(t, "2", respBody[1].ID)
-	assert.Equal(t, "newTestingProject2", respBody[1].Name)
+	assert.Equal(t, "testProjectID1", respBody[1].ID)
+	assert.Equal(t, "testProjectName1", respBody[1].Name)
 }
 
 func TestHTTPCreateProject(t *testing.T) {
@@ -99,8 +97,8 @@ func TestHTTPCreateProject(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+		ID:   "testProjectID",
+		Name: "testProjectName",
 	}
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects",
@@ -118,7 +116,7 @@ func TestHTTPCreateProject(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"1\",\"name\":\"newTestingProject\"}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testProjectID\",\"name\":\"testProjectName\"}"), respBody)
 }
 
 func TestHTTPEditProject(t *testing.T) {
@@ -128,8 +126,8 @@ func TestHTTPEditProject(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+		ID:   "testProjectID",
+		Name: "testProjectName1",
 	}
 
 	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID,
@@ -147,7 +145,7 @@ func TestHTTPEditProject(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"1\",\"name\":\"newTestingProject\"}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testProjectID\",\"name\":\"testProjectName1\"}"), respBody)
 }
 
 func TestHTTPDeleteProject(t *testing.T) {
@@ -157,8 +155,8 @@ func TestHTTPDeleteProject(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+		ID:   "testProjectID",
+		Name: "testProjectName",
 	}
 
 	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID,
@@ -168,7 +166,7 @@ func TestHTTPDeleteProject(t *testing.T) {
 		},
 	)
 
-	err := HTTPDeleteProject("1")
+	err := HTTPDeleteProject("testProjectID")
 
 	assert.Nil(t, err)
 }
