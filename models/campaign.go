@@ -8,6 +8,13 @@ type Campaign struct {
 	Type            string           `json:"type"`
 	Status          string           `json:"status"`
 	VariationGroups []VariationGroup `json:"variation_groups"`
+	Scheduler       Scheduler        `json:"scheduler"`
+}
+
+type Scheduler struct {
+	StartDate string `json:"start_date"`
+	StopDate  string `json:"stop_date"`
+	TimeZone  string `json:"timezone"`
 }
 
 type CampaignToggleRequest struct {
