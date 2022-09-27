@@ -178,8 +178,8 @@ func TestHTTPToggleProject(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	testProject := models.Project{
-		ID:   "1",
-		Name: "newTestingProject",
+		ID:   "testProjectID",
+		Name: "testProjectName",
 	}
 
 	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+testProject.ID+"/toggle",

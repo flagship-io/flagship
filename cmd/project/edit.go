@@ -39,6 +39,7 @@ func init() {
 	if err := editCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatalf("error occured: %v", err)
 	}
+
 	ProjectCmd.AddCommand(editCmd)
 
 }
