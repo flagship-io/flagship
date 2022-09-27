@@ -6,6 +6,7 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -71,7 +72,7 @@ var variationGroupsTest = []models.VariationGroup{
 }
 
 func TestHTTPGetCampaign(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -109,7 +110,7 @@ func TestHTTPGetCampaign(t *testing.T) {
 
 func TestHTTPListCampaign(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -133,7 +134,7 @@ func TestHTTPListCampaign(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.Campaign]{
+	resp := utils.HTTPListResponse[models.Campaign]{
 		Items:             testCampaignlist,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -171,7 +172,7 @@ func TestHTTPListCampaign(t *testing.T) {
 }
 
 func TestHTTPCreateCampaign(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -207,8 +208,7 @@ func TestHTTPCreateCampaign(t *testing.T) {
 }
 
 func TestHTTPEditCampaign(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -244,7 +244,7 @@ func TestHTTPEditCampaign(t *testing.T) {
 }
 
 func TestHTTPDeleteCampaign(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -272,7 +272,7 @@ func TestHTTPDeleteCampaign(t *testing.T) {
 }
 
 func TestHTTPToggleCampaign(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

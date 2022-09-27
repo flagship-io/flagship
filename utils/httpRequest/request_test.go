@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strconv"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -19,69 +19,9 @@ type TestRequest struct {
 	Name string `json:"name"`
 }
 
-type HTTPListResponse[T any] struct {
-	Items             []T `json:"items"`
-	CurrentItemsCount int `json:"current_items_count"`
-	CurrentPage       int `json:"current_page"`
-	TotalCount        int `json:"total_count"`
-	ItemsPerPage      int `json:"items_per_page"`
-	LastPage          int `json:"last_page"`
-}
-
-func New(exit Func) *Exit {
-	return &Exit{exit: exit}
-}
-
-type Func func(int)
-
-type Exit struct {
-	exit   Func
-	status int
-}
-
-func (e *Exit) Exit(code int) {
-	if e != nil {
-		e.status = code
-		e.exit(code)
-	} else {
-		os.Exit(code)
-	}
-}
-
-func ViperNotSet(t *testing.T) {
-	exiter := New(func(int) {})
-	exiter.Exit(1)
-
-	if !viper.IsSet("account_id") {
-		assert.Equal(t, exiter.status, 1)
-	}
-
-	if !viper.IsSet("account_environment_id") {
-		assert.Equal(t, exiter.status, 1)
-	}
-
-	if !viper.IsSet("client_id") {
-		assert.Equal(t, exiter.status, 1)
-	}
-
-	if !viper.IsSet("client_secret") {
-		assert.Equal(t, exiter.status, 1)
-	}
-
-	if !viper.IsSet("token") {
-		assert.Equal(t, exiter.status, 1)
-	}
-
-	viper.Set("account_id", "account_id")
-	viper.Set("account_environment_id", "account_environment_id")
-	viper.Set("client_id", "client_id")
-	viper.Set("client_secret", "client_secret")
-	viper.Set("token", "token")
-}
-
 func TestHTTPRequestGet(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	var result TestRequest
 
@@ -112,7 +52,7 @@ func TestHTTPRequestGet(t *testing.T) {
 
 func TestHTTPGetItem(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	testRequest := TestRequest{
 		Name: "TestName",
@@ -138,7 +78,7 @@ func TestHTTPGetItem(t *testing.T) {
 
 func TestHTTPGetAllPages(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	testRequest1 := TestRequest{
 		Name: "TestName1",
@@ -149,7 +89,7 @@ func TestHTTPGetAllPages(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
-		resp := HTTPListResponse[TestRequest]{
+		resp := utils.HTTPListResponse[TestRequest]{
 			Items:             []TestRequest{testRequest1, testRequest2},
 			CurrentItemsCount: 2,
 			CurrentPage:       1,
@@ -179,7 +119,7 @@ func TestHTTPGetAllPages(t *testing.T) {
 
 func TestRegenerateToken(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

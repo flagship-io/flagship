@@ -6,13 +6,14 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHTTPGetProject(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -42,8 +43,7 @@ func TestHTTPGetProject(t *testing.T) {
 }
 
 func TestHTTPListProject(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -59,7 +59,7 @@ func TestHTTPListProject(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.Project]{
+	resp := utils.HTTPListResponse[models.Project]{
 		Items:             testProjectList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -91,7 +91,7 @@ func TestHTTPListProject(t *testing.T) {
 }
 
 func TestHTTPCreateProject(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -120,7 +120,7 @@ func TestHTTPCreateProject(t *testing.T) {
 }
 
 func TestHTTPEditProject(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -149,7 +149,7 @@ func TestHTTPEditProject(t *testing.T) {
 }
 
 func TestHTTPDeleteProject(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -172,7 +172,7 @@ func TestHTTPDeleteProject(t *testing.T) {
 }
 
 func TestHTTPToggleProject(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

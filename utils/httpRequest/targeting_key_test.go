@@ -6,13 +6,14 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHTTPGetTargetingKey(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -44,8 +45,7 @@ func TestHTTPGetTargetingKey(t *testing.T) {
 }
 
 func TestHTTPListTargetingKey(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -65,7 +65,7 @@ func TestHTTPListTargetingKey(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.TargetingKey]{
+	resp := utils.HTTPListResponse[models.TargetingKey]{
 		Items:             testTargetingKeyList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -97,7 +97,7 @@ func TestHTTPListTargetingKey(t *testing.T) {
 }
 
 func TestHTTPCreateTargetingKey(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -130,7 +130,7 @@ func TestHTTPCreateTargetingKey(t *testing.T) {
 }
 
 func TestHTTPEditTargetingKey(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -161,7 +161,7 @@ func TestHTTPEditTargetingKey(t *testing.T) {
 }
 
 func TestHTTPDeleteTargetingKey(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

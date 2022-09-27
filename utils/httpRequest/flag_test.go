@@ -6,13 +6,14 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHTTPGetFlag(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -46,7 +47,7 @@ func TestHTTPGetFlag(t *testing.T) {
 
 func TestHTTPListFlag(t *testing.T) {
 
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -68,7 +69,7 @@ func TestHTTPListFlag(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.Flag]{
+	resp := utils.HTTPListResponse[models.Flag]{
 		Items:             testFlagList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -100,8 +101,7 @@ func TestHTTPListFlag(t *testing.T) {
 }
 
 func TestHTTPFlagUsage(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -119,7 +119,7 @@ func TestHTTPFlagUsage(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.FlagUsage]{
+	resp := utils.HTTPListResponse[models.FlagUsage]{
 		Items:             testFlagUsageList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -152,7 +152,7 @@ func TestHTTPFlagUsage(t *testing.T) {
 }
 
 func TestHTTPCreateFlag(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -186,7 +186,7 @@ func TestHTTPCreateFlag(t *testing.T) {
 }
 
 func TestHTTPEditFlag(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -220,7 +220,7 @@ func TestHTTPEditFlag(t *testing.T) {
 }
 
 func TestHTTPDeleteFlag(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -236,7 +236,6 @@ func TestHTTPDeleteFlag(t *testing.T) {
 	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+testFlag.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
-
 		},
 	)
 

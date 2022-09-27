@@ -13,7 +13,7 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create [-n <name> | --n=<name>]",
+	Use:   "create [-n <name> | --name=<name>]",
 	Short: "Create a project",
 	Long:  `Create a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {

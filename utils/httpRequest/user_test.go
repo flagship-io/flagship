@@ -7,14 +7,14 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHTTPListUsers(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -30,7 +30,7 @@ func TestHTTPListUsers(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.User]{
+	resp := utils.HTTPListResponse[models.User]{
 		Items:             testUserList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -62,7 +62,7 @@ func TestHTTPListUsers(t *testing.T) {
 }
 
 func TestHTTPBatchUpdateUsers(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -85,7 +85,7 @@ func TestHTTPBatchUpdateUsers(t *testing.T) {
 }
 
 func TestHTTPDeleteUser(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

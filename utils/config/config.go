@@ -5,9 +5,11 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"testing"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 )
 
 type Config struct {
@@ -111,4 +113,56 @@ func Binder(configureCmd *cobra.Command) {
 	v.BindPFlag("client-secret", configureCmd.PersistentFlags().Lookup("client_secret"))
 	v.BindPFlag("account-id", configureCmd.PersistentFlags().Lookup("account_id"))
 	v.BindPFlag("account-environment-id", configureCmd.PersistentFlags().Lookup("account_environment_id"))
+}
+
+func New(exit Func) *Exit {
+	return &Exit{exit: exit}
+}
+
+type Func func(int)
+
+type Exit struct {
+	exit   Func
+	status int
+}
+
+func (e *Exit) Exit(code int) {
+	if e != nil {
+		e.status = code
+		e.exit(code)
+	} else {
+		os.Exit(code)
+	}
+}
+
+func ViperNotSet(t *testing.T) {
+	exiter := New(func(int) {})
+	exiter.Exit(1)
+
+	if !viper.IsSet("account_id") {
+		assert.Equal(t, exiter.status, 1)
+	}
+
+	if !viper.IsSet("account_environment_id") {
+		assert.Equal(t, exiter.status, 1)
+	}
+
+	if !viper.IsSet("client_id") {
+		assert.Equal(t, exiter.status, 1)
+	}
+
+	if !viper.IsSet("client_secret") {
+		assert.Equal(t, exiter.status, 1)
+	}
+
+	if !viper.IsSet("token") {
+		assert.Equal(t, exiter.status, 1)
+	}
+
+	viper.Set("account_id", "account_id")
+	viper.Set("account_environment_id", "account_environment_id")
+	viper.Set("client_id", "client_id")
+	viper.Set("client_secret", "client_secret")
+	viper.Set("token", "token")
+	viper.Set("output_format", "json")
 }

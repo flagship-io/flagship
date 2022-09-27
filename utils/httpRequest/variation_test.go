@@ -6,6 +6,7 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -14,7 +15,7 @@ import (
 var variationGroupID = "variationGroupID"
 
 func TestHTTPGetVariation(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -50,8 +51,7 @@ func TestHTTPGetVariation(t *testing.T) {
 }
 
 func TestHTTPListVariation(t *testing.T) {
-
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -79,7 +79,7 @@ func TestHTTPListVariation(t *testing.T) {
 		},
 	}
 
-	resp := HTTPListResponse[models.Variation]{
+	resp := utils.HTTPListResponse[models.Variation]{
 		Items:             testVariationList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
@@ -115,7 +115,7 @@ func TestHTTPListVariation(t *testing.T) {
 }
 
 func TestHTTPCreateVariation(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -152,7 +152,7 @@ func TestHTTPCreateVariation(t *testing.T) {
 }
 
 func TestHTTPEditVariation(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -189,7 +189,7 @@ func TestHTTPEditVariation(t *testing.T) {
 }
 
 func TestHTTPDeleteVariation(t *testing.T) {
-	ViperNotSet(t)
+	config.ViperNotSet(t)
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
