@@ -9,11 +9,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-func HTTPUpdatePanic(panic string) error {
-	panicRequestJSON, err := json.Marshal(models.PanicRequest{Panic: panic})
+func HTTPUpdatePanic(panicStatus string) ([]byte, error) {
+	panicRequestJSON, err := json.Marshal(models.PanicRequest{Panic: panicStatus})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/panic", panicRequestJSON)
-	return err
+	resp, err := HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/panic", panicRequestJSON)
+	return resp, err
 }

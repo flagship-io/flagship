@@ -23,7 +23,7 @@ var PanicCmd = &cobra.Command{
 			log.Println("Status can only have 2 values: on or off ")
 			return
 		}
-		err := httprequest.HTTPUpdatePanic(panicStatus)
+		_, err := httprequest.HTTPUpdatePanic(panicStatus)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
