@@ -186,13 +186,6 @@ func TestRegenerateToken(t *testing.T) {
 
 	var tokenExpiration int = 0
 
-	testAuthenticationRequest := models.AuthenticationRequest{
-		ClientID:     "client_id",
-		ClientSecret: "client_secret",
-		GrantType:    "client_credentials",
-		Scope:        "*",
-	}
-
 	testAuthenticationResponse := models.AuthenticationResponse{
 		AccessToken:  "access_token",
 		RefreshToken: "refresh_token",
@@ -208,10 +201,8 @@ func TestRegenerateToken(t *testing.T) {
 		},
 	)
 
-	respBody, err := HTTPCreateToken(testAuthenticationRequest.ClientID, testAuthenticationRequest.ClientSecret, testAuthenticationRequest.GrantType, testAuthenticationRequest.Scope, tokenExpiration)
+	regenerateToken("credentialsTest.yaml")
 
-	assert.NotNil(t, respBody)
-	assert.Nil(t, err)
-
-	assert.Equal(t, "access_token", respBody)
+	assert.Equal(t, viper.IsSet("token"), true)
+	assert.Equal(t, viper.GetString("token"), "access_token")
 }

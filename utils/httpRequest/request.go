@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func regenerateToken() {
+func regenerateToken(configFile string) {
 	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetInt("expiration"))
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -25,7 +25,7 @@ func regenerateToken() {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
 		log.Println("Token generated successfully")
-		config.WriteToken(config.CredentialsFile, token)
+		config.WriteToken(configFile, token)
 	}
 }
 
@@ -57,7 +57,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	}
 
 	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
-		regenerateToken()
+		regenerateToken(config.CredentialsFile)
 	}
 
 	req.Header.Add("Accept", `*/*`)
@@ -90,7 +90,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	}
 	if resp.StatusCode == 403 && !counter {
 		counter = true
-		regenerateToken()
+		regenerateToken(config.CredentialsFile)
 		return HTTPRequest(method, resource, body)
 	}
 	return respBody, err
