@@ -198,6 +198,9 @@ func TestToggleCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(ProjectCmd, "toggle")
 	assert.Equal(t, "Error: required flag(s) \"id\", \"status\" not set\nUsage:\n  project toggle [-i <project-id> | --id=<project-id>] [-s <status> | --status=<status>] [flags]\n\nFlags:\n  -h, --help            help for toggle\n  -i, --id string       id of the project you want to toggle\n  -s, --status string   status you want to set to the project. Only 3 values are possible: active, paused and interrupted\n\n", failOutput)
 
+	failOutput1, _ := utils.ExecuteCommand(ProjectCmd, "toggle", "--id="+testProject.ID, "--status=notKnown")
+	assert.Equal(t, "Status can only have 3 values: active or paused or interrupted\n", failOutput1)
+
 	successOutput, _ := utils.ExecuteCommand(ProjectCmd, "toggle", "--id="+testProject.ID, "--status=active")
 	assert.Equal(t, "project set to active\n", successOutput)
 }
