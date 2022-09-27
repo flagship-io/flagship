@@ -13,10 +13,10 @@ import (
 func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (string, error) {
 	var authenticationResponse models.AuthenticationResponse
 	authRequest := models.AuthenticationRequest{
-		Client_id:     client_id,
-		Client_secret: client_secret,
-		Scope:         scope,
-		Grant_type:    grant_type,
+		ClientID:     client_id,
+		ClientSecret: client_secret,
+		Scope:        scope,
+		GrantType:    grant_type,
 	}
 	authRequestJSON, err := json.Marshal(authRequest)
 	if err != nil {
@@ -33,7 +33,7 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expirat
 		return "", err
 	}
 
-	return authenticationResponse.Access_token, err
+	return authenticationResponse.AccessToken, err
 }
 
 func HTTPCheckToken(token string) (models.Token, error) {

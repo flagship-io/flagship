@@ -5,8 +5,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strconv"
 	"testing"
 
+	"github.com/flagship-io/flagship/models"
+	"github.com/flagship-io/flagship/utils"
+	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
@@ -171,4 +175,43 @@ func TestHTTPGetAllPages(t *testing.T) {
 
 	assert.Equal(t, "TestName1", result[0].Name)
 	assert.Equal(t, "TestName2", result[1].Name)
+}
+
+func TestRegenerateToken(t *testing.T) {
+
+	ViperNotSet(t)
+
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	var tokenExpiration int = 0
+
+	testAuthenticationRequest := models.AuthenticationRequest{
+		ClientID:     "client_id",
+		ClientSecret: "client_secret",
+		GrantType:    "client_credentials",
+		Scope:        "*",
+	}
+
+	testAuthenticationResponse := models.AuthenticationResponse{
+		AccessToken:  "access_token",
+		RefreshToken: "refresh_token",
+	}
+
+	httpmock.RegisterResponder("POST", utils.HostAuth+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(tokenExpiration),
+		func(req *http.Request) (*http.Response, error) {
+			resp, err := httpmock.NewJsonResponse(200, testAuthenticationResponse)
+			if err != nil {
+				return httpmock.NewStringResponse(500, ""), nil
+			}
+			return resp, nil
+		},
+	)
+
+	respBody, err := HTTPCreateToken(testAuthenticationRequest.ClientID, testAuthenticationRequest.ClientSecret, testAuthenticationRequest.GrantType, testAuthenticationRequest.Scope, tokenExpiration)
+
+	assert.NotNil(t, respBody)
+	assert.Nil(t, err)
+
+	assert.Equal(t, "access_token", respBody)
 }
