@@ -128,7 +128,7 @@ func TestHTTPFlagUsage(t *testing.T) {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags_usage",
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/flags_usage",
 		func(req *http.Request) (*http.Response, error) {
 			resp, err := httpmock.NewJsonResponse(200, resp)
 			if err != nil {
