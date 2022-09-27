@@ -12,6 +12,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestProjectCommand(t *testing.T) {
+	output, _ := utils.ExecuteCommand(ProjectCmd)
+	assert.Equal(t, output, "Manage your projects\n\nUsage:\n  project [create|edit|get|list|delete|toggle] [flags]\n  project [command]\n\nAvailable Commands:\n  completion  Generate the autocompletion script for the specified shell\n  create      Create a project\n  delete      Delete a project\n  edit        Edit a project\n  get         Get a project\n  help        Help about any command\n  list        List all projects\n  toggle      Toggle a project\n\nFlags:\n  -h, --help   help for project\n\nUse \"project [command] --help\" for more information about a command.\n")
+}
+
 func TestHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(ProjectCmd, "--help")
 	assert.Equal(t, output, "Manage your projects\n\nUsage:\n  project [create|edit|get|list|delete|toggle] [flags]\n  project [command]\n\nAvailable Commands:\n  completion  Generate the autocompletion script for the specified shell\n  create      Create a project\n  delete      Delete a project\n  edit        Edit a project\n  get         Get a project\n  help        Help about any command\n  list        List all projects\n  toggle      Toggle a project\n\nFlags:\n  -h, --help   help for project\n\nUse \"project [command] --help\" for more information about a command.\n")
