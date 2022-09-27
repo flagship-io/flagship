@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package panic
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -20,14 +21,14 @@ var PanicCmd = &cobra.Command{
 	Long:  `Manage panic mode in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(panicStatus == "on" || panicStatus == "off") {
-			log.Println("Status can only have 2 values: on or off ")
+			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 2 values: on or off ")
 			return
 		}
 		_, err := httprequest.HTTPUpdatePanic(panicStatus)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("Panic set to %v", panicStatus)
+		fmt.Fprintf(cmd.OutOrStdout(), "Panic set to %v\n", panicStatus)
 
 	},
 }

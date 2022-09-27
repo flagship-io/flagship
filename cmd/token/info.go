@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package token
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
@@ -26,7 +27,7 @@ var infoCmd = &cobra.Command{
 			}
 			utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 		} else {
-			log.Println("Token required")
+			fmt.Fprintln(cmd.OutOrStdout(), "Token required")
 		}
 	},
 }

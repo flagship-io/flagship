@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils/config"
@@ -53,7 +54,7 @@ var ConfigureCmd = &cobra.Command{
 			log.Fatal("required client-id and client-secret and account-id and account-env-id")
 		} else {
 			config.WriteCredentials(config.CredentialsFile, clientId, clientSecret, accountId, accountEnvId)
-			log.Println("Credentials wrote successfully")
+			fmt.Fprintln(cmd.OutOrStdout(), "Credentials wrote successfully")
 		}
 
 	},

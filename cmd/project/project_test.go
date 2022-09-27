@@ -111,5 +111,5 @@ func TestCreateCommand(t *testing.T) {
 	assert.Equal(t, "Error: required flag(s) \"name\" not set\nUsage:\n  project create [-n <name> | --name=<name>] [flags]\n\nFlags:\n  -h, --help          help for create\n  -n, --name string   name of the project you want to create\n\n", failOutput)
 
 	successOutput, _ := utils.ExecuteCommand(ProjectCmd, "create", "--name=testProjectName")
-	assert.Equal(t, "", successOutput)
+	assert.Equal(t, "Project created: {\"id\":\"testProjectID\",\"name\":\"testProjectName\"}", successOutput)
 }

@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -24,7 +25,7 @@ func regenerateToken(configFile string) {
 	if token == "" {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
-		log.Println("Token generated successfully")
+		fmt.Fprintln(os.Stdout, "Token generated successfully")
 		config.WriteToken(configFile, token)
 	}
 }

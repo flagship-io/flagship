@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package project
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -18,7 +19,7 @@ var toggleCmd = &cobra.Command{
 	Long:  `Toggle a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(ProjectStatus == "active" || ProjectStatus == "paused" || ProjectStatus == "interrupted") {
-			log.Println("Status can only have 3 values: active or paused or interrupted")
+			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 3 values: active or paused or interrupted")
 			return
 		}
 
@@ -26,7 +27,7 @@ var toggleCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("project set to %v", ProjectStatus)
+		fmt.Fprintf(cmd.OutOrStdout(), "project set to %v\n", ProjectStatus)
 	},
 }
 

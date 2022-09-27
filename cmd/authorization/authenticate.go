@@ -5,6 +5,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package authorization
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils/config"
@@ -35,7 +36,7 @@ var AuthenticateCmd = &cobra.Command{
 			log.Fatal("client_id or client_secret not valid")
 			return
 		} else {
-			log.Println("Token generated successfully")
+			fmt.Fprintln(cmd.OutOrStdout(), "Token generated successfully")
 		}
 		config.WriteToken(config.CredentialsFile, token)
 	},
