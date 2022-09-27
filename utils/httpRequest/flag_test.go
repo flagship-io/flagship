@@ -99,6 +99,58 @@ func TestHTTPListFlag(t *testing.T) {
 	assert.Equal(t, "testFlagName1", respBody[1].Name)
 }
 
+func TestHTTPFlagUsage(t *testing.T) {
+
+	ViperNotSet(t)
+
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	testFlagUsageList := []models.FlagUsage{
+		{
+			ID:                "testFlagUsageID",
+			FlagKey:           "isVIP",
+			Repository:        "flagship-cli",
+			FilePath:          "https://github.com/flagship-io/flagship-cli",
+			Branch:            "main",
+			Line:              "Line116",
+			CodeLineHighlight: "codeLineHighlight",
+			Code:              "code",
+		},
+	}
+
+	resp := HTTPListResponse[models.FlagUsage]{
+		Items:             testFlagUsageList,
+		CurrentItemsCount: 2,
+		CurrentPage:       1,
+		TotalCount:        2,
+		ItemsPerPage:      10,
+		LastPage:          1,
+	}
+
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags_usage",
+		func(req *http.Request) (*http.Response, error) {
+			resp, err := httpmock.NewJsonResponse(200, resp)
+			if err != nil {
+				return httpmock.NewStringResponse(500, ""), nil
+			}
+			return resp, nil
+		},
+	)
+
+	respBody, err := HTTPFlagUsage()
+
+	assert.NotNil(t, respBody)
+	assert.Nil(t, err)
+
+	assert.Equal(t, "testFlagUsageID", respBody[0].ID)
+	assert.Equal(t, "isVIP", respBody[0].FlagKey)
+	assert.Equal(t, "flagship-cli", respBody[0].Repository)
+	assert.Equal(t, "https://github.com/flagship-io/flagship-cli", respBody[0].FilePath)
+	assert.Equal(t, "main", respBody[0].Branch)
+
+}
+
 func TestHTTPCreateFlag(t *testing.T) {
 	ViperNotSet(t)
 
