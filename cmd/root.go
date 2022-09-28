@@ -17,6 +17,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
+	"github.com/flagship-io/flagship/cmd/version"
 	"github.com/flagship-io/flagship/utils/config"
 
 	"github.com/spf13/cobra"
@@ -64,7 +65,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(flag.FlagCmd)
 	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
-	rootCmd.AddCommand(authorization.VersionCmd)
+	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 }
 func init() {
