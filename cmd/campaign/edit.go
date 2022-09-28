@@ -22,7 +22,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "campaign updated: %s\n", body)
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
 }
 

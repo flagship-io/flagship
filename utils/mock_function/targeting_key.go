@@ -10,38 +10,38 @@ import (
 	"github.com/spf13/viper"
 )
 
+var TestTargetingKey = models.TargetingKey{
+	ID:          "testTargetingKeyID",
+	Name:        "testTargetingKeyName",
+	Type:        "string",
+	Description: "testTargetingKeyDescription",
+}
+
+var TestTargetingKey1 = models.TargetingKey{
+	ID:          "testTargetingKeyID1",
+	Name:        "testTargetingKeyName1",
+	Type:        "string",
+	Description: "testTargetingKeyDescription1",
+}
+
+var TestTargetingKeyEdit = models.TargetingKey{
+	ID:          "testTargetingKeyID",
+	Name:        "testTargetingKeyName1",
+	Type:        "string",
+	Description: "testTargetingKeyDescription1",
+}
+
+var TestTargetingKeyList = []models.TargetingKey{
+	TestTargetingKey,
+	TestTargetingKey1,
+}
+
 func APITargetingKey() {
 
 	config.SetViper()
 
-	testTargetingKey := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName",
-		Type:        "string",
-		Description: "testTargetingKeyDescription",
-	}
-
-	testTargetingKey1 := models.TargetingKey{
-		ID:          "testTargetingKeyID1",
-		Name:        "testTargetingKeyName1",
-		Type:        "string",
-		Description: "testTargetingKeyDescription1",
-	}
-
-	testTargetingKeyEdit := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName1",
-		Type:        "string",
-		Description: "testTargetingKeyDescription1",
-	}
-
-	testTargetingKeyList := []models.TargetingKey{
-		testTargetingKey,
-		testTargetingKey1,
-	}
-
 	resp := utils.HTTPListResponse[models.TargetingKey]{
-		Items:             testTargetingKeyList,
+		Items:             TestTargetingKeyList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
 		TotalCount:        2,
@@ -49,9 +49,9 @@ func APITargetingKey() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKey)
+			resp, err := httpmock.NewJsonResponse(200, TestTargetingKey)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -71,7 +71,7 @@ func APITargetingKey() {
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKey)
+			resp, err := httpmock.NewJsonResponse(200, TestTargetingKey)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -79,9 +79,9 @@ func APITargetingKey() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKeyEdit)
+			resp, err := httpmock.NewJsonResponse(200, TestTargetingKeyEdit)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -89,7 +89,7 @@ func APITargetingKey() {
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 

@@ -10,10 +10,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type FlagKey struct {
-	Color string `json:"color"`
-}
-
 var scheduler = models.Scheduler{
 	StartDate: "2022-02-01 10:00:00",
 	StopDate:  "2022-02-02 08:00:00",
@@ -42,10 +38,8 @@ var variationTest = []models.Variation{
 		Reference:  true,
 		Allocation: 50,
 		Modifications: models.Modification{
-			Type: "string",
-			Value: FlagKey{
-				Color: "blue",
-			},
+			Type:  "string",
+			Value: map[string]interface{}{"color": "blue"},
 		},
 	},
 	{
@@ -53,10 +47,8 @@ var variationTest = []models.Variation{
 		Reference:  false,
 		Allocation: 50,
 		Modifications: models.Modification{
-			Type: "string",
-			Value: FlagKey{
-				Color: "red",
-			},
+			Type:  "string",
+			Value: map[string]interface{}{"color": "red"},
 		},
 	},
 }
@@ -69,46 +61,46 @@ var variationGroupsTest = []models.VariationGroup{
 	},
 }
 
+var TestCampaign = models.Campaign{
+	ID:              "testCampaignID",
+	Name:            "testCampaignName",
+	ProjectID:       "testProjectID",
+	Description:     "testCampaignDescription",
+	Type:            "toggle",
+	VariationGroups: variationGroupsTest,
+	Scheduler:       scheduler,
+}
+
+var TestCampaign1 = models.Campaign{
+	ID:              "testCampaignID1",
+	Name:            "testCampaignName1",
+	ProjectID:       "testProjectID1",
+	Description:     "testCampaignDescription1",
+	Type:            "toggle",
+	VariationGroups: variationGroupsTest,
+	Scheduler:       scheduler,
+}
+
+var TestCampaignEdit = models.Campaign{
+	ID:              "testCampaignID",
+	Name:            "testCampaignName1",
+	ProjectID:       "testProjectID1",
+	Description:     "testCampaignDescription1",
+	Type:            "toggle",
+	VariationGroups: variationGroupsTest,
+	Scheduler:       scheduler,
+}
+
+var TestCampaignlist = []models.Campaign{
+	TestCampaign,
+	TestCampaign1,
+}
+
 func APICampaign() {
 	config.SetViper()
 
-	testCampaign := models.Campaign{
-		ID:              "testCampaignID",
-		Name:            "testCampaignName",
-		ProjectID:       "testProjectID",
-		Description:     "testCampaignDescription",
-		Type:            "toggle",
-		VariationGroups: variationGroupsTest,
-		Scheduler:       scheduler,
-	}
-
-	testCampaignEdit := models.Campaign{
-		ID:              "testCampaignID",
-		Name:            "testCampaignName1",
-		ProjectID:       "testProjectID1",
-		Description:     "testCampaignDescription1",
-		Type:            "toggle",
-		VariationGroups: variationGroupsTest,
-		Scheduler:       scheduler,
-	}
-
-	testCampaign1 := models.Campaign{
-		ID:              "testCampaignID1",
-		Name:            "testCampaignName1",
-		ProjectID:       "testProjectID1",
-		Description:     "testCampaignDescription1",
-		Type:            "toggle",
-		VariationGroups: variationGroupsTest,
-		Scheduler:       scheduler,
-	}
-
-	testCampaignlist := []models.Campaign{
-		testCampaign,
-		testCampaign1,
-	}
-
 	resp := utils.HTTPListResponse[models.Campaign]{
-		Items:             testCampaignlist,
+		Items:             TestCampaignlist,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
 		TotalCount:        2,
@@ -116,9 +108,9 @@ func APICampaign() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testCampaign)
+			resp, err := httpmock.NewJsonResponse(200, TestCampaign)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -138,7 +130,7 @@ func APICampaign() {
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testCampaign)
+			resp, err := httpmock.NewJsonResponse(200, TestCampaign)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -146,9 +138,9 @@ func APICampaign() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID,
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testCampaignEdit)
+			resp, err := httpmock.NewJsonResponse(200, TestCampaignEdit)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -156,14 +148,14 @@ func APICampaign() {
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+testCampaign.ID+"/toggle",
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID+"/toggle",
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(200, ""), nil
 		},
