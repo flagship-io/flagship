@@ -1,4 +1,4 @@
-package httprequest
+package test
 
 import (
 	"testing"
@@ -21,6 +21,5 @@ func TestMain(m *testing.M) {
 	mockfunction.APIToken()
 	mockfunction.APIUser()
 	mockfunction.APIPanic()
-	mockfunction.Request()
 	m.Run()
 }
