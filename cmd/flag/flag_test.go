@@ -1,36 +1,45 @@
-package test
+package flag
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMain(m *testing.M) {
+
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	mockfunction.APIFlag()
+	m.Run()
+}
 
 var testFlag models.Flag
 var testFlagList []models.Flag
 var testFlagUsageList []models.FlagUsage
 
 func TestFlagCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(flag.FlagCmd)
+	output, _ := utils.ExecuteCommand(FlagCmd)
 	assert.Contains(t, output, "Manage your flags in your account")
 }
 
 func TestFlagHelpCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(flag.FlagCmd, "--help")
+	output, _ := utils.ExecuteCommand(FlagCmd, "--help")
 	assert.Contains(t, output, "Manage your flags in your account")
 }
 
 func TestFlagGetCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "get")
+	failOutput, _ := utils.ExecuteCommand(FlagCmd, "get")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "get", "--id=testFlagID")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "get", "--id=testFlagID")
 
 	err := json.Unmarshal([]byte(successOutput), &testFlag)
 
@@ -41,7 +50,7 @@ func TestFlagGetCommand(t *testing.T) {
 
 func TestFlagListCommand(t *testing.T) {
 
-	output, _ := utils.ExecuteCommand(flag.FlagCmd, "list")
+	output, _ := utils.ExecuteCommand(FlagCmd, "list")
 
 	err := json.Unmarshal([]byte(output), &testFlagList)
 
@@ -52,10 +61,10 @@ func TestFlagListCommand(t *testing.T) {
 
 func TestFlagCreateCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "create")
+	failOutput, _ := utils.ExecuteCommand(FlagCmd, "create")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"data-raw\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "create", "--data-raw='{\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"manual\"}'")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "create", "--data-raw='{\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"manual\"}'")
 
 	err := json.Unmarshal([]byte(successOutput), &testFlag)
 
@@ -66,10 +75,10 @@ func TestFlagCreateCommand(t *testing.T) {
 
 func TestFlagEditCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "edit")
+	failOutput, _ := utils.ExecuteCommand(FlagCmd, "edit")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"data-raw\", \"id\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "edit", "--id=testFlagID", "--data-raw='{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"manual\"}'")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "edit", "--id=testFlagID", "--data-raw='{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"manual\"}'")
 
 	err := json.Unmarshal([]byte(successOutput), &testFlag)
 
@@ -80,16 +89,16 @@ func TestFlagEditCommand(t *testing.T) {
 
 func TestFlagDeleteCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "delete")
+	failOutput, _ := utils.ExecuteCommand(FlagCmd, "delete")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(flag.FlagCmd, "delete", "--id=testFlagID")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "delete", "--id=testFlagID")
 	assert.Equal(t, "Flag deleted\n", successOutput)
 }
 
 func TestFlagUsageListCommand(t *testing.T) {
 
-	output, _ := utils.ExecuteCommand(flag.FlagCmd, "usage", "get")
+	output, _ := utils.ExecuteCommand(FlagCmd, "usage", "get")
 
 	err := json.Unmarshal([]byte(output), &testFlagUsageList)
 
