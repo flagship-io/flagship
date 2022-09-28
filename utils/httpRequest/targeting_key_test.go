@@ -1,39 +1,12 @@
 package httprequest
 
 import (
-	"net/http"
 	"testing"
 
-	"github.com/flagship-io/flagship/models"
-	"github.com/flagship-io/flagship/utils"
-	"github.com/flagship-io/flagship/utils/config"
-	"github.com/jarcoal/httpmock"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHTTPGetTargetingKey(t *testing.T) {
-	config.ViperNotSet(t)
-
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	testTargetingKey := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName",
-		Type:        "string",
-		Description: "testTargetingKeyDescription",
-	}
-
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
-		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKey)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
-			return resp, nil
-		},
-	)
 
 	respBody, err := HTTPGetTargetingKey("testTargetingKeyID")
 
@@ -45,44 +18,6 @@ func TestHTTPGetTargetingKey(t *testing.T) {
 }
 
 func TestHTTPListTargetingKey(t *testing.T) {
-	config.ViperNotSet(t)
-
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	testTargetingKeyList := []models.TargetingKey{
-		{
-			ID:          "testTargetingKeyID",
-			Name:        "testTargetingKeyName",
-			Type:        "string",
-			Description: "testTargetingKeyDescription",
-		},
-		{
-			ID:          "testTargetingKeyID1",
-			Name:        "testTargetingKeyName1",
-			Type:        "string",
-			Description: "testTargetingKeyDescription1",
-		},
-	}
-
-	resp := utils.HTTPListResponse[models.TargetingKey]{
-		Items:             testTargetingKeyList,
-		CurrentItemsCount: 2,
-		CurrentPage:       1,
-		TotalCount:        2,
-		ItemsPerPage:      10,
-		LastPage:          1,
-	}
-
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
-		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
-			return resp, nil
-		},
-	)
 
 	respBody, err := HTTPListTargetingKey()
 
@@ -97,29 +32,8 @@ func TestHTTPListTargetingKey(t *testing.T) {
 }
 
 func TestHTTPCreateTargetingKey(t *testing.T) {
-	config.ViperNotSet(t)
-
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	testTargetingKey := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName",
-		Type:        "string",
-		Description: "testTargetingKeyDescription",
-	}
 
 	data := "{\"name\":\"testTargetingKeyName\", \"type\":\"string\", \"description\":\"testTargetingKeyDescription\"}"
-
-	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
-		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKey)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
-			return resp, nil
-		},
-	)
 
 	respBody, err := HTTPCreateTargetingKey(data)
 
@@ -130,29 +44,8 @@ func TestHTTPCreateTargetingKey(t *testing.T) {
 }
 
 func TestHTTPEditTargetingKey(t *testing.T) {
-	config.ViperNotSet(t)
 
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	testTargetingKey := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName1",
-		Type:        "string",
-		Description: "testTargetingKeyDescription1",
-	}
-
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
-		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testTargetingKey)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
-			return resp, nil
-		},
-	)
-
-	respBody, err := HTTPEditTargetingKey(testTargetingKey.ID, testTargetingKey.Name)
+	respBody, err := HTTPEditTargetingKey("testTargetingKeyID", "testTargetingKeyName")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -161,24 +54,6 @@ func TestHTTPEditTargetingKey(t *testing.T) {
 }
 
 func TestHTTPDeleteTargetingKey(t *testing.T) {
-	config.ViperNotSet(t)
-
-	httpmock.Activate()
-	defer httpmock.DeactivateAndReset()
-
-	testTargetingKey := models.TargetingKey{
-		ID:          "testTargetingKeyID",
-		Name:        "testTargetingKeyName",
-		Type:        "string",
-		Description: "testTargetingKeyDescription",
-	}
-
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+testTargetingKey.ID,
-		func(req *http.Request) (*http.Response, error) {
-			return httpmock.NewStringResponse(204, ""), nil
-
-		},
-	)
 
 	err := HTTPDeleteTargetingKey("testTargetingKeyID")
 

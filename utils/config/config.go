@@ -135,6 +135,15 @@ func (e *Exit) Exit(code int) {
 	}
 }
 
+func SetViper() {
+	viper.GetViper().Set("account_id", "account_id")
+	viper.GetViper().Set("account_environment_id", "account_environment_id")
+	viper.GetViper().Set("client_id", "client_id")
+	viper.GetViper().Set("client_secret", "client_secret")
+	viper.GetViper().Set("token", "token")
+	viper.GetViper().Set("output_format", "json")
+}
+
 func ViperNotSet(t *testing.T) {
 	exiter := New(func(int) {})
 	exiter.Exit(1)
@@ -159,10 +168,5 @@ func ViperNotSet(t *testing.T) {
 		assert.Equal(t, exiter.status, 1)
 	}
 
-	viper.Set("account_id", "account_id")
-	viper.Set("account_environment_id", "account_environment_id")
-	viper.Set("client_id", "client_id")
-	viper.Set("client_secret", "client_secret")
-	viper.Set("token", "token")
-	viper.Set("output_format", "json")
+	SetViper()
 }
