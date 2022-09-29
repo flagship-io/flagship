@@ -45,40 +45,28 @@ func APIProject() {
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestProject)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestProject)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestProject)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestProject)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestProjectEdit)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestProjectEdit)
 			return resp, nil
 		},
 	)

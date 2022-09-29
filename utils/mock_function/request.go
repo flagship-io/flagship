@@ -36,20 +36,14 @@ func Request() {
 
 	httpmock.RegisterResponder("GET", "serverURLGet",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testRequest)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, testRequest)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", "serverURLList",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)

@@ -38,30 +38,21 @@ func APIUser() {
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("PUT", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(204, "")
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(204, "")
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+url.QueryEscape(email),
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(204, "")
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(204, "")
 			return resp, nil
 		},
 	)

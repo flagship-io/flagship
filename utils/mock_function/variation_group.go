@@ -81,40 +81,28 @@ func APIVariationGroup() {
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestVariationGroup)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestVariationGroup)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestVariationGroupEdit)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroupEdit)
 			return resp, nil
 		},
 	)
@@ -122,7 +110,6 @@ func APIVariationGroup() {
 	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
-
 		},
 	)
 

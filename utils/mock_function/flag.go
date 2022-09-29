@@ -75,50 +75,35 @@ func APIFlag() {
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestFlag)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestFlag)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, resp)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/flags_usage",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, respUsage)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, respUsage)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestFlag)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestFlag)
 			return resp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, TestFlagEdit)
-			if err != nil {
-				return httpmock.NewStringResponse(500, ""), nil
-			}
+			resp, _ := httpmock.NewJsonResponse(200, TestFlagEdit)
 			return resp, nil
 		},
 	)
