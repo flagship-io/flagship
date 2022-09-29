@@ -23,15 +23,10 @@ func TestPanicCommand(t *testing.T) {
 	assert.Contains(t, output, "Error: required flag(s) \"status\" not set")
 }
 
-func TestPanicHelpCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(PanicCmd, "--help")
-	assert.Contains(t, output, "Manage panic mode in your account")
-}
-
 func TestPanicStatusCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(PanicCmd, "--status=ac")
 	assert.Contains(t, failOutput, "Status can only have 2 values: on or off")
 
-	successOutput, _ := utils.ExecuteCommand(PanicCmd, "--status=on")
-	assert.Equal(t, "Panic set to on\n", successOutput)
+	successOutput, _ := utils.ExecuteCommand(PanicCmd, "--status=off")
+	assert.Equal(t, "Panic set to off\n", successOutput)
 }
