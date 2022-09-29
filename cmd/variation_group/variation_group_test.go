@@ -27,6 +27,9 @@ var testVariationGroupList []models.VariationGroup
 func TestVariationGroupCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(VariationGroupCmd)
 	assert.Contains(t, output, "Error: required flag(s) \"campaign-id\" not set")
+
+	output1, _ := utils.ExecuteCommand(VariationGroupCmd, "--campaign-id=campaignID")
+	assert.Contains(t, output1, "Manage your variation groups in your campaign")
 }
 
 func TestVariationGroupHelpCommand(t *testing.T) {

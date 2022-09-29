@@ -10,6 +10,44 @@ import (
 	"github.com/spf13/viper"
 )
 
+var TestVariation = models.Variation{
+	ID:         "testVariationID",
+	Name:       "testVariationName",
+	Reference:  true,
+	Allocation: 50,
+	Modifications: models.Modification{
+		Type:  "string",
+		Value: "isVIP",
+	},
+}
+
+var TestVariation1 = models.Variation{
+	ID:         "testVariationID1",
+	Name:       "testVariationName1",
+	Reference:  false,
+	Allocation: 80,
+	Modifications: models.Modification{
+		Type:  "string",
+		Value: "isVIP1",
+	},
+}
+
+var TestVariationEdit = models.Variation{
+	ID:         "testVariationID",
+	Name:       "testVariationName1",
+	Reference:  false,
+	Allocation: 80,
+	Modifications: models.Modification{
+		Type:  "string",
+		Value: "isVIP1",
+	},
+}
+
+var TestVariationList = []models.Variation{
+	TestVariation,
+	TestVariation1,
+}
+
 func APIVariation() {
 
 	config.SetViper()
@@ -17,46 +55,8 @@ func APIVariation() {
 	campaignID := "campaignID"
 	variationGroupID := "variationGroupID"
 
-	testVariation := models.Variation{
-		ID:         "testVariationID",
-		Name:       "testVariationName",
-		Reference:  true,
-		Allocation: 50,
-		Modifications: models.Modification{
-			Type:  "string",
-			Value: "isVIP",
-		},
-	}
-
-	testVariation1 := models.Variation{
-		ID:         "testVariationID1",
-		Name:       "testVariationName1",
-		Reference:  false,
-		Allocation: 80,
-		Modifications: models.Modification{
-			Type:  "string",
-			Value: "isVIP1",
-		},
-	}
-
-	testVariationEdit := models.Variation{
-		ID:         "testVariationID",
-		Name:       "testVariationName1",
-		Reference:  false,
-		Allocation: 80,
-		Modifications: models.Modification{
-			Type:  "string",
-			Value: "isVIP1",
-		},
-	}
-
-	testVariationList := []models.Variation{
-		testVariation,
-		testVariation1,
-	}
-
 	resp := utils.HTTPListResponse[models.Variation]{
-		Items:             testVariationList,
+		Items:             TestVariationList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
 		TotalCount:        2,
@@ -64,9 +64,9 @@ func APIVariation() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+testVariation.ID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+TestVariation.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testVariation)
+			resp, err := httpmock.NewJsonResponse(200, TestVariation)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -86,7 +86,7 @@ func APIVariation() {
 
 	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations",
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testVariation)
+			resp, err := httpmock.NewJsonResponse(200, TestVariation)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -94,9 +94,9 @@ func APIVariation() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+testVariation.ID,
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+TestVariation.ID,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testVariationEdit)
+			resp, err := httpmock.NewJsonResponse(200, TestVariationEdit)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}
@@ -104,7 +104,7 @@ func APIVariation() {
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+testVariation.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+variationGroupID+"/variations/"+TestVariation.ID,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 
