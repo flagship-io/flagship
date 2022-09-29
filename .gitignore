@@ -2,3 +2,4 @@ flagship
 config.yaml
 fixtures
 coverage
+/bin
