@@ -5,6 +5,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package campaign
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -21,7 +22,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Campaign deleted")
+		fmt.Fprintln(cmd.OutOrStdout(), "Campaign deleted")
 	},
 }
 

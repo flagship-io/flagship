@@ -3,8 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"reflect"
 	"strings"
 	"text/tabwriter"
@@ -19,41 +19,39 @@ func FormatItemTable[T any](columns []string, item T, w *tabwriter.Writer) {
 	fmt.Fprintf(w, "%s\n", strings.Join(values, "\t"))
 }
 
-func FormatItem[T any](columns []string, item T, outputFormat string) {
+func FormatItem[T any](columns []string, item T, outputFormat string, w io.Writer) {
 	if outputFormat == "json" {
 		projectJSON, err := json.Marshal(item)
 		if err != nil {
-			fmt.Printf("%s\n", err)
-			return
+			log.Fatalf("%s\n", err)
 		}
-		fmt.Println(string(projectJSON))
+		fmt.Fprintln(w, string(projectJSON))
 		return
 	}
 
 	if outputFormat == "json-pretty" {
 		projectJSON, err := json.MarshalIndent(item, "", "  ")
 		if err != nil {
-			fmt.Printf("%s\n", err)
-			return
+			log.Fatalf("%s\n", err)
 		}
-		fmt.Println(string(projectJSON))
+		fmt.Fprintln(w, string(projectJSON))
 		return
 	}
 
 	if outputFormat == "table" {
-		w := tabwriter.NewWriter(os.Stdout, 10, 1, 5, ' ', 0)
-		fmt.Fprintln(w, strings.Join(columns, "\t"))
+		w_t := tabwriter.NewWriter(w, 10, 1, 5, ' ', 0)
+		fmt.Fprintln(w_t, strings.Join(columns, "\t"))
 		if reflect.TypeOf(item).Kind() == reflect.Slice {
 			s := reflect.ValueOf(item)
 			for i := 0; i < s.Len(); i++ {
 				val := s.Index(i).Interface()
-				FormatItemTable(columns, val, w)
+				FormatItemTable(columns, val, w_t)
 			}
 
 		} else {
-			FormatItemTable(columns, item, w)
+			FormatItemTable(columns, item, w_t)
 		}
-		w.Flush()
+		w_t.Flush()
 		return
 	}
 

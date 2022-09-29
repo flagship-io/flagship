@@ -17,6 +17,8 @@ import (
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
 	"github.com/flagship-io/flagship/cmd/variation_group"
+	"github.com/flagship-io/flagship/cmd/version"
+	"github.com/flagship-io/flagship/utils/config"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -63,13 +65,14 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(flag.FlagCmd)
 	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
+	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVarP(&cmdToken, "token", "t", "", "access token to manage flagship resources")
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", "table", "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 

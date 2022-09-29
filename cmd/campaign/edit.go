@@ -5,6 +5,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package campaign
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -21,7 +22,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("campaign updated: %s", body)
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
 }
 
