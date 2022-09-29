@@ -18,6 +18,23 @@ type Config struct {
 
 var v = viper.New()
 
+func SetFlagshipHome(credendialsFile string) (filePath string) {
+	homeDir, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	if _, err := os.Stat(homeDir + "/.flagship"); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(homeDir+"/.flagship", os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	filepath, _ := filepath.Abs(homeDir + "/.flagship/" + credendialsFile)
+	v.SetConfigFile(filepath)
+
+	return filepath
+}
+
 func SetOptionalsDefault(grantType, scope string, expiration int) (*Config, error) {
 	viper.Set("grant_type", grantType)
 	viper.Set("scope", scope)
@@ -27,22 +44,13 @@ func SetOptionalsDefault(grantType, scope string, expiration int) (*Config, erro
 }
 
 func WriteCredentials(credendialsFile, clientId, clientSecret, accountId, accountEnvId string) (*Config, error) {
-	homeDir, err := os.UserHomeDir()
-	cobra.CheckErr(err)
 
-	if _, err := os.Stat(homeDir + "/.flagship"); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(homeDir+"/.flagship", os.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	filepath, _ := filepath.Abs(homeDir + "/.flagship/" + credendialsFile)
-	v.SetConfigFile(filepath)
+	filepath := SetFlagshipHome(credendialsFile)
 	v.Set("client_id", clientId)
 	v.Set("client_secret", clientSecret)
 	v.Set("account_id", accountId)
 	v.Set("account_environment_id", accountEnvId)
-	err = v.WriteConfigAs(filepath)
+	err := v.WriteConfigAs(filepath)
 	if err != nil {
 		log.Fatalf("error occured: %v", err)
 	}
@@ -52,21 +60,12 @@ func WriteCredentials(credendialsFile, clientId, clientSecret, accountId, accoun
 }
 
 func WriteOptionals(credendialsFile, grantType, scope string, expiration int) (*Config, error) {
-	homeDir, err := os.UserHomeDir()
-	cobra.CheckErr(err)
 
-	if _, err := os.Stat(homeDir + "/.flagship"); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(homeDir+"/.flagship", os.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	filepath, _ := filepath.Abs(homeDir + "/.flagship/" + credendialsFile)
-	v.SetConfigFile(filepath)
+	filepath := SetFlagshipHome(credendialsFile)
 	v.Set("grant_type", grantType)
 	v.Set("scope", scope)
 	v.Set("expiration", expiration)
-	err = v.WriteConfigAs(filepath)
+	err := v.WriteConfigAs(filepath)
 	if err != nil {
 		log.Fatalf("error occured: %v", err)
 	}
