@@ -22,7 +22,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		fmt.Fprintln(cmd.OutOrStdout(), "user deleted.")
+		fmt.Fprintln(cmd.OutOrStdout(), "Email deleted")
 	},
 }
 

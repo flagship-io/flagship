@@ -11,18 +11,18 @@ import (
 	"github.com/spf13/viper"
 )
 
+var TestToken = models.Token{
+	ClientID:  "client_id",
+	AccountID: "account_id",
+	ExpiresIn: 0,
+	Scope:     "*",
+}
+
 func APIToken() {
 	config.SetViper()
 
 	token := "token"
 	tokenExpiration := 0
-
-	testToken := models.Token{
-		ClientID:  "client_id",
-		AccountID: "account_id",
-		ExpiresIn: 0,
-		Scope:     "*",
-	}
 
 	testAuthenticationResponse := models.AuthenticationResponse{
 		AccessToken:  "access_token",
@@ -31,7 +31,7 @@ func APIToken() {
 
 	httpmock.RegisterResponder("GET", utils.HostAuth+"/token?access_token="+token,
 		func(req *http.Request) (*http.Response, error) {
-			resp, err := httpmock.NewJsonResponse(200, testToken)
+			resp, err := httpmock.NewJsonResponse(200, TestToken)
 			if err != nil {
 				return httpmock.NewStringResponse(500, ""), nil
 			}

@@ -18,17 +18,21 @@ var editCmd = &cobra.Command{
 	Short: "Edit a user with right",
 	Long:  `Edit a user with right in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
+		_, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
+		fmt.Fprintf(cmd.OutOrStdout(), "users created\n")
 	},
 }
 
 func init() {
 
 	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your user, check the doc for details")
+
+	if err := editCmd.MarkFlagRequired("data-raw"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
 
 	UserCmd.AddCommand(editCmd)
 }

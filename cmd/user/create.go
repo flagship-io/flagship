@@ -28,5 +28,10 @@ var createCmd = &cobra.Command{
 
 func init() {
 	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to create your user with right, check the doc for details")
+
+	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
+
 	UserCmd.AddCommand(createCmd)
 }

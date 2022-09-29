@@ -11,24 +11,24 @@ import (
 	"github.com/spf13/viper"
 )
 
+var TestUserList = []models.User{
+	{
+		Email: "example@abtasty.com",
+		Role:  "ADMIN",
+	},
+	{
+		Email: "example1@abtasty.com",
+		Role:  "VIEWER",
+	},
+}
+
 func APIUser() {
 	config.SetViper()
 
 	email := "example@abtasty.com"
 
-	testUserList := []models.User{
-		{
-			Email: "example@abtasty.com",
-			Role:  "ADMIN",
-		},
-		{
-			Email: "example1@abtasty.com",
-			Role:  "VIEWER",
-		},
-	}
-
 	resp := utils.HTTPListResponse[models.User]{
-		Items:             testUserList,
+		Items:             TestUserList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
 		TotalCount:        2,
