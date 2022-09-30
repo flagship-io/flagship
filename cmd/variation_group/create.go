@@ -20,7 +20,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPCreateVariationGroup(CampaignID, DataRaw)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
@@ -30,7 +30,7 @@ func init() {
 	createCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to create your variation group, check the doc for details")
 
 	if err := createCmd.MarkFlagRequired("data-raw"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	VariationGroupCmd.AddCommand(createCmd)

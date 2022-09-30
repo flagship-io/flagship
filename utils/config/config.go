@@ -52,7 +52,7 @@ func WriteCredentials(credendialsFile, clientId, clientSecret, accountId, accoun
 	v.Set("account_environment_id", accountEnvId)
 	err := v.WriteConfigAs(filepath)
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	return &Config{v}, nil
@@ -67,7 +67,7 @@ func WriteOptionals(credendialsFile, grantType, scope string, expiration int) (*
 	v.Set("expiration", expiration)
 	err := v.WriteConfigAs(filepath)
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	return &Config{v}, nil
@@ -90,18 +90,18 @@ func InitLocalConfigureConfig(credentialsFile string) *Config {
 func WriteToken(credendialsFile, token string) (*Config, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	cobra.CheckErr(err)
 	filepath, err := filepath.Abs(homeDir + "/.flagship/" + credendialsFile)
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	viper.SetConfigFile(filepath)
 	viper.Set("token", token)
 	err = viper.WriteConfigAs(filepath)
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	return &Config{viper.GetViper()}, err

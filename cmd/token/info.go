@@ -23,7 +23,7 @@ var infoCmd = &cobra.Command{
 		if viper.GetString("token") != "" {
 			body, err := httprequest.HTTPCheckToken(viper.GetString("token"))
 			if err != nil {
-				log.Fatalf("error occured: %v", err)
+				log.Fatalf("error occurred: %v", err)
 			}
 			utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 		} else {

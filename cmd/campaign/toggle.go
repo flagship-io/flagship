@@ -23,7 +23,7 @@ var toggleCmd = &cobra.Command{
 		} else {
 			err := httprequest.HTTPToggleCampaign(CampaignID, Status)
 			if err != nil {
-				log.Fatalf("error occured: %v", err)
+				log.Fatalf("error occurred: %v", err)
 			}
 			fmt.Fprintf(cmd.OutOrStdout(), "campaign status set to %s\n", Status)
 		}
@@ -37,11 +37,11 @@ func init() {
 	toggleCmd.Flags().StringVarP(&Status, "status", "s", "", "status you want set to the campaign. Only 3 values are possible: active, paused and interrupted")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	if err := toggleCmd.MarkFlagRequired("status"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	CampaignCmd.AddCommand(toggleCmd)

@@ -21,7 +21,7 @@ var getCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetVariationGroup(CampaignID, VariationGroupID)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 
@@ -32,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&VariationGroupID, "id", "i", "", "id of the variation group you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	VariationGroupCmd.AddCommand(getCmd)
 }

@@ -32,12 +32,12 @@ func init() {
 	VariationCmd.PersistentFlags().StringVarP(&CampaignID, "campaign-id", "", "", "id of the campaign where you want to manage your variation")
 
 	if err := VariationCmd.MarkPersistentFlagRequired("campaign-id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	VariationCmd.PersistentFlags().StringVarP(&VariationGroupID, "variation-group-id", "", "", "id of the variation group where you want to manage your variation")
 
 	if err := VariationCmd.MarkPersistentFlagRequired("variation-group-id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 }

@@ -21,7 +21,7 @@ var getCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetProject(ProjectId)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
@@ -32,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	ProjectCmd.AddCommand(getCmd)
 

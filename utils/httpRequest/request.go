@@ -46,7 +46,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 
 	req, err := http.NewRequest(method, resource, bodyIO)
 	if err != nil {
-		log.Panicf("error occured on request creation: %v", err)
+		log.Panicf("error occurred on request creation: %v", err)
 	}
 
 	if !strings.Contains(resource, "token") && viper.GetString("account_id") == "" && viper.GetString("account_environment_id") == "" {

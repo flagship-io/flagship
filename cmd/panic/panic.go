@@ -26,7 +26,7 @@ var PanicCmd = &cobra.Command{
 		}
 		_, err := httprequest.HTTPUpdatePanic(panicStatus)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "Panic set to %v\n", panicStatus)
 
@@ -38,6 +38,6 @@ func init() {
 	PanicCmd.Flags().StringVarP(&panicStatus, "status", "s", "", "status you want to set the your flagship environment. Only 2 values are possible: on and off")
 
 	if err := PanicCmd.MarkFlagRequired("status"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 }

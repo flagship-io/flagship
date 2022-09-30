@@ -20,7 +20,7 @@ var editCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPEditProject(ProjectId, ProjectName)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
@@ -33,11 +33,11 @@ func init() {
 	editCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name you want to set for the project")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	if err := editCmd.MarkFlagRequired("name"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	ProjectCmd.AddCommand(editCmd)
