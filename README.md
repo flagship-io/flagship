@@ -33,7 +33,7 @@ The Flagship CLI can be installed and deployed in your infrastructure either by 
 You can download the latest binary here: [https://github.com/flagship-io/flagship-cli/releases](https://github.com/flagship-io/flagship-cli/releases)
 
 ### Using a Docker image
-You can pull the latest docker image from docker hub: docker pull [flagshipio/flagship-cli](https://hub.docker.com/repository/docker/flagshipio/flagship-cli)
+You can pull the latest docker image from docker hub: docker pull [flagshipio/cli](https://hub.docker.com/repository/docker/flagshipio/cli)
 
 ### Using Golang
 You can pull the project from github and build it using golang latest stable version (+1.18): 
