@@ -1,4 +1,4 @@
-package targeting_key
+package targetingkey
 
 import (
 	"encoding/json"

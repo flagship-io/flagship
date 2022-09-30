@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package targeting_key
+package targetingkey
 
 import "github.com/spf13/cobra"
 
