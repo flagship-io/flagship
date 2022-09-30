@@ -1,10 +1,11 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package targeting_key
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -21,7 +22,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Targeting key deleted")
+		fmt.Fprintln(cmd.OutOrStdout(), "Targeting key deleted")
 
 	},
 }

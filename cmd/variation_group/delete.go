@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package variation_group
@@ -22,7 +22,7 @@ var deleteCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Variation group deleted")
+		fmt.Fprintln(cmd.OutOrStdout(), "Variation group deleted")
 	},
 }
 

@@ -1,10 +1,11 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package campaign
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -18,13 +19,13 @@ var toggleCmd = &cobra.Command{
 	Long:  `Toggle a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
-			log.Println("Status can only have 3 values : active or paused or interrupted")
+			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 3 values : active or paused or interrupted")
 		} else {
 			err := httprequest.HTTPToggleCampaign(CampaignID, Status)
 			if err != nil {
 				log.Fatalf("error occured: %v", err)
 			}
-			log.Printf("campaign status set to %s", Status)
+			fmt.Fprintf(cmd.OutOrStdout(), "campaign status set to %s\n", Status)
 		}
 
 	},

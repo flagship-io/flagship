@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package project
@@ -23,7 +23,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"))
+		utils.FormatItem([]string{"ID", "Name"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 

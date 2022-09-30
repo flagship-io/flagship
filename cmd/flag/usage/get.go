@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package usage
@@ -23,7 +23,7 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		utils.FormatItem([]string{"ID", "Name", "Type", "Description", "Source"}, body, viper.GetString("output_format"))
+		utils.FormatItem([]string{"ID", "FlagKey", "Repository", "FilePath", "Branch", "Line", "CodeLineHighlight", "Code"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 

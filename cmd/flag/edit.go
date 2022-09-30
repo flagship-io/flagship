@@ -1,10 +1,11 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package flag
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -21,7 +22,7 @@ var editCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Printf("flag updated: %s", body)
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
 }
 

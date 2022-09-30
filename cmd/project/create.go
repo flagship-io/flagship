@@ -1,10 +1,11 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package project
 
 import (
+	"fmt"
 	"log"
 
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -13,15 +14,15 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create [-n <name> | --n=<name>]",
+	Use:   "create [-n <name> | --name=<name>]",
 	Short: "Create a project",
 	Long:  `Create a project in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPCreateProject(ProjectName)
+		body, err := httprequest.HTTPCreateProject(ProjectName)
 		if err != nil {
 			log.Fatalf("error occured: %v", err)
 		}
-		log.Println("Project created")
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
 }
 
