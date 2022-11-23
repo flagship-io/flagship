@@ -3,14 +3,13 @@ module github.com/flagship-io/flagship
 go 1.18
 
 require (
+	github.com/flagship-io/codebase-analyzer v0.5.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
-	github.com/stretchr/testify v1.7.1
+	github.com/stretchr/testify v1.8.0
 )
 
 require (
-	github.com/flagship-io/codebase-analyzer v0.5.0 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/thoas/go-funk v0.9.2 // indirect
 )
