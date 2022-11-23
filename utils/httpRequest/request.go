@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -88,6 +89,9 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	respBody, err := ioutil.ReadAll(reader)
 	if err != nil {
 		return nil, err
+	}
+	if resp.StatusCode >= 400 && resp.StatusCode != 403 {
+		err = errors.New(string(respBody))
 	}
 	if resp.StatusCode == 403 && !counter {
 		counter = true
