@@ -3,7 +3,7 @@ package httprequest
 import (
 	"testing"
 
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction "github.com/flagship-io/flagship-cli/utils/mock_function"
 	"github.com/jarcoal/httpmock"
 )
 

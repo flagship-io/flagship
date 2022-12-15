@@ -1,6 +1,6 @@
 FROM golang:1.18-alpine as builder
 RUN apk add --update make
-WORKDIR /go/src/github/flagship-io/flagship
+WORKDIR /go/src/github/flagship-io/flagship-cli
 
 # Download dependencies before building
 COPY go.mod .
@@ -14,5 +14,5 @@ RUN make build
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=builder /go/src/github/flagship-io/flagship/flagship ./
+COPY --from=builder /go/src/github/flagship-io/flagship-cli/flagship ./
 CMD ["/bin/sh"]

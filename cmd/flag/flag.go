@@ -5,7 +5,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package flag
 
 import (
-	"github.com/flagship-io/flagship/cmd/flag/usage"
+	"github.com/flagship-io/flagship-cli/cmd/flag/usage"
 	"github.com/spf13/cobra"
 )
 
