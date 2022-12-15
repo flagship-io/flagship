@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/flagship-io/flagship/models"
-	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship-cli/models"
+	"github.com/flagship-io/flagship-cli/utils"
 	"github.com/spf13/viper"
 )
 
