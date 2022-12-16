@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/flagship-io/flagship-cli/utils/config"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

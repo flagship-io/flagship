@@ -7,8 +7,8 @@ package variation
 import (
 	"log"
 
-	"github.com/flagship-io/flagship-cli/utils"
-	httprequest "github.com/flagship-io/flagship-cli/utils/httpRequest"
+	"github.com/flagship-io/flagship/utils"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/flagship-io/flagship-cli/models"
-	"github.com/flagship-io/flagship-cli/utils"
-	mockfunction "github.com/flagship-io/flagship-cli/utils/mock_function"
+	"github.com/flagship-io/flagship/models"
+	"github.com/flagship-io/flagship/utils"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )

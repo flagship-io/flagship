@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship-cli/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
