@@ -3,9 +3,9 @@ package mockfunction
 import (
 	"net/http"
 
-	"github.com/flagship-io/flagship-cli/models"
-	"github.com/flagship-io/flagship-cli/utils"
-	"github.com/flagship-io/flagship-cli/utils/config"
+	"github.com/flagship-io/flagship/models"
+	"github.com/flagship-io/flagship/utils"
+	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"
 	"github.com/spf13/viper"
 )

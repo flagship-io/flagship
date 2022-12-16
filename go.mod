@@ -1,4 +1,4 @@
-module github.com/flagship-io/flagship-cli
+module github.com/flagship-io/flagship
 
 go 1.18
 
