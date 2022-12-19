@@ -89,7 +89,8 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode == 403 && !counter {
+
+	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
 		counter = true
 		regenerateToken(config.CredentialsFile)
 		return HTTPRequest(method, resource, body)
