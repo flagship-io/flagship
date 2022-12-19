@@ -12,7 +12,7 @@ import (
 )
 
 // Version will match the tag
-var Version = "v0.2.1"
+var Version = "v0.3.0"
 
 // VersionCmd represents the version command
 var VersionCmd = &cobra.Command{
