@@ -1,6 +1,6 @@
 <p align="center">
 
-<img  src="https://mk0abtastybwtpirqi5t.kinstacdn.com/wp-content/uploads/picture-solutions-persona-product-flagship.jpg"  width="211"  height="182"  alt="flagship-cli"  />
+<img  src="https://mk0abtastybwtpirqi5t.kinstacdn.com/wp-content/uploads/picture-solutions-persona-product-flagship.jpg"  width="211"  height="182"  alt="flagship"  />
 
 </p>
 
@@ -30,7 +30,7 @@ The Flagship CLI can be installed and deployed in your infrastructure either by 
 
 ### Using a binary
 
-You can download the latest binary here: [https://github.com/flagship-io/flagship-cli/releases](https://github.com/flagship-io/flagship-cli/releases)
+You can download the latest binary here: [https://github.com/flagship-io/flagship/releases](https://github.com/flagship-io/flagship/releases)
 
 ### Using a Docker image
 You can pull the latest docker image from docker hub: docker pull [flagshipio/cli](https://hub.docker.com/repository/docker/flagshipio/cli)
@@ -38,7 +38,7 @@ You can pull the latest docker image from docker hub: docker pull [flagshipio/cl
 ### Using Golang
 You can pull the project from github and build it using golang latest stable version (+1.18): 
 
-    git clone git@github.com:flagship-io/flagship-cli.git
+    git clone git@github.com:flagship-io/flagship.git
     cd flagship
     go build .
 
@@ -49,7 +49,7 @@ You can pull the project from github and build it using golang latest stable ver
 
 ## Licence
 
-[Apache License.](https://github.com/flagship-io/flagship-cli/blob/main/LICENSE)
+[Apache License.](https://github.com/flagship-io/flagship/blob/main/LICENSE)
 
 ## About Flagship
 ​
