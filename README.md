@@ -38,8 +38,8 @@ You can pull the latest docker image from docker hub: docker pull [flagshipio/cl
 ### Using Golang
 You can pull the project from github and build it using golang latest stable version (+1.18): 
 
-    git pull git@github.com:flagship-io/flagship-cli.git
-    cd flagship-cli
+    git clone git@github.com:flagship-io/flagship-cli.git
+    cd flagship
     go build .
 
 ## Contributors
