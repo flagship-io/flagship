@@ -20,7 +20,7 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteUsers(UserEmail)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintln(cmd.OutOrStdout(), "Email deleted")
 	},
@@ -31,7 +31,7 @@ func init() {
 	deleteCmd.Flags().StringVarP(&UserEmail, "email", "e", "", "email you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("email"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	UserCmd.AddCommand(deleteCmd)

@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package targetingkey
+package goal
 
 import (
 	"log"
@@ -16,17 +16,17 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all targeting keys",
-	Long:  `List all targeting keys in your account`,
+	Short: "List all goals",
+	Long:  `List all goals in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPListTargetingKey()
+		body, err := httprequest.HTTPListGoal()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		utils.FormatItem([]string{"ID", "Name", "Type", "Description"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"ID", "Label", "Type", "Operator", "Value"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 
 func init() {
-	TargetingKeyCmd.AddCommand(listCmd)
+	GoalCmd.AddCommand(listCmd)
 }

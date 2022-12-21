@@ -43,8 +43,8 @@ var TestFlagUsageList = []models.FlagUsage{
 	{
 		ID:                "testFlagUsageID",
 		FlagKey:           "isVIP",
-		Repository:        "flagship-cli",
-		FilePath:          "https://github.com/flagship-io/flagship-cli",
+		Repository:        "flagship",
+		FilePath:          "https://github.com/flagship-io/flagship",
 		Branch:            "main",
 		Line:              "Line116",
 		CodeLineHighlight: "codeLineHighlight",

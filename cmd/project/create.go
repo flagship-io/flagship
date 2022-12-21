@@ -20,7 +20,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPCreateProject(ProjectName)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", body)
 	},
@@ -31,7 +31,7 @@ func init() {
 	createCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name of the project you want to create")
 
 	if err := createCmd.MarkFlagRequired("name"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	ProjectCmd.AddCommand(createCmd)

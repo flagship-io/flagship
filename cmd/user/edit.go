@@ -20,7 +20,7 @@ var editCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "users created\n")
 	},
@@ -31,7 +31,7 @@ func init() {
 	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your user, check the doc for details")
 
 	if err := editCmd.MarkFlagRequired("data-raw"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	UserCmd.AddCommand(editCmd)

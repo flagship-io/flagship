@@ -1,6 +1,6 @@
 <p align="center">
 
-<img  src="https://mk0abtastybwtpirqi5t.kinstacdn.com/wp-content/uploads/picture-solutions-persona-product-flagship.jpg"  width="211"  height="182"  alt="flagship-cli"  />
+<img  src="https://mk0abtastybwtpirqi5t.kinstacdn.com/wp-content/uploads/picture-solutions-persona-product-flagship.jpg"  width="211"  height="182"  alt="flagship"  />
 
 </p>
 
@@ -11,6 +11,9 @@ A Tool to manage your Flagship resources built in [Go](https://go.dev/) using th
 [Website](https://flagship.io) | [Documentation](https://docs.developers.flagship.io/docs/flagship-command-line-interface) | [Installation Guide](https://docs.developers.flagship.io/docs/flagship-command-line-interface#download-and-install-the-flagship-cli) | [Twitter](https://twitter.com/feature_flags)
 
 [![Apache2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Go Report Card](https://goreportcard.com/badge/github.com/flagship-io/flagship)](https://goreportcard.com/report/github.com/flagship-io/flagship)
+[![Go Reference](https://pkg.go.dev/badge/github.com/flagship-io/flagship.svg)](https://pkg.go.dev/github.com/flagship-io/flagship)
+[![codecov](https://codecov.io/gh/flagship-io/flagship/branch/main/graph/badge.svg?token=nr9K5jvTlR)](https://codecov.io/gh/flagship-io/flagship)
 
 ## Overview
 
@@ -30,7 +33,7 @@ The Flagship CLI can be installed and deployed in your infrastructure either by 
 
 ### Using a binary
 
-You can download the latest binary here: [https://github.com/flagship-io/flagship-cli/releases](https://github.com/flagship-io/flagship-cli/releases)
+You can download the latest binary here: [https://github.com/flagship-io/flagship/releases](https://github.com/flagship-io/flagship/releases)
 
 ### Using a Docker image
 You can pull the latest docker image from docker hub: docker pull [flagshipio/cli](https://hub.docker.com/repository/docker/flagshipio/cli)
@@ -38,8 +41,8 @@ You can pull the latest docker image from docker hub: docker pull [flagshipio/cl
 ### Using Golang
 You can pull the project from github and build it using golang latest stable version (+1.18): 
 
-    git pull git@github.com:flagship-io/flagship-cli.git
-    cd flagship-cli
+    git clone git@github.com:flagship-io/flagship.git
+    cd flagship
     go build .
 
 ## Contributors
@@ -49,7 +52,7 @@ You can pull the project from github and build it using golang latest stable ver
 
 ## Licence
 
-[Apache License.](https://github.com/flagship-io/flagship-cli/blob/main/LICENSE)
+[Apache License.](https://github.com/flagship-io/flagship/blob/main/LICENSE)
 
 ## About Flagship
 ​

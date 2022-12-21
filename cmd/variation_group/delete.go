@@ -20,7 +20,7 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteVariationGroup(CampaignID, VariationGroupID)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintln(cmd.OutOrStdout(), "Variation group deleted")
 	},

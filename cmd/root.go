@@ -11,9 +11,10 @@ import (
 	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/cmd/campaign"
 	"github.com/flagship-io/flagship/cmd/flag"
+	"github.com/flagship-io/flagship/cmd/goal"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
-	"github.com/flagship-io/flagship/cmd/targeting_key"
+	targetingkey "github.com/flagship-io/flagship/cmd/targeting_key"
 	"github.com/flagship-io/flagship/cmd/token"
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
@@ -65,7 +66,8 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(flag.FlagCmd)
-	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
+	rootCmd.AddCommand(goal.GoalCmd)
+	rootCmd.AddCommand(targetingkey.TargetingKeyCmd)
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(analyse.AnalyseCmd)

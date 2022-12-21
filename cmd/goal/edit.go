@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package project
+package goal
 
 import (
 	"fmt"
@@ -14,11 +14,11 @@ import (
 
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
-	Use:   "edit [-i <project-id> | --id=<project-id>] [-n <name> | --name=<name>]",
-	Short: "Edit a project",
-	Long:  `Edit a project in your account`,
+	Use:   "edit [-i <goal-id> | --id=<goal-id>] [-d <data-raw> | --data-raw <data-raw>]",
+	Short: "Edit a goal",
+	Long:  `Edit a goal in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPEditProject(ProjectId, ProjectName)
+		body, err := httprequest.HTTPEditGoal(GoalID, DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
@@ -28,18 +28,16 @@ var editCmd = &cobra.Command{
 
 func init() {
 
-	editCmd.Flags().StringVarP(&ProjectId, "id", "i", "", "id of the project you want to edit")
-
-	editCmd.Flags().StringVarP(&ProjectName, "name", "n", "", "name you want to set for the project")
+	editCmd.Flags().StringVarP(&GoalID, "id", "i", "", "id of the goal you want to edit")
+	editCmd.Flags().StringVarP(&DataRaw, "data-raw", "d", "", "raw data contains all the info to edit your goal, check the doc for details")
 
 	if err := editCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	if err := editCmd.MarkFlagRequired("name"); err != nil {
+	if err := editCmd.MarkFlagRequired("data-raw"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	ProjectCmd.AddCommand(editCmd)
-
+	GoalCmd.AddCommand(editCmd)
 }

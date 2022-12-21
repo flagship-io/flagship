@@ -21,7 +21,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPListUsers()
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		utils.FormatItem([]string{"Email", "Role"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},

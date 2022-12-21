@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package targeting_key
+package targetingkey
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.HTTPDeleteTargetingKey(TargetingKeyID)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintln(cmd.OutOrStdout(), "Targeting key deleted")
 
@@ -31,7 +31,7 @@ func init() {
 	deleteCmd.Flags().StringVarP(&TargetingKeyID, "id", "i", "", "id of the targeting key you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	TargetingKeyCmd.AddCommand(deleteCmd)
 }

@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package targeting_key
+package targetingkey
 
 import (
 	"log"
@@ -21,7 +21,7 @@ var getCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.HTTPGetTargetingKey(TargetingKeyID)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		utils.FormatItem([]string{"ID", "Name", "Type", "Description"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 
@@ -32,7 +32,7 @@ func init() {
 	getCmd.Flags().StringVarP(&TargetingKeyID, "id", "i", "", "id of the targeting key you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 	TargetingKeyCmd.AddCommand(getCmd)
 }

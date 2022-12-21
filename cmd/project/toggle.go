@@ -25,7 +25,7 @@ var toggleCmd = &cobra.Command{
 
 		err := httprequest.HTTPToggleProject(ProjectId, ProjectStatus)
 		if err != nil {
-			log.Fatalf("error occured: %v", err)
+			log.Fatalf("error occurred: %v", err)
 		}
 		fmt.Fprintf(cmd.OutOrStdout(), "project set to %v\n", ProjectStatus)
 	},
@@ -37,11 +37,11 @@ func init() {
 	toggleCmd.Flags().StringVarP(&ProjectStatus, "status", "s", "", "status you want to set to the project. Only 3 values are possible: active, paused and interrupted")
 
 	if err := toggleCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	if err := toggleCmd.MarkFlagRequired("status"); err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occurred: %v", err)
 	}
 
 	ProjectCmd.AddCommand(toggleCmd)

@@ -24,7 +24,7 @@ func HTTPCreateProject(name string) ([]byte, error) {
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
 	if err != nil {
-		log.Fatalf("error occured: %s", err)
+		log.Fatalf("error occurred: %s", err)
 	}
 	return HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects", projectRequestJSON)
 }
@@ -35,7 +35,7 @@ func HTTPEditProject(id, name string) ([]byte, error) {
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
 	if err != nil {
-		log.Fatalf("error occured: %s", err)
+		log.Fatalf("error occurred: %s", err)
 	}
 	return HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, projectRequestJSON)
 }

@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package flag
+package goal
 
 import (
 	"fmt"
@@ -14,24 +14,24 @@ import (
 
 // deleteCmd represents delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete [-i <flag-id> | --id=<flag-id>]",
+	Use:   "delete [-i <goal-id> | --id=<goal-id>]",
 	Short: "Delete a flag",
 	Long:  `Delete a flag in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPDeleteFlag(FlagID)
+		err := httprequest.HTTPDeleteGoal(GoalID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		fmt.Fprintln(cmd.OutOrStdout(), "Flag deleted")
+		fmt.Fprintln(cmd.OutOrStdout(), "Goal deleted")
 
 	},
 }
 
 func init() {
-	deleteCmd.Flags().StringVarP(&FlagID, "id", "i", "", "id of the flag you want to delete")
+	deleteCmd.Flags().StringVarP(&GoalID, "id", "i", "", "id of the goal you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
-	FlagCmd.AddCommand(deleteCmd)
+	GoalCmd.AddCommand(deleteCmd)
 }
