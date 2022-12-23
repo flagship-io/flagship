@@ -34,7 +34,7 @@ var AnalyseCmd = &cobra.Command{
 			RepositoryURL:         repoURL,
 			RepositoryBranch:      repoBranch,
 			NbLineCodeEdges:       1,
-			FilesToExcludes:       []string{"/.git"},
+			FilesToExcludes:       []string{".git", ".github", ".vscode"},
 		})
 
 		if err != nil {
