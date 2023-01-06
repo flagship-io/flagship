@@ -1,0 +1,36 @@
+{
+    "resources": [
+        {
+            "name": "project",
+            "data": {
+                "name": "Generic wizard"
+            }
+        },
+        {
+            "name": "flag",
+            "data": {
+                "name": "Flag_created_with_cli_1",
+                "type": "string",
+                "description": "I'am flag number 1, i have been created by the CLI",
+                "source": "manual"
+            }
+        },
+        {
+            "name": "targeting_key",
+            "data": {
+                "type": "string",
+                "name": "keyname001",
+                "description": "I'm targeting key1"
+            }
+        },
+        {
+            "name": "goal",
+            "data": {
+                "type": "event",
+                "label": "fgdgdg",
+                "operator": "contains",
+                "value": "fdgdfgdg"
+            }
+        }
+    ]
+}
