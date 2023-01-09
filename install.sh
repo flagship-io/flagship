@@ -23,10 +23,10 @@ case "$distro" in
   "Darwin")
     case "$arch" in
       "x86_64")
-        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}-darwin-amd64.tar.gz"
+        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}_darwin_amd64.tar.gz"
         ;;
       "arm64")
-        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}-darwin-arm64.tar.gz"
+        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}_darwin_arm64.tar.gz"
         ;;
       *)
         echo "Unsupported architecture"
@@ -38,14 +38,14 @@ case "$distro" in
   echo "Downloading Flagship CLI..."
     case "$arch" in
       "i686")
-        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}-linux-386.tar.gz"
+        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}_linux_386.tar.gz"
         ;;
       "x86_64")
-        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}-linux-amd64.tar.gz"
+        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}_linux_amd64.tar.gz"
         echo $url
         ;;
       "arm64")
-        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}-linux-arm64.tar.gz"
+        url="https://github.com/flagship-io/flagship/releases/download/${version}/flagship_${version}_linux_arm64.tar.gz"
         ;;
       *)
         echo "Unsupported architecture"
