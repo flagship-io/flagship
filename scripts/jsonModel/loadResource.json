@@ -1,9 +1,31 @@
 {
     "resources": [
         {
+            "name": "campaign",
+            "resourceVariable": "c1",
+            "resourceVariable": "p1",
+            "method": "create",
+            "data": {
+                "projectId": "$p1.id",
+                "type": "string",
+                "name": "keyname001",
+                "description": "I'm targeting key1"
+            }
+        },
+        {
             "name": "project",
+            "resourceVariable": "p1",
+            "method": "create",
             "data": {
                 "name": "Generic wizard"
+            }
+        },
+        {
+            "name": "project",
+            "resourceVariable": "p2",
+            "method": "create",
+            "data": {
+                "name": "Generic wizard2"
             }
         },
         {
@@ -13,14 +35,6 @@
                 "type": "string",
                 "description": "I'am flag number 1, i have been created by the CLI",
                 "source": "manual"
-            }
-        },
-        {
-            "name": "targeting_key",
-            "data": {
-                "type": "string",
-                "name": "keyname001",
-                "description": "I'm targeting key1"
             }
         },
         {

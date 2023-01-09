@@ -11,30 +11,33 @@ import (
 	"log"
 	"os"
 
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
 )
 
 type Data interface {
-	GetName() string
+	Save(data string) ([]byte, error)
 }
 
 type ProjectData struct {
+	Id   string
 	Name string
 }
 
-func (p ProjectData) GetName() string {
-	return p.Name
+func (f ProjectData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateProject(data)
 }
 
 type FlagData struct {
+	Id          string
 	Name        string
 	Type        string
 	Description string
 	Source      string
 }
 
-func (f FlagData) GetName() string {
-	return f.Name
+func (f FlagData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateFlag(data)
 }
 
 // define structs for other resource types
@@ -69,6 +72,7 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 	}
 
 	bytes, err := os.ReadFile(resourceFile)
+
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
@@ -114,6 +118,17 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 	flag := resources[1].Data.(FlagData).Name
 	fmt.Println(flag)
 	return resources, nil
+}
+
+func loadResources(resources []Resource) ([]Resource, error) {
+
+	for _, resource := range resources {
+		data, err := json.Marshal(resource.Data)
+		if err != nil {
+			return nil, err
+		}
+		resource.Data.Save()
+	}
 }
 
 var gResources []Resource
