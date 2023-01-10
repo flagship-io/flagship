@@ -35,12 +35,12 @@ The Flagship CLI can be installed and deployed in your infrastructure either by 
 
 * Linux/Darwin
 
-# With wget
+#### With wget
 ```bash
 wget -qO- https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh | bash
 ```
 
-# With curl
+#### With curl
 ```bash
 curl -sL https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh | bash
 ```
