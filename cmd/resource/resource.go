@@ -7,14 +7,11 @@ package resource
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var (
 	resourceFile string
 )
-
-var v = viper.New()
 
 // ResourceCmd represents the resource command
 var ResourceCmd = &cobra.Command{
