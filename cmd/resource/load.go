@@ -28,16 +28,76 @@ func (f ProjectData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateProject(data)
 }
 
-type FlagData struct {
+type CampaignData struct {
 	Id          string
+	ProjectId   string
 	Name        string
-	Type        string
 	Description string
-	Source      string
+	Type        string
+	//VariationGroups []VariationGroupData
+}
+
+func (f CampaignData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateCampaign(data)
+}
+
+type FlagData struct {
+	Id               string
+	Name             string
+	Type             string
+	Description      string
+	Source           string
+	DefaultValue     string
+	PredefinedValues []string
 }
 
 func (f FlagData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateFlag(data)
+}
+
+type GoalData struct {
+	Id       string
+	Label    string
+	Type     string
+	Operator string
+	Value    string
+}
+
+func (f GoalData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateGoal(data)
+}
+
+/* type VariationGroupData struct {
+	Id            string
+	Name          string
+	Allocation    int
+	Reference     bool
+	Modifications interface{}
+	Value         string
+}
+
+func (f VariationGroupData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateVariationGroup(campaignID, data)
+}
+
+type VariationData struct {
+	Id        string
+	Varations []VariationData
+}
+
+func (f VariationData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateVariation(campaignID, variationGroupID, data)
+} */
+
+type TargetingKeysData struct {
+	Id          string
+	Name        string
+	Type        string
+	Description string
+}
+
+func (f TargetingKeysData) Save(data string) ([]byte, error) {
+	return httprequest.HTTPCreateTargetingKey(data)
 }
 
 // define structs for other resource types
@@ -49,13 +109,19 @@ const (
 	Flag
 	TargetingKey
 	Goal
+	Campaign
+	VariationGroup
+	Variation
 )
 
 var resourceTypeMap = map[string]ResourceType{
-	"project":       Project,
-	"flag":          Flag,
-	"targeting_key": TargetingKey,
-	"goal":          Goal,
+	"project":         Project,
+	"flag":            Flag,
+	"targeting_key":   TargetingKey,
+	"goal":            Goal,
+	"campaign":        Campaign,
+	"variation_group": VariationGroup,
+	"variation":       Variation,
 }
 
 type Resource struct {
@@ -93,19 +159,38 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 		var err error = nil
 
 		switch name {
+
 		case Project:
 			projectData := ProjectData{}
 			err = json.Unmarshal(r.Data, &projectData)
 			data = projectData
-
-			fmt.Println(data)
+			//fmt.Println(data)
 
 		//data = &ProjectData{}
 		case Flag:
 			flagData := FlagData{}
 			err = json.Unmarshal(r.Data, &flagData)
 			data = flagData
-			fmt.Println(data)
+			//fmt.Println(data)
+
+		case TargetingKey:
+			targetingKeyData := TargetingKeysData{}
+			err = json.Unmarshal(r.Data, &targetingKeyData)
+			data = targetingKeyData
+			//fmt.Println(data)
+
+		case Campaign:
+			campaignData := CampaignData{}
+			err = json.Unmarshal(r.Data, &campaignData)
+			data = campaignData
+			//fmt.Println(data)
+
+			/* 		case VariationGroup:
+			variationGroupData := VariationGroupData{}
+			err = json.Unmarshal(r.Data, &variationGroupData)
+			data = variationGroupData
+			fmt.Println(data) */
+
 		}
 
 		if err != nil {
@@ -115,20 +200,23 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 		resources = append(resources, Resource{Name: name, Data: data})
 	}
 
-	flag := resources[1].Data.(FlagData).Name
-	fmt.Println(flag)
+	//flag := resources[1].Data.(ProjectData).Name
+	//fmt.Println(flag)
 	return resources, nil
 }
 
-func loadResources(resources []Resource) ([]Resource, error) {
+func loadResources(resources []Resource) (string, error) {
 
 	for _, resource := range resources {
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		resource.Data.Save()
+		fmt.Println(string(data))
+
+		//resource.Data.Save(string(data))
 	}
+	return "done", nil
 }
 
 var gResources []Resource
@@ -139,7 +227,7 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		fmt.Println(loadResources(gResources))
 	},
 }
 
@@ -158,8 +246,9 @@ func init() {
 func initResource() {
 
 	// Use config file from the flag.
+	var err error
 	if resourceFile != "" {
-		_, err := UnmarshalConfig(resourceFile)
+		gResources, err = UnmarshalConfig(resourceFile)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

@@ -3,7 +3,6 @@
         {
             "name": "campaign",
             "resourceVariable": "c1",
-            "resourceVariable": "p1",
             "method": "create",
             "data": {
                 "projectId": "$p1.id",
@@ -30,6 +29,7 @@
         },
         {
             "name": "flag",
+            "resourceVariable": "f1",
             "data": {
                 "name": "Flag_created_with_cli_1",
                 "type": "string",
@@ -39,6 +39,7 @@
         },
         {
             "name": "goal",
+            "resourceVariable": "g1",
             "data": {
                 "type": "event",
                 "label": "fgdgdg",
