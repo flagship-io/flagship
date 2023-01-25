@@ -25,8 +25,8 @@ brews:
   - name: flagship
     homepage: "https://github.com/flagship-io/flagship"
     tap:
-      owner: flaghsip-io
-      name: homebrew-flaghsip
+      owner: flagship-io
+      name: homebrew-flagship
     commit_author:
-      name: chadi
-      email: chadi.laoulaou@abtasty.com
+      name: flagship
+      email: flagship@abtasty.com
