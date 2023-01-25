@@ -45,6 +45,12 @@ wget -qO- https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh
 curl -sL https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh | bash
 ```
 
+#### With Homebrew
+```bash
+brew tap flagship-io/flagship
+brew install flagship
+```
+
 * Other Operating Systems
 
 Please download the binary from the [release page](https://github.com/flagship-io/flagship/releases)

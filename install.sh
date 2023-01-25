@@ -80,6 +80,9 @@ else
   exit 1
 fi
 
+# exit when any command fails
+set -e
+
 # Removing the archive
 echo "Removing archive..."
 rm ~/flagship.tar.gz
