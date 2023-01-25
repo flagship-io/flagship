@@ -14,3 +14,19 @@ builds:
       - windows
       - linux
       - darwin
+
+    env:
+      - CGO_ENABLED=0
+
+universal_binaries:
+  - replace: true
+
+brews:
+  - name: flagship
+    homepage: "https://github.com/flagship-io/flagship"
+    tap:
+      owner: flagship-io
+      name: homebrew-flagship
+    commit_author:
+      name: flagship
+      email: flagship@abtasty.com
