@@ -14,3 +14,19 @@ builds:
       - windows
       - linux
       - darwin
+
+    env:
+      - CGO_ENABLED=0
+
+universal_binaries:
+  - replace: true
+
+brews:
+  - name: flagship
+    homepage: "https://github.com/flagship-io/flagship"
+    tap:
+      owner: flaghsip-io
+      name: homebrew-flaghsip
+    commit_author:
+      name: chadi
+      email: chadi.laoulaou@abtasty.com
