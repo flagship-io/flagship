@@ -9,10 +9,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 type Data interface {
@@ -20,8 +23,8 @@ type Data interface {
 }
 
 type ProjectData struct {
-	Id   string
-	Name string
+	Id   string `json:",omitempty"`
+	Name string `json:"name"`
 }
 
 func (f ProjectData) Save(data string) ([]byte, error) {
@@ -208,13 +211,19 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 func loadResources(resources []Resource) (string, error) {
 
 	for _, resource := range resources {
+		var url = ""
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
 			return "", err
 		}
 		fmt.Println(string(data))
 
-		//resource.Data.Save(string(data))
+		switch resource.Name {
+		case Project:
+			url = "/project"
+		}
+		httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+
 	}
 	return "done", nil
 }
@@ -227,7 +236,7 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(loadResources(gResources))
+		loadResources(gResources)
 	},
 }
 
