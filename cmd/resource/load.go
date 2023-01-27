@@ -185,6 +185,11 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 			campaignData := CampaignData{}
 			err = json.Unmarshal(r.Data, &campaignData)
 			data = campaignData
+
+		case Goal:
+			goalData := GoalData{}
+			err = json.Unmarshal(r.Data, &goalData)
+			data = goalData
 			//fmt.Println(data)
 
 			/* 		case VariationGroup:
