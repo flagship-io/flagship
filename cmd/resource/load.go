@@ -147,7 +147,6 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 	}
 
 	if err := json.Unmarshal(bytes, &config); err != nil {
-		fmt.Println("here")
 		return nil, err
 	}
 
@@ -216,13 +215,17 @@ func loadResources(resources []Resource) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		fmt.Println(string(data))
 
 		switch resource.Name {
 		case Project:
-			url = "/project"
+			url = "/projects"
 		}
-		httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+
+		_, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+
+		if err != nil {
+			return "", err
+		}
 
 	}
 	return "done", nil
@@ -236,7 +239,11 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		loadResources(gResources)
+		res, err := loadResources(gResources)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", res)
 	},
 }
 
