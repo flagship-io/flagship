@@ -32,11 +32,11 @@ func (f ProjectData) Save(data string) ([]byte, error) {
 }
 
 type CampaignData struct {
-	Id          string
-	ProjectId   string
-	Name        string
-	Description string
-	Type        string
+	Id          string `json:",omitempty"`
+	ProjectId   string `json:"project_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        string `json:"type"`
 	//VariationGroups []VariationGroupData
 }
 
@@ -45,13 +45,13 @@ func (f CampaignData) Save(data string) ([]byte, error) {
 }
 
 type FlagData struct {
-	Id               string
-	Name             string
-	Type             string
-	Description      string
-	Source           string
-	DefaultValue     string
-	PredefinedValues []string
+	Id               string   `json:",omitempty"`
+	Name             string   `json:"name"`
+	Type             string   `json:"type"`
+	Description      string   `json:"description"`
+	Source           string   `json:"source"`
+	DefaultValue     string   `json:",omitempty"`
+	PredefinedValues []string `json:",omitempty"`
 }
 
 func (f FlagData) Save(data string) ([]byte, error) {
@@ -59,11 +59,11 @@ func (f FlagData) Save(data string) ([]byte, error) {
 }
 
 type GoalData struct {
-	Id       string
-	Label    string
-	Type     string
-	Operator string
-	Value    string
+	Id       string `json:",omitempty"`
+	Label    string `json:"label"`
+	Type     string `json:"type"`
+	Operator string `json:"operator"`
+	Value    string `json:"value"`
 }
 
 func (f GoalData) Save(data string) ([]byte, error) {
@@ -93,10 +93,10 @@ func (f VariationData) Save(data string) ([]byte, error) {
 } */
 
 type TargetingKeysData struct {
-	Id          string
-	Name        string
-	Type        string
-	Description string
+	Id          string `json:",omitempty"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	Description string `json:"description"`
 }
 
 func (f TargetingKeysData) Save(data string) ([]byte, error) {
@@ -219,9 +219,27 @@ func loadResources(resources []Resource) (string, error) {
 		switch resource.Name {
 		case Project:
 			url = "/projects"
+		case Flag:
+			url = "/flags"
+		case TargetingKey:
+			url = "/targeting_keys"
+		case Goal:
+			url = "/goals"
+		case VariationGroup:
+			url = "/variable_groups"
+		case Variation:
+			url = "/variations"
+		case Campaign:
+			url = "/campaigns"
 		}
 
-		_, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
+			_, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+		}
+
+		if resource.Name == Goal || resource.Name == Campaign {
+			_, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, data)
+		}
 
 		if err != nil {
 			return "", err
