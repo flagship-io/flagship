@@ -27,23 +27,43 @@ For example, you can use the Flagship CLI to manage the following;
 
 For an introduction to the Flagship CLI, a list of commonly used commands, and a look at how these commands are structured, see the [Flagship cheat sheet](https://docs.developers.flagship.io/docs/cli-reference#commands).
 
-## Download and install the Flagship CLI
+## Download and install Flagship CLI
 
 The Flagship CLI can be installed and deployed in your infrastructure either by downloading and running the binary, or pulling and running the docker image in your orchestration system.
 
 ### Using a binary
 
-You can download the latest binary here: [https://github.com/flagship-io/flagship/releases](https://github.com/flagship-io/flagship/releases)
+* Linux/Darwin
+
+#### With wget
+```bash
+wget -qO- https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh | bash
+```
+
+#### With curl
+```bash
+curl -sL https://raw.githubusercontent.com/flagship-io/flagship/main/install.sh | bash
+```
+
+#### With Homebrew
+```bash
+brew tap flagship-io/flagship
+brew install flagship
+```
+
+* Other Operating Systems
+
+Please download the binary from the [release page](https://github.com/flagship-io/flagship/releases)
 
 ### Using a Docker image
 You can pull the latest docker image from docker hub: docker pull [flagshipio/cli](https://hub.docker.com/repository/docker/flagshipio/cli)
 
-### Using Golang
+### Using Golang from source
 You can pull the project from github and build it using golang latest stable version (+1.18): 
 
     git clone git@github.com:flagship-io/flagship.git
     cd flagship
-    go build .
+    go build -o flagship
 
 ## Contributors
 
