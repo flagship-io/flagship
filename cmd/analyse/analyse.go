@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
 package analyse
@@ -45,6 +45,6 @@ var AnalyseCmd = &cobra.Command{
 
 func init() {
 	AnalyseCmd.Flags().StringVarP(&directory, "directory", "", ".", "directory")
-	AnalyseCmd.Flags().StringVarP(&repoURL, "repository-url", "", "", "repository URL")
+	AnalyseCmd.Flags().StringVarP(&repoURL, "repository-url", "", "https://gitlab.com/org/repo", "repository URL")
 	AnalyseCmd.Flags().StringVarP(&repoBranch, "repository-branch", "", "main", "repository branch")
 }
