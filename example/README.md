@@ -1,0 +1,12 @@
+## Supported file languages
+- .cs .fs
+- .go
+- .java
+- .js .jsx
+- .kt
+- .m
+- .py
+- .php
+- .swift
+- .ts .tsx
+- .vb
