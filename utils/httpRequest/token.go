@@ -23,7 +23,7 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expirat
 		return "", err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.HostAuth+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
+	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
 	if err != nil {
 		return "", err
 	}
@@ -37,5 +37,5 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expirat
 }
 
 func HTTPCheckToken(token string) (models.Token, error) {
-	return HTTPGetItem[models.Token](utils.HostAuth + "/token?access_token=" + token)
+	return HTTPGetItem[models.Token](utils.GetHostAuth() + "/token?access_token=" + token)
 }

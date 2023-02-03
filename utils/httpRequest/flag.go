@@ -9,26 +9,26 @@ import (
 )
 
 func HTTPListFlag() ([]models.Flag, error) {
-	return HTTPGetAllPages[models.Flag](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/flags")
+	return HTTPGetAllPages[models.Flag](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags")
 }
 
 func HTTPFlagUsage() ([]models.FlagUsage, error) {
-	return HTTPGetAllPages[models.FlagUsage](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/flags_usage")
+	return HTTPGetAllPages[models.FlagUsage](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/flags_usage")
 }
 
 func HTTPGetFlag(id string) (models.Flag, error) {
-	return HTTPGetItem[models.Flag](utils.Host + "/v1/accounts/" + viper.GetString("account_id") + "/flags/" + id)
+	return HTTPGetItem[models.Flag](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags/" + id)
 }
 
 func HTTPCreateFlag(data string) ([]byte, error) {
-	return HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags", []byte(data))
+	return HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags", []byte(data))
 }
 
 func HTTPEditFlag(id, data string) ([]byte, error) {
-	return HTTPRequest(http.MethodPatch, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, []byte(data))
+	return HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, []byte(data))
 }
 
 func HTTPDeleteFlag(id string) error {
-	_, err := HTTPRequest(http.MethodDelete, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, nil)
+	_, err := HTTPRequest(http.MethodDelete, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, nil)
 	return err
 }
