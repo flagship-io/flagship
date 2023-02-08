@@ -24,8 +24,6 @@ var (
 	withCreation bool
 )
 
-var flagResponse models.Flag
-
 // analyseCmd represents the analyse command
 var AnalyseCmd = &cobra.Command{
 	Use:   "analyse",
@@ -52,11 +50,19 @@ var AnalyseCmd = &cobra.Command{
 			}
 			for _, r := range result {
 				for _, result := range r.Results {
+					var flagResponse models.Flag = models.Flag{}
+					if result.FlagType == "unknown" {
+						log.WithFields(log.Fields{
+							"key": result.FlagKey,
+						}).Error("Type unknown, Flag not created")
+						continue
+					}
 					flagRequest := models.Flag{
-						Name:        result.FlagKey,
-						Type:        "string",
-						Description: "flag created by CLI",
-						Source:      "codebase_analyzer",
+						Name:         result.FlagKey,
+						Type:         result.FlagType,
+						DefaultValue: result.FlagDefaultValue,
+						Description:  "flag created by CLI",
+						Source:       "codebase_analyzer",
 					}
 
 					flagRequestJSON, err_ := json.Marshal(flagRequest)
