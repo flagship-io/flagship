@@ -11,7 +11,7 @@ import (
 )
 
 var TestFlag = models.Flag{
-	ID:          "testFlagID",
+	Id:          "testFlagID",
 	Name:        "testFlagName",
 	Type:        "string",
 	Description: "testFlagDescription",
@@ -19,7 +19,7 @@ var TestFlag = models.Flag{
 }
 
 var TestFlag1 = models.Flag{
-	ID:          "testFlagID1",
+	Id:          "testFlagID1",
 	Name:        "testFlagName1",
 	Type:        "string",
 	Description: "testFlagDescription1",
@@ -27,7 +27,7 @@ var TestFlag1 = models.Flag{
 }
 
 var TestFlagEdit = models.Flag{
-	ID:          "testFlagID",
+	Id:          "testFlagID",
 	Name:        "testFlagName1",
 	Type:        "string",
 	Description: "testFlagDescription1",
@@ -73,7 +73,7 @@ func APIFlag() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.ID,
+	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestFlag)
 			return resp, nil
@@ -101,14 +101,14 @@ func APIFlag() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.ID,
+	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestFlagEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.ID,
+	httpmock.RegisterResponder("DELETE", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+TestFlag.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 		},
