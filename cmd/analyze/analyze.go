@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package analyse
+package analyze
 
 import (
 	"encoding/json"
@@ -24,9 +24,9 @@ var (
 	withCreation bool
 )
 
-// analyseCmd represents the analyse command
-var AnalyseCmd = &cobra.Command{
-	Use:   "analyse",
+// analyzeCmd represents the analyze command
+var AnalyzeCmd = &cobra.Command{
+	Use:   "analyze",
 	Short: "Manage your flags",
 	Long:  `Manage your flags in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -44,25 +44,44 @@ var AnalyseCmd = &cobra.Command{
 		}
 
 		if withCreation {
+
+			_, errListFlag := httprequest.HTTPListFlag()
+			if errListFlag != nil {
+				log.Fatalf("error occurred: %v", errListFlag)
+			}
+
 			result, err := handler.ExtractFlagsInfo(FSConfig)
 			if err != nil {
 				log.Fatalf("error occured: %s", err)
 			}
 			for _, r := range result {
 				for _, result := range r.Results {
-					var flagResponse models.Flag = models.Flag{}
+
+					var flagRequest models.Flag
+					var flagResponse models.Flag
+
 					if result.FlagType == "unknown" {
 						log.WithFields(log.Fields{
 							"key": result.FlagKey,
 						}).Error("Type unknown, Flag not created")
 						continue
 					}
-					flagRequest := models.Flag{
-						Name:         result.FlagKey,
-						Type:         result.FlagType,
-						DefaultValue: result.FlagDefaultValue,
-						Description:  "flag created by CLI",
-						Source:       "codebase_analyzer",
+
+					if result.FlagType == "boolean" {
+						flagRequest = models.Flag{
+							Name:        result.FlagKey,
+							Type:        result.FlagType,
+							Description: "flag created by CLI",
+							Source:      "codebase_analyzer",
+						}
+					} else {
+						flagRequest = models.Flag{
+							Name:         result.FlagKey,
+							Type:         result.FlagType,
+							DefaultValue: result.FlagDefaultValue,
+							Description:  "flag created by CLI",
+							Source:       "codebase_analyzer",
+						}
 					}
 
 					flagRequestJSON, err_ := json.Marshal(flagRequest)
@@ -70,14 +89,15 @@ var AnalyseCmd = &cobra.Command{
 						log.Fatalf("error occurred: %s", err)
 					}
 
-					body, err := httprequest.HTTPCreateFlag(string(flagRequestJSON))
-					if err != nil {
+					createdFlag, errCreatedFlag := httprequest.HTTPCreateFlag(string(flagRequestJSON))
+
+					if errCreatedFlag != nil {
 						log.Fatalf("error occurred: %v", err)
 					}
 
-					err_r := json.Unmarshal(body, &flagResponse)
+					err_json := json.Unmarshal(createdFlag, &flagResponse)
 
-					if err_r != nil {
+					if err_json != nil {
 						log.Fatalf("error occurred: %v", err)
 					}
 
@@ -93,7 +113,7 @@ var AnalyseCmd = &cobra.Command{
 					} else {
 						log.WithFields(log.Fields{
 							"key": flagRequest.Name,
-						}).Error("Existing Flag")
+						}).Warn("Existing Flag")
 					}
 
 				}
@@ -109,8 +129,8 @@ var AnalyseCmd = &cobra.Command{
 }
 
 func init() {
-	AnalyseCmd.Flags().StringVarP(&directory, "directory", "", ".", "directory")
-	AnalyseCmd.Flags().StringVarP(&repoURL, "repository-url", "", "https://gitlab.com/org/repo", "repository URL")
-	AnalyseCmd.Flags().StringVarP(&repoBranch, "repository-branch", "", "main", "repository branch")
-	AnalyseCmd.Flags().BoolVarP(&withCreation, "with-creation", "", false, "analyse and create flag if not exist")
+	AnalyzeCmd.Flags().StringVarP(&directory, "directory", "", ".", "directory")
+	AnalyzeCmd.Flags().StringVarP(&repoURL, "repository-url", "", "https://gitlab.com/org/repo", "repository URL")
+	AnalyzeCmd.Flags().StringVarP(&repoBranch, "repository-branch", "", "main", "repository branch")
+	AnalyzeCmd.Flags().BoolVarP(&withCreation, "with-creation", "", false, "analyze and create flag if not exist")
 }
