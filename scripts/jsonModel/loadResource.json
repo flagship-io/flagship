@@ -1,17 +1,6 @@
 {
     "resources": [
         {
-            "name": "campaign",
-            "resourceVariable": "c1",
-            "method": "create",
-            "data": {
-                "project_id": "$p1.id",
-                "name": "Resource loader",
-                "description": "from resource loader",
-                "type": "ab"
-            }
-        },
-        {
             "name": "project",
             "resourceVariable": "p1",
             "method": "create",
@@ -20,11 +9,14 @@
             }
         },
         {
-            "name": "project",
-            "resourceVariable": "p2",
+            "name": "campaign",
+            "resourceVariable": "c1",
             "method": "create",
             "data": {
-                "name": "Generic wizard_all1"
+                "project_id": "$p1",
+                "name": "Resource loader",
+                "description": "from resource loader",
+                "type": "ab"
             }
         },
         {
