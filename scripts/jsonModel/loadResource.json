@@ -13,17 +13,33 @@
             "resourceVariable": "c1",
             "method": "create",
             "data": {
-                "project_id": "$p1",
-                "name": "Resource loader",
+                "project_id": "$p1.id",
+                "name": "campaign_resource_loader",
                 "description": "from resource loader",
-                "type": "ab"
+                "type": "ab",
+                "variation_groups": [
+                    {
+                        "variations": [
+                            {
+                                "name": "Original",
+                                "reference": true,
+                                "allocation": 50
+                            },
+                            {
+                                "name": "Variation 1",
+                                "reference": false,
+                                "allocation": 50
+                            }
+                        ]
+                    }
+                ]
             }
         },
         {
             "name": "flag",
             "resourceVariable": "f1",
             "data": {
-                "name": "Flag_created_with_resource_uploader",
+                "name": "Flag_created_with_resource_loader",
                 "type": "string",
                 "description": "I'am flag number 1, i have been created by the CLI resource loader",
                 "source": "manual"
@@ -34,7 +50,7 @@
             "resourceVariable": "g1",
             "data": {
                 "type": "screenview",
-                "label": "goal_loader",
+                "label": "goal_loader_resource_loader",
                 "operator": "contains",
                 "value": "working"
             }
@@ -44,7 +60,7 @@
             "resourceVariable": "t1",
             "data": {
                 "type": "string",
-                "name": "targetingLOADER",
+                "name": "targeting_resource_loader",
                 "description": "from resource loader"
             }
         }

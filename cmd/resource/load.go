@@ -31,7 +31,7 @@ type ProjectData struct {
 }
 
 type ResourceData struct {
-	Id string `json:"id,omitempty"`
+	Id string `json:"id"`
 }
 
 func (f ProjectData) Save(data string) ([]byte, error) {
@@ -39,12 +39,12 @@ func (f ProjectData) Save(data string) ([]byte, error) {
 }
 
 type CampaignData struct {
-	Id          string `json:",omitempty"`
-	ProjectId   string `json:"project_id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Type        string `json:"type"`
-	//VariationGroups []VariationGroupData
+	Id              string               `json:",omitempty"`
+	ProjectId       string               `json:"project_id"`
+	Name            string               `json:"name"`
+	Description     string               `json:"description"`
+	Type            string               `json:"type"`
+	VariationGroups []VariationGroupData `json:"variation_groups"`
 }
 
 func (f CampaignData) Save(data string) ([]byte, error) {
@@ -88,25 +88,24 @@ func (f TargetingKeysData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateTargetingKey(data)
 }
 
-/* type VariationGroupData struct {
-	Id            string
-	Name          string
-	Allocation    int
-	Reference     bool
-	Modifications interface{}
-	Value         string
+type VariationGroupData struct {
+	Id         string          `json:"id,omitempty"`
+	Name       string          `json:"name,omitempty"`
+	Variations []VariationData `json:"variations"`
 }
 
-func (f VariationGroupData) Save(data string) ([]byte, error) {
+/* func (f VariationGroupData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateVariationGroup(campaignID, data)
-}
+} */
 
 type VariationData struct {
-	Id        string
-	Varations []VariationData
+	Id         string `json:"id,omitempty"`
+	Name       string `json:"name"`
+	Allocation int    `json:"allocation"`
+	Reference  bool   `json:"reference"`
 }
 
-func (f VariationData) Save(data string) ([]byte, error) {
+/* func (f VariationData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateVariation(campaignID, variationGroupID, data)
 } */
 
@@ -307,35 +306,21 @@ func initResource() {
 	}
 }
 
-/* func GetResourceVariableAndData(resources []Resource) ([]string, []interface{}) {
-
-	var resourceVariables []string
-	var data []interface{}
-
-	for _, r := range resources {
-		data = append(data, r.Data)
-		resourceVariables = append(resourceVariables, r.ResourceVariable)
-	}
-
-	return resourceVariables, data
-} */
-
 func ScriptResource(resources []Resource) {
 
 	//var resourceVariables map[string]interface{}
 	resourceVariables := make(map[string]interface{})
 
 	for _, resource := range resources {
-		var resourceData map[string]string
+		var resourceData map[string]interface{}
 		var response []byte
-		var responseData ResourceData
+		var responseData interface{}
 		var url = ""
 
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
-			fmt.Printf("error occurred: %v\n", err)
+			fmt.Printf("error occurred marshal data: %v\n", err)
 		}
-		//fmt.Println(string(data), url)
 
 		switch resource.Name {
 		case Project:
@@ -357,62 +342,60 @@ func ScriptResource(resources []Resource) {
 		err = json.Unmarshal(data, &resourceData)
 
 		if err != nil {
-			fmt.Printf("error occurred: %v\n", err)
+			fmt.Printf("error occurred unmarshall resourceData: %v\n", err)
 		}
 
-		for k, v := range resourceData {
-			if strings.Contains(v, "$") {
-				vTrim := strings.Trim(v, "$")
-				script := tengo.NewScript([]byte(vTrim))
-				for k_, variable := range resourceVariables {
-					err = script.Add(k_, variable)
-					if err != nil {
-						fmt.Printf("error occurred affectation: %v\n", err)
+		for k, vInterface := range resourceData {
+			v, ok := vInterface.(string)
+			if ok {
+				if strings.Contains(v, "$") {
+					vTrim := strings.Trim(v, "$")
+					for k_, variable := range resourceVariables {
+						script, err := tengo.Eval(context.Background(), vTrim, map[string]interface{}{
+							k_: variable,
+						})
+
+						if err != nil {
+							log.Fatalf("error compiled: %v", err)
+						}
+						resourceData[k] = script.(string)
 					}
-					fmt.Println("hello", k_, variable)
-					fmt.Println("hi", k, vTrim)
 				}
 
-				compiled, err := script.RunContext(context.Background())
-				if err != nil {
-					fmt.Printf("error occurred compiled: %v\n", err)
-				}
-				resourceData[k] = compiled.Get(vTrim).String()
-				fmt.Println(compiled.Get(vTrim).String())
 			}
 
 		}
 
-		fmt.Println(resource.ResourceVariable)
-		fmt.Println(resourceData)
-
-		//fmt.Println(responseData)
-		//fmt.Println(resource)
+		dataResource, err := json.Marshal(resourceData)
+		if err != nil {
+			log.Fatalf("error occurred http call: %v\n", err)
+		}
 
 		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
 		}
 
 		if resource.Name == Goal || resource.Name == Campaign {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, data)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
 		}
 
 		if err != nil {
-			log.Fatalf("error occurred: %v\n", err)
+			log.Fatalf("error occurred http call: %v\n", err)
 		}
+
+		fmt.Println(string(response))
 
 		err = json.Unmarshal(response, &responseData)
 
 		if err != nil {
-			fmt.Printf("error occurred: %v\n", err)
+			fmt.Printf("error occurred unmarshal responseData: %v\n", err)
 		}
 
-		if responseData.Id == "" {
-			fmt.Println("error occurred: " + string(response))
+		if responseData == nil {
+			fmt.Println("error occurred not response data: " + string(response))
 			continue
 		}
 
-		resourceVariables[resource.ResourceVariable] = responseData.Id
-		fmt.Println(resourceVariables)
+		resourceVariables[resource.ResourceVariable] = responseData
 	}
 }
