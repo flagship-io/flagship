@@ -6,8 +6,10 @@ package analyze
 
 import (
 	"encoding/json"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/exp/slices"
 
 	"github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
@@ -43,22 +45,46 @@ var AnalyzeCmd = &cobra.Command{
 			FilesToExcludes:       []string{".git", ".github", ".vscode"},
 		}
 
+		/* 		results, err := handler.ExtractFlagsInfo(FSConfig)
+		   		if err != nil {
+		   			log.Fatalf("error occured: %s", err)
+		   		}
+
+		   		for _, r := range results {
+		   			for _, result := range r.Results {
+		   				fmt.Println(result.FlagKey, result.FlagDefaultValue, result.FlagType)
+		   			}
+		   		} */
+
 		if withCreation {
 
-			_, errListFlag := httprequest.HTTPListFlag()
+			var existedFlagKey []string
+
+			listedFlags, errListFlag := httprequest.HTTPListFlag()
 			if errListFlag != nil {
 				log.Fatalf("error occurred: %v", errListFlag)
 			}
 
-			result, err := handler.ExtractFlagsInfo(FSConfig)
+			for _, flag := range listedFlags {
+				existedFlagKey = append(existedFlagKey, strings.ToLower(flag.Name))
+			}
+
+			results, err := handler.ExtractFlagsInfo(FSConfig)
 			if err != nil {
 				log.Fatalf("error occured: %s", err)
 			}
-			for _, r := range result {
+			for _, r := range results {
 				for _, result := range r.Results {
 
 					var flagRequest models.Flag
 					var flagResponse models.Flag
+
+					if slices.Contains(existedFlagKey, strings.ToLower(result.FlagKey)) {
+						log.WithFields(log.Fields{
+							"key": result.FlagKey,
+						}).Warn("Existing Flag")
+						continue
+					}
 
 					if result.FlagType == "unknown" {
 						log.WithFields(log.Fields{
@@ -110,10 +136,6 @@ var AnalyzeCmd = &cobra.Command{
 							"description":  flagResponse.Description,
 							"source":       flagResponse.Source,
 						}).Info("Created Flag")
-					} else {
-						log.WithFields(log.Fields{
-							"key": flagRequest.Name,
-						}).Warn("Existing Flag")
 					}
 
 				}
