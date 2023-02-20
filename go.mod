@@ -3,7 +3,7 @@ module github.com/flagship-io/flagship
 go 1.18
 
 require (
-	github.com/flagship-io/codebase-analyzer v0.5.3
+	github.com/flagship-io/codebase-analyzer v0.6.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
