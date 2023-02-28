@@ -6,6 +6,7 @@ package flag
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -46,15 +47,23 @@ var createCmd = &cobra.Command{
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
 			FilesToExcludes:       FilesToExcludes_,
+			SearchCustomRegex:     SearchCustomRegex,
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
+		var flagCreatedLen int = 0
+		var flagNotCreatedLen int = 0
+		var flagAlreadyExistLen int = 0
+		var flagKeyNotCreated []string
 
 		headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 		columnFmt := color.New(color.FgYellow).SprintfFunc()
 
-		tbl := table.New("Flag", "File", "Created")
+		tbl := table.New("Flag", "Type", "defaultValue", "File", "State (Created:"+emoji.Sprint(":check_mark_button:")+", Not Created:"+emoji.Sprint(":cross_mark:")+", Already Exists:"+emoji.Sprint(":white_large_square:")+")")
 		tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
+
+		summtbl := table.New("\nSummary")
+		summtbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
 
 		var existedFlagKey []string
 
@@ -78,20 +87,15 @@ var createCmd = &cobra.Command{
 				var flagResponse models.Flag
 
 				if slices.Contains(existedFlagKey, strings.ToLower(result.FlagKey)) {
-					/* 					log.WithFields(log.Fields{
-						"key": result.FlagKey,
-					}).Warn("Existing Flag") */
-					state := emoji.Sprint(":warning:")
-					tbl.AddRow(result.FlagKey, r.File+":"+strconv.Itoa(result.LineNumber), state)
+					flagAlreadyExistLen += 1
+					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":white_large_square:"))
 					continue
 				}
 
 				if result.FlagType == "unknown" {
-					/* 					log.WithFields(log.Fields{
-						"key": result.FlagKey,
-					}).Error("Type unknown, Flag not created") */
-					state := emoji.Sprint(":cross_mark:")
-					tbl.AddRow(result.FlagKey, r.File+":"+strconv.Itoa(result.LineNumber), state)
+					flagNotCreatedLen += 1
+					flagKeyNotCreated = append(flagKeyNotCreated, result.FlagKey)
+					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
 					continue
 				}
 
@@ -130,21 +134,30 @@ var createCmd = &cobra.Command{
 				}
 
 				if flagResponse.Id != "" {
-					/* 					log.WithFields(log.Fields{
-						"id":           flagResponse.Id,
-						"key":          flagResponse.Name,
-						"type":         flagResponse.Type,
-						"defaultValue": flagResponse.DefaultValue,
-						"description":  flagResponse.Description,
-						"source":       flagResponse.Source,
-					}).Info("Created Flag") */
-					state := emoji.Sprint(":check_mark_button:")
-					tbl.AddRow(result.FlagKey, r.File+":"+strconv.Itoa(result.LineNumber), state)
+					flagCreatedLen += 1
+					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":check_mark_button:"))
 				}
 
 			}
 		}
+
+		totalFlag := flagCreatedLen + flagAlreadyExistLen + flagNotCreatedLen
+		if totalFlag == 0 {
+			tbl.AddRow("No flag found")
+		}
+
+		summtbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagCreatedLen) + " Flag created " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotCreatedLen) + " Flag not created" + emoji.Sprint(":cross_mark:") + ", " + strconv.Itoa(flagAlreadyExistLen) + " Flag that already exist" + emoji.Sprint(":white_large_square:") + ")")
+
 		tbl.Print()
+
+		summtbl.Print()
+
+		if flagNotCreatedLen != 0 {
+			fmt.Fprintf(cmd.OutOrStdout(), "\n%sTips: To create these flags use these commands: \n", emoji.Sprint(":bulb:"))
+			for _, flagKey := range flagKeyNotCreated {
+				fmt.Fprintf(cmd.OutOrStdout(), "flagship flag create --data-raw '{\"name\": \"%s\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}'\n", flagKey)
+			}
+		}
 	},
 }
 

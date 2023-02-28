@@ -15,13 +15,13 @@ import (
 )
 
 var (
-	Directory       string
-	RepoURL         string
-	RepoBranch      string
-	NbLineCodeEdges int
-	FilesToExcludes string
+	Directory         string
+	RepoURL           string
+	RepoBranch        string
+	NbLineCodeEdges   int
+	FilesToExcludes   string
+	SearchCustomRegex string
 )
-
 var FSConfig *config.Config
 
 // FlagCmd represents the flag command
@@ -47,11 +47,11 @@ var FlagCmd = &cobra.Command{
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
 			FilesToExcludes:       FilesToExcludes_,
+			SearchCustomRegex:     SearchCustomRegex,
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		err := handler.AnalyzeCode(FSConfig)
-
 		if err != nil {
 			log.Fatalf("error occured: %s", err)
 		}
@@ -64,4 +64,5 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "repository branch")
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
 	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "file-excludes", "", "[\".git\", \".github\", \".vscode\"]", "nombre of line code edges")
+	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "custom regex")
 }

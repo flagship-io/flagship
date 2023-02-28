@@ -44,15 +44,21 @@ var listCmd = &cobra.Command{
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
 			FilesToExcludes:       FilesToExcludes_,
+			SearchCustomRegex:     SearchCustomRegex,
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		var flagLen int = 0
+		var flagExistLen int = 0
+		var flagNotExistLen int = 0
+
 		headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 		columnFmt := color.New(color.FgYellow).SprintfFunc()
 
-		tbl := table.New("Flag", "File", "Exists")
+		tbl := table.New("Flag", "Type", "defaultValue", "File", "Exists ? ("+emoji.Sprint(":check_mark_button:")+"/"+emoji.Sprint(":cross_mark:")+")")
 		tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
+
+		summtbl := table.New("\nSummary")
+		summtbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
 
 		var existedFlagKey []string
 
@@ -72,21 +78,23 @@ var listCmd = &cobra.Command{
 
 		for _, r := range results {
 			for _, result := range r.Results {
-				flagLen += 1
 				if slices.Contains(existedFlagKey, strings.ToLower(result.FlagKey)) {
-					state := emoji.Sprint(":check_mark_button:")
-					tbl.AddRow(result.FlagKey, r.File+":"+strconv.Itoa(result.LineNumber), state)
+					flagExistLen += 1
+					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":check_mark_button:"))
 					continue
 				}
-				state := emoji.Sprint(":cross_mark:")
-				tbl.AddRow(result.FlagKey, r.File+":"+strconv.Itoa(result.LineNumber), state)
+				flagNotExistLen += 1
+				tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":cross_mark:"))
 			}
 		}
 
-		if flagLen == 0 {
+		totalFlag := flagExistLen + flagNotExistLen
+		if totalFlag == 0 {
 			tbl.AddRow("No flag found")
 		}
-		tbl.AddRow("Total flags: " + strconv.Itoa(flagLen) + " found")
+
+		tbl.AddRow("\nSummary: ")
+		tbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagExistLen) + " Flag exist " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotExistLen) + " Flag don't exist" + emoji.Sprint(":cross_mark:") + ")")
 		tbl.Print()
 	},
 }
