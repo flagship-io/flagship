@@ -27,8 +27,8 @@ import (
 // CreateCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create analyzed flags",
-	Long:  `create analyzed flag present in the directory`,
+	Short: "Analyze your codebase and automatically create flags detected",
+	Long:  `Analyze your codebase and automatically create flags detected`,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		var filesToExcludes_ []string
 		var searchCustomRegex string = SearchCustomRegex
@@ -151,10 +151,9 @@ var createCmd = &cobra.Command{
 			tbl.AddRow("No flag found")
 		}
 
-		summtbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagCreatedLen) + " Flag created " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotCreatedLen) + " Flag not created" + emoji.Sprint(":cross_mark:") + ", " + strconv.Itoa(flagAlreadyExistLen) + " Flag that already exist" + emoji.Sprint(":white_large_square:") + ")")
-
 		tbl.Print()
 
+		summtbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagCreatedLen) + " Flag created " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotCreatedLen) + " Flag not created" + emoji.Sprint(":cross_mark:") + ", " + strconv.Itoa(flagAlreadyExistLen) + " Flag that already exist" + emoji.Sprint(":white_large_square:") + ")")
 		summtbl.Print()
 
 		if flagNotCreatedLen != 0 {

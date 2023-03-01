@@ -24,8 +24,8 @@ import (
 // ListCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List your flags",
-	Long:  `List your flags present in the directory`,
+	Short: "Analyze your codebase and list flags detected",
+	Long:  `Analyze your codebase and list flags detected`,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		var filesToExcludes_ []string
 		var searchCustomRegex string = SearchCustomRegex
@@ -98,9 +98,10 @@ var listCmd = &cobra.Command{
 			tbl.AddRow("No flag found")
 		}
 
-		tbl.AddRow("\nSummary: ")
-		tbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagExistLen) + " Flag exist " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotExistLen) + " Flag don't exist" + emoji.Sprint(":cross_mark:") + ")")
 		tbl.Print()
+
+		summtbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagExistLen) + " Flag exist " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotExistLen) + " Flag don't exist" + emoji.Sprint(":cross_mark:") + ")")
+		summtbl.Print()
 	},
 }
 

@@ -30,8 +30,8 @@ var FSConfig *config.Config
 // FlagCmd represents the flag command
 var FlagCmd = &cobra.Command{
 	Use:   "flag [create|list]",
-	Short: "Manage analyzed flags",
-	Long:  `Manage analyzed flags in your account`,
+	Short: "Analyze your codebase and detect the usage of Flagship or custom flags",
+	Long:  `Analyze your codebase and detect the usage of Flagship or custom flags, in order to synchronize them with your Flag view in the platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		var filesToExcludes_ []string
 		var searchCustomRegex string = SearchCustomRegex
