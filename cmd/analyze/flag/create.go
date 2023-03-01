@@ -30,11 +30,16 @@ var createCmd = &cobra.Command{
 	Short: "create analyzed flags",
 	Long:  `create analyzed flag present in the directory`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		var FilesToExcludes_ []string
+		var filesToExcludes_ []string
+		var searchCustomRegex string = SearchCustomRegex
 
-		err := json.Unmarshal([]byte(FilesToExcludes), &FilesToExcludes_)
+		err := json.Unmarshal([]byte(FilesToExcludes), &filesToExcludes_)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
+		}
+
+		if CustomRegexJson != "" {
+			searchCustomRegex = CustomRegexJson
 		}
 
 		FSConfig = &config.Config{
@@ -46,8 +51,8 @@ var createCmd = &cobra.Command{
 			RepositoryURL:         RepoURL,
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
-			FilesToExcludes:       FilesToExcludes_,
-			SearchCustomRegex:     SearchCustomRegex,
+			FilesToExcludes:       filesToExcludes_,
+			SearchCustomRegex:     searchCustomRegex,
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
