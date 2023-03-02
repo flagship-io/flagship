@@ -1,4 +1,11 @@
 # .goreleaser.yaml
+
+env:
+  - FLAGSHIP_VERSION={{ .Env.FLAGSHIP_VERSION }}
+
+ldflags:
+  - -s -w -X 'github.com/flagship-io/flagship/cmd/version.Version={{.FLAGSHIP_VERSION}}'
+
 builds:
   # You can have multiple builds defined as a yaml list
   - # Binary name.
