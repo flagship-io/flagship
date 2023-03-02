@@ -3,15 +3,14 @@
 env:
   - FLAGSHIP_VERSION={{ .Env.FLAGSHIP_VERSION }}
 
-ldflags:
-  - -s -w -X 'github.com/flagship-io/flagship/cmd/version.Version={{.FLAGSHIP_VERSION}}'
-
 builds:
   # You can have multiple builds defined as a yaml list
   - # Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
     # Default is the name of the project directory.
     binary: flagship
+    ldflags:
+      - -s -w -X 'github.com/flagship-io/flagship/cmd/version.Version={{.FLAGSHIP_VERSION}}'
 
     # GOOS list to build for.
     # For more info refer to: https://golang.org/doc/install/source#environment
