@@ -1,5 +1,5 @@
 build:
-	CGO_ENABLED=0 GOOS=linux go build -ldflags "-X version.Version=${FLAGSHIP_VERSION}" -o flagship
+	CGO_ENABLED=0 GOOS=linux go build -ldflags "-X 'github.com/flagship-io/flagship/cmd/version.Version=${FLAGSHIP_VERSION}'" -o flagship
 
 test: SHELL:=/bin/bash
 test:
