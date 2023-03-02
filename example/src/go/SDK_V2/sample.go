@@ -28,7 +28,13 @@ func main() {
 	}
 	fsVisitor.UpdateContext(newContext)
 
-	btnColor, _ := fsVisitor.GetModificationString("btnColor", "VString", true)
-	btnSize, _ := fsVisitor.GetModificationNumber("btnSize", 13, true)
-	showBtn, _ := fsVisitor.GetModificationBool("showBtn", false, true)
+	discountName, err := fsVisitor.GetModificationString("btnColor", "VString", true)
+	discountName, err := fsVisitor.GetModificationNumber("btnSize", 13, true)
+	discountName, err := fsVisitor.GetModificationBool("showBtn", false, true)
+
+	// these flags will be analyzed using the custom-regex file example-regex.json
+	// try the command: flagship analyze flag list --json ./cmd/analyze/flag/example-regex.json --directory ./example/
+	flagValue, _ := example.BoolVariation("my-boolean-flag", false)
+	flagValue1, _ := example.StringVariation("my-string-flag", "defaltVal")
+	flagValue2, _ := example.Float64Variation("my-numbers-flag", 13.6)
 }
