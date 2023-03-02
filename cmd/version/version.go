@@ -7,13 +7,12 @@ package version
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
 
 // Version will match the tag
-var Version = os.Getenv("FLAGSHIP_VERSION")
+var Version = "main"
 
 // VersionCmd represents the version command
 var VersionCmd = &cobra.Command{
