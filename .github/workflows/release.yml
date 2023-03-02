@@ -39,7 +39,7 @@ jobs:
           build-args: |
             FLAGSHIP_VERSION=${{ github.ref_name }}
           push: true
-          tags: chadiii/flagship:${{ steps.vars.outputs.tag }}
+          tags: flagshipio/cli:${{ steps.vars.outputs.tag }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
