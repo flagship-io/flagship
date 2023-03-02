@@ -1,8 +1,5 @@
 # .goreleaser.yaml
 
-env:
-  - FLAGSHIP_VERSION={{ .Env.FLAGSHIP_VERSION }}
-
 builds:
   # You can have multiple builds defined as a yaml list
   - # Binary name.
