@@ -25,7 +25,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Analyze your codebase and list flags detected",
-	Long:  `Analyze your codebase and list flags detected`,
+	Long:  `Analyze your codebase and list flags detected and check if it exist in Flagship platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		var filesToExcludes_ []string
 		var searchCustomRegex string = SearchCustomRegex

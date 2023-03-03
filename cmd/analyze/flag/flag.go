@@ -73,7 +73,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&RepoURL, "repository-url", "", "https://gitlab.com/org/repo", "repository URL")
 	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "repository branch")
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
-	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "file-excludes", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "nombre of line code edges")
+	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "file-excludes", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "file to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "custom regex")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "json", "", "", "custom regex in json")
 }

@@ -28,7 +28,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Analyze your codebase and automatically create flags detected",
-	Long:  `Analyze your codebase and automatically create flags detected`,
+	Long:  `Analyze your codebase and automatically create flags detected to Flagship platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
 		var filesToExcludes_ []string
 		var searchCustomRegex string = SearchCustomRegex

@@ -15,8 +15,8 @@ var FSConfig *config.Config
 // analyzeCmd represents the analyze command
 var AnalyzeCmd = &cobra.Command{
 	Use:   "analyze [flag]",
-	Short: "Manage your flags",
-	Long:  `Manage your flags in your account`,
+	Short: "Analyze your codebase",
+	Long:  `Analyze your codebase using the codebase analyzer`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
