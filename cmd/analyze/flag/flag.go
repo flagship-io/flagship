@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/flagship-io/codebase-analyzer/pkg/config"
+	cbaConfig "github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -25,7 +25,7 @@ var (
 	CustomRegexJsonFile string
 	CustomRegexJson     string
 )
-var FSConfig *config.Config
+var FSConfig *cbaConfig.Config
 
 // FlagCmd represents the flag command
 var FlagCmd = &cobra.Command{
@@ -45,9 +45,11 @@ var FlagCmd = &cobra.Command{
 			searchCustomRegex = CustomRegexJson
 		}
 
-		FSConfig = &config.Config{
+		FSConfig = &cbaConfig.Config{
 			FlagshipAPIURL:        "https://api.flagship.io",
 			FlagshipAPIToken:      viper.GetString("token"),
+			FlagshipClientID:      viper.GetString("client_id"),
+			FlagshipClientSecret:  viper.GetString("client_secret"),
 			FlagshipAccountID:     viper.GetString("account_id"),
 			FlagshipEnvironmentID: viper.GetString("account_environment_id"),
 			Directory:             Directory,
@@ -69,13 +71,13 @@ var FlagCmd = &cobra.Command{
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	FlagCmd.PersistentFlags().StringVarP(&Directory, "directory", "", ".", "directory to analyze")
-	FlagCmd.PersistentFlags().StringVarP(&RepoURL, "repository-url", "", "https://gitlab.com/org/repo", "repository URL")
-	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "repository branch")
+	FlagCmd.PersistentFlags().StringVarP(&Directory, "directory", "", ".", "directory to analyze in your codebase")
+	FlagCmd.PersistentFlags().StringVarP(&RepoURL, "repository-url", "", "https://github.com/org/repo", "root URL of your repository, and is used to track the links of the files where your flags are used")
+	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "branch of the code you want to analyse, and is used to track the links of the files where your flags are used")
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
-	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "file-excludes", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "file to exclude in analysis")
-	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "custom regex")
-	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "json", "", "", "custom regex in json")
+	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "list of files to exclude in analysis")
+	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
+	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that the regex for the pattern you want to analyze")
 }
 
 func initConfig() {
