@@ -109,7 +109,7 @@ var createCmd = &cobra.Command{
 						Name:        result.FlagKey,
 						Type:        result.FlagType,
 						Description: "flag created by CLI",
-						Source:      "codebase_analyzer",
+						Source:      "cli",
 					}
 				} else {
 					flagRequest = models.Flag{
@@ -117,7 +117,7 @@ var createCmd = &cobra.Command{
 						Type:         result.FlagType,
 						DefaultValue: result.FlagDefaultValue,
 						Description:  "flag created by CLI",
-						Source:       "codebase_analyzer",
+						Source:       "cli",
 					}
 				}
 
