@@ -16,7 +16,7 @@ import (
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
-	Use:   "create [-d <data-raw> | --data-raw <data-raw>]",
+	Use:   "create [--name <flag-name> --type <flag-type> --default-value <default-value> --description <description> | -d <data-raw> | --data-raw <data-raw>]",
 	Short: "Create a flag",
 	Long:  `Create a flag in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -24,7 +24,7 @@ var createCmd = &cobra.Command{
 		var predefinedValues_ []string
 
 		if DataRaw != "" && FlagName != "" {
-			log.Fatalln("error occurred: You can either use --data-raw or the flag --name --description --type --default-value to create a flag")
+			log.Fatalln("error occurred: You can either use --data-raw or the flags --name --description --type --default-value to create a flag")
 		}
 
 		if DataRaw != "" {
