@@ -10,8 +10,13 @@ import (
 )
 
 var (
-	FlagID  string
-	DataRaw string
+	FlagID               string
+	DataRaw              string
+	FlagName             string
+	FlagType             string
+	FlagDefaultValue     string
+	FlagDescription      string
+	FlagPredefinedValues string
 )
 
 // FlagCmd represents the flag command

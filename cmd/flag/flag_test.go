@@ -61,10 +61,7 @@ func TestFlagListCommand(t *testing.T) {
 
 func TestFlagCreateCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(FlagCmd, "create")
-	assert.Contains(t, failOutput, "Error: required flag(s) \"data-raw\" not set")
-
-	successOutput, _ := utils.ExecuteCommand(FlagCmd, "create", "--data-raw='{\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"manual\"}'")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "create", "--data-raw='{\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"cli\"}'")
 
 	err := json.Unmarshal([]byte(successOutput), &testFlag)
 
@@ -78,7 +75,7 @@ func TestFlagEditCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(FlagCmd, "edit")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"data-raw\", \"id\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(FlagCmd, "edit", "--id=testFlagID", "--data-raw='{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"manual\"}'")
+	successOutput, _ := utils.ExecuteCommand(FlagCmd, "edit", "--id=testFlagID", "--data-raw='{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"cli\"}'")
 
 	err := json.Unmarshal([]byte(successOutput), &testFlag)
 
