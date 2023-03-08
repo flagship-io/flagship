@@ -11,6 +11,7 @@ import (
 
 	cbaConfig "github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
+	"github.com/flagship-io/flagship/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -20,7 +21,7 @@ var (
 	RepoURL             string
 	RepoBranch          string
 	NbLineCodeEdges     int
-	FilesToExcludes     string
+	FilesToExclude      string
 	SearchCustomRegex   string
 	CustomRegexJsonFile string
 	CustomRegexJson     string
@@ -33,10 +34,10 @@ var FlagCmd = &cobra.Command{
 	Short: "Analyze your codebase and detect the usage of Flagship or custom flags",
 	Long:  `Analyze your codebase and detect the usage of Flagship or custom flags, in order to synchronize them with your Flag view in the platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		var filesToExcludes_ []string
+		var filesToExclude_ []string
 		var searchCustomRegex string = SearchCustomRegex
 
-		err := json.Unmarshal([]byte(FilesToExcludes), &filesToExcludes_)
+		err := json.Unmarshal([]byte(FilesToExclude), &filesToExclude_)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
@@ -46,7 +47,8 @@ var FlagCmd = &cobra.Command{
 		}
 
 		FSConfig = &cbaConfig.Config{
-			FlagshipAPIURL:        "https://api.flagship.io",
+			FlagshipAPIURL:        utils.GetHost(),
+			FlagshipAuthAPIURL:    utils.GetHostAuth(),
 			FlagshipAPIToken:      viper.GetString("token"),
 			FlagshipClientID:      viper.GetString("client_id"),
 			FlagshipClientSecret:  viper.GetString("client_secret"),
@@ -56,7 +58,7 @@ var FlagCmd = &cobra.Command{
 			RepositoryURL:         RepoURL,
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
-			FilesToExcludes:       filesToExcludes_,
+			FilesToExclude:        filesToExclude_,
 			SearchCustomRegex:     searchCustomRegex,
 		}
 	},
@@ -75,7 +77,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&RepoURL, "repository-url", "", "https://github.com/org/repo", "root URL of your repository, and is used to track the links of the files where your flags are used")
 	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "branch of the code you want to analyse, and is used to track the links of the files where your flags are used")
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
-	FlagCmd.PersistentFlags().StringVarP(&FilesToExcludes, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "list of files to exclude in analysis")
+	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that the regex for the pattern you want to analyze")
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
+	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/kyokomi/emoji/v2"
 	"github.com/rodaine/table"
@@ -27,10 +28,10 @@ var listCmd = &cobra.Command{
 	Short: "Analyze your codebase and list flags detected",
 	Long:  `Analyze your codebase and list flags detected and check if it exist in Flagship platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		var filesToExcludes_ []string
+		var filesToExclude_ []string
 		var searchCustomRegex string = SearchCustomRegex
 
-		err := json.Unmarshal([]byte(FilesToExcludes), &filesToExcludes_)
+		err := json.Unmarshal([]byte(FilesToExclude), &filesToExclude_)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
@@ -40,7 +41,8 @@ var listCmd = &cobra.Command{
 		}
 
 		FSConfig = &config.Config{
-			FlagshipAPIURL:        "https://api.flagship.io",
+			FlagshipAPIURL:        utils.GetHost(),
+			FlagshipAuthAPIURL:    utils.GetHostAuth(),
 			FlagshipAPIToken:      viper.GetString("token"),
 			FlagshipAccountID:     viper.GetString("account_id"),
 			FlagshipEnvironmentID: viper.GetString("account_environment_id"),
@@ -48,7 +50,7 @@ var listCmd = &cobra.Command{
 			RepositoryURL:         RepoURL,
 			RepositoryBranch:      RepoBranch,
 			NbLineCodeEdges:       NbLineCodeEdges,
-			FilesToExcludes:       filesToExcludes_,
+			FilesToExclude:        filesToExclude_,
 			SearchCustomRegex:     searchCustomRegex,
 		}
 	},
