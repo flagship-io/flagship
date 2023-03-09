@@ -1,8 +1,8 @@
 package models
 
 type VariationGroup struct {
-	Id         string      `json:"id"`
-	Name       string      `json:"name"`
+	Id         string      `json:"id,omitempty"`
+	Name       string      `json:"name,omitempty"`
 	Variations []Variation `json:"variations"`
 	Targeting  Targeting   `json:"targeting"`
 }
