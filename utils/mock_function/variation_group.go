@@ -41,21 +41,21 @@ var targeting = models.Targeting{
 var TestVariationGroup = models.VariationGroup{
 	Id:         "testVariationGroupID",
 	Name:       "testVariationGroupName",
-	Variations: variations,
+	Variations: &variations,
 	Targeting:  targeting,
 }
 
 var TestVariationGroup1 = models.VariationGroup{
 	Id:         "testVariationGroupID1",
 	Name:       "testVariationGroupName1",
-	Variations: variations,
+	Variations: &variations,
 	Targeting:  targeting,
 }
 
 var TestVariationGroupEdit = models.VariationGroup{
 	Id:         "testVariationGroupID",
 	Name:       "testVariationGroupName1",
-	Variations: variations,
+	Variations: &variations,
 	Targeting:  targeting,
 }
 
@@ -81,15 +81,15 @@ func APIVariationGroup() {
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
 		func(req *http.Request) (*http.Response, error) {
-			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
-			return resp, nil
+			mockResp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
+			return mockResp, nil
 		},
 	)
 
 	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups",
 		func(req *http.Request) (*http.Response, error) {
-			resp, _ := httpmock.NewJsonResponse(200, resp)
-			return resp, nil
+			mockResp, _ := httpmock.NewJsonResponse(200, resp)
+			return mockResp, nil
 		},
 	)
 

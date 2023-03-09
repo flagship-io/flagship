@@ -67,7 +67,7 @@ func TestVariationGroupCreateCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(VariationGroupCmd, "create", "--campaign-id=campaignID")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"data-raw\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(VariationGroupCmd, "create", "--campaign-id=campaignID", "--data-raw='{\"name\":\"testVariationGroupName\",\"variations\":[{\"id\":\"\",\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP\"}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}'")
+	successOutput, _ := utils.ExecuteCommand(VariationGroupCmd, "create", "--campaign-id=campaignID", "--data-raw='{\"name\":\"testVariationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP\"}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}'")
 
 	err := json.Unmarshal([]byte(successOutput), &testVariationGroup)
 

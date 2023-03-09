@@ -56,7 +56,7 @@ var variationTest = []models.Variation{
 var variationGroupsTest = []models.VariationGroup{
 	{
 		Name:       "variationGroupName",
-		Variations: variationTest,
+		Variations: &variationTest,
 		Targeting:  targetingTest,
 	},
 }
@@ -67,7 +67,7 @@ var TestCampaign = models.Campaign{
 	ProjectId:       "testProjectID",
 	Description:     "testCampaignDescription",
 	Type:            "toggle",
-	VariationGroups: variationGroupsTest,
+	VariationGroups: &variationGroupsTest,
 	Scheduler:       scheduler,
 }
 
@@ -77,7 +77,7 @@ var TestCampaign1 = models.Campaign{
 	ProjectId:       "testProjectID1",
 	Description:     "testCampaignDescription1",
 	Type:            "toggle",
-	VariationGroups: variationGroupsTest,
+	VariationGroups: &variationGroupsTest,
 	Scheduler:       scheduler,
 }
 
@@ -87,7 +87,7 @@ var TestCampaignEdit = models.Campaign{
 	ProjectId:       "testProjectID1",
 	Description:     "testCampaignDescription1",
 	Type:            "toggle",
-	VariationGroups: variationGroupsTest,
+	VariationGroups: &variationGroupsTest,
 	Scheduler:       scheduler,
 }
 
