@@ -62,9 +62,9 @@ var variationGroupsTest = []models.VariationGroup{
 }
 
 var TestCampaign = models.Campaign{
-	ID:              "testCampaignID",
+	Id:              "testCampaignID",
 	Name:            "testCampaignName",
-	ProjectID:       "testProjectID",
+	ProjectId:       "testProjectID",
 	Description:     "testCampaignDescription",
 	Type:            "toggle",
 	VariationGroups: variationGroupsTest,
@@ -72,9 +72,9 @@ var TestCampaign = models.Campaign{
 }
 
 var TestCampaign1 = models.Campaign{
-	ID:              "testCampaignID1",
+	Id:              "testCampaignID1",
 	Name:            "testCampaignName1",
-	ProjectID:       "testProjectID1",
+	ProjectId:       "testProjectID1",
 	Description:     "testCampaignDescription1",
 	Type:            "toggle",
 	VariationGroups: variationGroupsTest,
@@ -82,9 +82,9 @@ var TestCampaign1 = models.Campaign{
 }
 
 var TestCampaignEdit = models.Campaign{
-	ID:              "testCampaignID",
+	Id:              "testCampaignID",
 	Name:            "testCampaignName1",
-	ProjectID:       "testProjectID1",
+	ProjectId:       "testProjectID1",
 	Description:     "testCampaignDescription1",
 	Type:            "toggle",
 	VariationGroups: variationGroupsTest,
@@ -108,7 +108,7 @@ func APICampaign() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestCampaign)
 			return resp, nil
@@ -129,21 +129,21 @@ func APICampaign() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestCampaignEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.ID+"/toggle",
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+TestCampaign.Id+"/toggle",
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(200, ""), nil
 		},

@@ -13,7 +13,7 @@ func TestHTTPGetFlag(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testFlagID", respBody.ID)
+	assert.Equal(t, "testFlagID", respBody.Id)
 	assert.Equal(t, "testFlagName", respBody.Name)
 }
 
@@ -24,10 +24,10 @@ func TestHTTPListFlag(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testFlagID", respBody[0].ID)
+	assert.Equal(t, "testFlagID", respBody[0].Id)
 	assert.Equal(t, "testFlagName", respBody[0].Name)
 
-	assert.Equal(t, "testFlagID1", respBody[1].ID)
+	assert.Equal(t, "testFlagID1", respBody[1].Id)
 	assert.Equal(t, "testFlagName1", respBody[1].Name)
 }
 
@@ -38,7 +38,7 @@ func TestHTTPFlagUsage(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testFlagUsageID", respBody[0].ID)
+	assert.Equal(t, "testFlagUsageID", respBody[0].Id)
 	assert.Equal(t, "isVIP", respBody[0].FlagKey)
 	assert.Equal(t, "flagship", respBody[0].Repository)
 	assert.Equal(t, "https://github.com/flagship-io/flagship", respBody[0].FilePath)

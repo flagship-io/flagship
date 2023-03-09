@@ -13,9 +13,9 @@ func TestHTTPGetCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testCampaignID", respBody.ID)
+	assert.Equal(t, "testCampaignID", respBody.Id)
 	assert.Equal(t, "testCampaignName", respBody.Name)
-	assert.Equal(t, "testProjectID", respBody.ProjectID)
+	assert.Equal(t, "testProjectID", respBody.ProjectId)
 	assert.Equal(t, "testCampaignDescription", respBody.Description)
 	assert.Equal(t, "toggle", respBody.Type)
 }
@@ -27,15 +27,15 @@ func TestHTTPListCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testCampaignID", respBody[0].ID)
+	assert.Equal(t, "testCampaignID", respBody[0].Id)
 	assert.Equal(t, "testCampaignName", respBody[0].Name)
-	assert.Equal(t, "testProjectID", respBody[0].ProjectID)
+	assert.Equal(t, "testProjectID", respBody[0].ProjectId)
 	assert.Equal(t, "testCampaignDescription", respBody[0].Description)
 	assert.Equal(t, "toggle", respBody[0].Type)
 
-	assert.Equal(t, "testCampaignID1", respBody[1].ID)
+	assert.Equal(t, "testCampaignID1", respBody[1].Id)
 	assert.Equal(t, "testCampaignName1", respBody[1].Name)
-	assert.Equal(t, "testProjectID1", respBody[1].ProjectID)
+	assert.Equal(t, "testProjectID1", respBody[1].ProjectId)
 	assert.Equal(t, "testCampaignDescription1", respBody[1].Description)
 	assert.Equal(t, "toggle", respBody[1].Type)
 }

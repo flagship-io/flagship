@@ -15,7 +15,7 @@ func TestHTTPGetVariation(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testVariationID", respBody.ID)
+	assert.Equal(t, "testVariationID", respBody.Id)
 	assert.Equal(t, "testVariationName", respBody.Name)
 }
 
@@ -26,12 +26,12 @@ func TestHTTPListVariation(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testVariationID", respBody[0].ID)
+	assert.Equal(t, "testVariationID", respBody[0].Id)
 	assert.Equal(t, "testVariationName", respBody[0].Name)
 	assert.Equal(t, true, respBody[0].Reference)
 	assert.Equal(t, 50, respBody[0].Allocation)
 
-	assert.Equal(t, "testVariationID1", respBody[1].ID)
+	assert.Equal(t, "testVariationID1", respBody[1].Id)
 	assert.Equal(t, "testVariationName1", respBody[1].Name)
 	assert.Equal(t, false, respBody[1].Reference)
 	assert.Equal(t, 80, respBody[1].Allocation)
