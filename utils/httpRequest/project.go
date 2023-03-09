@@ -19,7 +19,7 @@ func HTTPGetProject(id string) (models.Project, error) {
 }
 
 func HTTPCreateProject(name string) ([]byte, error) {
-	projectRequest := models.ProjectRequest{
+	projectRequest := models.Project{
 		Name: name,
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
@@ -30,7 +30,7 @@ func HTTPCreateProject(name string) ([]byte, error) {
 }
 
 func HTTPEditProject(id, name string) ([]byte, error) {
-	projectRequest := models.ProjectRequest{
+	projectRequest := models.Project{
 		Name: name,
 	}
 	projectRequestJSON, err := json.Marshal(projectRequest)
