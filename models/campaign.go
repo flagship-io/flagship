@@ -1,8 +1,8 @@
 package models
 
 type Campaign struct {
-	ID              string           `json:"id"`
-	ProjectID       string           `json:"project_id"`
+	Id              string           `json:"id,omitempty"`
+	ProjectId       string           `json:"project_id"`
 	Name            string           `json:"name"`
 	Description     string           `json:"description"`
 	Type            string           `json:"type"`

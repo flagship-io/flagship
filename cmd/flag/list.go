@@ -23,7 +23,7 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		utils.FormatItem([]string{"ID", "Name", "Type", "Description", "Source"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Id", "Name", "Type", "Description", "Source"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 

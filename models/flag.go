@@ -1,15 +1,17 @@
 package models
 
 type Flag struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Description string `json:"description"`
-	Source      string `json:"source"`
+	Id               string   `json:"id,omitempty"`
+	Name             string   `json:"name"`
+	Type             string   `json:"type"`
+	Description      string   `json:"description"`
+	Source           string   `json:"source"`
+	DefaultValue     string   `json:"default_value,omitempty"`
+	PredefinedValues []string `json:"predefined_values,omitempty"`
 }
 
 type FlagUsage struct {
-	ID                string `json:"id"`
+	Id                string `json:"id,omitempty"`
 	FlagKey           string `json:"flag_key"`
 	Repository        string `json:"repository"`
 	FilePath          string `json:"file_path"`
