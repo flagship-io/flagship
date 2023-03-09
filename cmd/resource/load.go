@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/d5/tengo/v2"
+	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/spf13/cobra"
@@ -26,8 +27,7 @@ type Data interface {
 }
 
 type ProjectData struct {
-	Id   string `json:",omitempty"`
-	Name string `json:"name"`
+	*models.Project
 }
 
 type ResourceData struct {
@@ -39,7 +39,7 @@ func (f ProjectData) Save(data string) ([]byte, error) {
 }
 
 type CampaignData struct {
-	Id              string               `json:",omitempty"`
+	Id              string               `json:"id,omitempty"`
 	ProjectId       string               `json:"project_id"`
 	Name            string               `json:"name"`
 	Description     string               `json:"description"`
@@ -52,13 +52,7 @@ func (f CampaignData) Save(data string) ([]byte, error) {
 }
 
 type FlagData struct {
-	Id               string   `json:",omitempty"`
-	Name             string   `json:"name"`
-	Type             string   `json:"type"`
-	Description      string   `json:"description"`
-	Source           string   `json:"source"`
-	DefaultValue     string   `json:",omitempty"`
-	PredefinedValues []string `json:",omitempty"`
+	*models.Flag
 }
 
 func (f FlagData) Save(data string) ([]byte, error) {
@@ -66,11 +60,7 @@ func (f FlagData) Save(data string) ([]byte, error) {
 }
 
 type GoalData struct {
-	Id       string `json:",omitempty"`
-	Label    string `json:"label"`
-	Type     string `json:"type"`
-	Operator string `json:"operator"`
-	Value    string `json:"value"`
+	*models.Goal
 }
 
 func (f GoalData) Save(data string) ([]byte, error) {
@@ -78,10 +68,7 @@ func (f GoalData) Save(data string) ([]byte, error) {
 }
 
 type TargetingKeysData struct {
-	Id          string `json:",omitempty"`
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Description string `json:"description"`
+	*models.TargetingKey
 }
 
 func (f TargetingKeysData) Save(data string) ([]byte, error) {
@@ -89,9 +76,7 @@ func (f TargetingKeysData) Save(data string) ([]byte, error) {
 }
 
 type VariationGroupData struct {
-	Id         string          `json:"id,omitempty"`
-	Name       string          `json:"name,omitempty"`
-	Variations []VariationData `json:"variations"`
+	*models.VariationGroup
 }
 
 /* func (f VariationGroupData) Save(data string) ([]byte, error) {
@@ -99,10 +84,7 @@ type VariationGroupData struct {
 } */
 
 type VariationData struct {
-	Id         string `json:"id,omitempty"`
-	Name       string `json:"name"`
-	Allocation int    `json:"allocation"`
-	Reference  bool   `json:"reference"`
+	*models.Variation
 }
 
 /* func (f VariationData) Save(data string) ([]byte, error) {
