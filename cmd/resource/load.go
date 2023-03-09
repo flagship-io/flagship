@@ -230,11 +230,11 @@ func loadResources(resources []Resource) (string, error) {
 		}
 
 		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, data)
+			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+url, data)
 		}
 
 		if resource.Name == Goal || resource.Name == Campaign {
-			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, data)
+			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, data)
 		}
 
 		if err != nil {
@@ -354,11 +354,11 @@ func ScriptResource(resources []Resource) {
 		}
 
 		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
 		}
 
 		if resource.Name == Goal || resource.Name == Campaign {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
 		}
 
 		if err != nil {
