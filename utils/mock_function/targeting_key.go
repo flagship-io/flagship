@@ -49,35 +49,35 @@ func APITargetingKey() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
+	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestTargetingKey)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
+	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
+	httpmock.RegisterResponder("POST", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestTargetingKey)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
+	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestTargetingKeyEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
+	httpmock.RegisterResponder("DELETE", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 		},
