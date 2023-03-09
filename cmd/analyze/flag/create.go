@@ -7,23 +7,138 @@ package flag
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/kyokomi/emoji/v2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/fatih/color"
-	"github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
 	"github.com/flagship-io/flagship/models"
-	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"golang.org/x/exp/slices"
 )
+
+func summaryTableFlagCreated(flagCreatedLen, flagNotCreatedLen, flagAlreadyExistLen int) {
+	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
+	columnFmt := color.New(color.FgYellow).SprintfFunc()
+
+	totalFlag := flagCreatedLen + flagAlreadyExistLen + flagNotCreatedLen
+
+	summtbl := table.New("\nSummary")
+	summtbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
+
+	summtbl.AddRow(fmt.Sprintf("Total flags: %d (%d Flag created %s, %d Flag not created%s, %d Flag that already exist%s)", totalFlag, flagCreatedLen, emoji.Sprint(":check_mark_button:"), flagNotCreatedLen, emoji.Sprint(":cross_mark:"), flagAlreadyExistLen, emoji.Sprint(":white_large_square:")))
+	summtbl.Print()
+}
+
+func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
+	var flagCreatedLen int = 0
+	var flagNotCreatedLen int = 0
+	var flagAlreadyExistLen int = 0
+
+	var flagKeyNotCreated []string
+
+	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
+	columnFmt := color.New(color.FgYellow).SprintfFunc()
+
+	tbl := table.New("Flag", "Type", "defaultValue", "File", fmt.Sprintf("State (Created:%s, Not Created:%s, Already Exists:%s)", emoji.Sprint(":check_mark_button:"), emoji.Sprint(":cross_mark:"), emoji.Sprint(":white_large_square:")))
+	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt).WithPadding(2)
+
+	var existedFlagKey []string
+
+	for _, flag := range listedFlags {
+		existedFlagKey = append(existedFlagKey, strings.ToLower(flag.Name))
+	}
+
+	results, err := handler.ExtractFlagsInfo(FSConfig)
+	if err != nil {
+		return err
+	}
+
+	for _, r := range results {
+		pathArray := strings.Split(r.File, "/")
+		for _, analyzedFlag := range r.Results {
+
+			var flagRequest models.Flag
+			var flagResponse models.Flag
+
+			if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
+				flagAlreadyExistLen += 1
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":white_large_square:"))
+				continue
+			}
+
+			if analyzedFlag.FlagType == "unknown" {
+				flagNotCreatedLen += 1
+				flagKeyNotCreated = append(flagKeyNotCreated, analyzedFlag.FlagKey)
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
+				continue
+			}
+
+			if analyzedFlag.FlagType == "boolean" {
+				flagRequest = models.Flag{
+					Name:        analyzedFlag.FlagKey,
+					Type:        analyzedFlag.FlagType,
+					Description: "flag created by CLI",
+					Source:      "cli",
+				}
+			} else {
+				flagRequest = models.Flag{
+					Name:         analyzedFlag.FlagKey,
+					Type:         analyzedFlag.FlagType,
+					DefaultValue: analyzedFlag.FlagDefaultValue,
+					Description:  "flag created by CLI",
+					Source:       "cli",
+				}
+			}
+
+			flagRequestJSON, err_ := json.Marshal(flagRequest)
+			if err_ != nil {
+				return err_
+			}
+
+			createdFlag, errCreatedFlag := httprequest.HTTPCreateFlag(string(flagRequestJSON))
+
+			if errCreatedFlag != nil {
+				return errCreatedFlag
+			}
+
+			err_json := json.Unmarshal(createdFlag, &flagResponse)
+
+			if err_json != nil {
+				return err_json
+			}
+
+			if flagResponse.Id != "" {
+				flagCreatedLen += 1
+				existedFlagKey = append(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
+			}
+
+		}
+	}
+
+	totalFlag := flagCreatedLen + flagAlreadyExistLen + flagNotCreatedLen
+	if totalFlag == 0 {
+		tbl.AddRow("No flag found")
+	}
+
+	tbl.Print()
+
+	summaryTableFlagCreated(flagCreatedLen, flagNotCreatedLen, flagAlreadyExistLen)
+
+	if flagNotCreatedLen != 0 {
+		fmt.Fprintf(cmd.OutOrStdout(), "\n%sTips: To create these flags use these commands: \n", emoji.Sprint(":bulb:"))
+		for _, flagKey := range flagKeyNotCreated {
+			fmt.Fprintf(cmd.OutOrStdout(), "flagship flag create --data-raw '{\"name\": \"%s\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}'\n", flagKey)
+		}
+	}
+
+	return nil
+}
 
 // CreateCmd represents the create command
 var createCmd = &cobra.Command{
@@ -31,138 +146,17 @@ var createCmd = &cobra.Command{
 	Short: "Analyze your codebase and automatically create flags detected",
 	Long:  `Analyze your codebase and automatically create flags detected to Flagship platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		var filesToExclude_ []string
-		var searchCustomRegex string = SearchCustomRegex
-
-		err := json.Unmarshal([]byte(FilesToExclude), &filesToExclude_)
-		if err != nil {
-			log.Fatalf("error occurred: %s", err)
-		}
-
-		if CustomRegexJson != "" {
-			searchCustomRegex = CustomRegexJson
-		}
-
-		FSConfig = &config.Config{
-			FlagshipAPIURL:        utils.GetHost(),
-			FlagshipAuthAPIURL:    utils.GetHostAuth(),
-			FlagshipAPIToken:      viper.GetString("token"),
-			FlagshipAccountID:     viper.GetString("account_id"),
-			FlagshipEnvironmentID: viper.GetString("account_environment_id"),
-			Directory:             Directory,
-			RepositoryURL:         RepoURL,
-			RepositoryBranch:      RepoBranch,
-			NbLineCodeEdges:       NbLineCodeEdges,
-			FilesToExclude:        filesToExclude_,
-			SearchCustomRegex:     searchCustomRegex,
-		}
+		PreRunConfiguration()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		var flagCreatedLen int = 0
-		var flagNotCreatedLen int = 0
-		var flagAlreadyExistLen int = 0
-		var flagKeyNotCreated []string
-
-		headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
-		columnFmt := color.New(color.FgYellow).SprintfFunc()
-
-		tbl := table.New("Flag", "Type", "defaultValue", "File", "State (Created:"+emoji.Sprint(":check_mark_button:")+", Not Created:"+emoji.Sprint(":cross_mark:")+", Already Exists:"+emoji.Sprint(":white_large_square:")+")")
-		tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
-
-		summtbl := table.New("\nSummary")
-		summtbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt)
-
-		var existedFlagKey []string
-
-		listedFlags, errListFlag := httprequest.HTTPListFlag()
+		listedExistingFlags, errListFlag := httprequest.HTTPListFlag()
 		if errListFlag != nil {
-			log.Fatalf("error occurred: %v", errListFlag)
+			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
 		}
 
-		for _, flag := range listedFlags {
-			existedFlagKey = append(existedFlagKey, strings.ToLower(flag.Name))
-		}
-
-		results, err := handler.ExtractFlagsInfo(FSConfig)
+		err := flagCreatedTable(cmd, listedExistingFlags)
 		if err != nil {
-			log.Fatalf("error occured: %s", err)
-		}
-		for _, r := range results {
-			for _, result := range r.Results {
-
-				var flagRequest models.Flag
-				var flagResponse models.Flag
-
-				if slices.Contains(existedFlagKey, strings.ToLower(result.FlagKey)) {
-					flagAlreadyExistLen += 1
-					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":white_large_square:"))
-					continue
-				}
-
-				if result.FlagType == "unknown" {
-					flagNotCreatedLen += 1
-					flagKeyNotCreated = append(flagKeyNotCreated, result.FlagKey)
-					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
-					continue
-				}
-
-				if result.FlagType == "boolean" {
-					flagRequest = models.Flag{
-						Name:        result.FlagKey,
-						Type:        result.FlagType,
-						Description: "flag created by CLI",
-						Source:      "cli",
-					}
-				} else {
-					flagRequest = models.Flag{
-						Name:         result.FlagKey,
-						Type:         result.FlagType,
-						DefaultValue: result.FlagDefaultValue,
-						Description:  "flag created by CLI",
-						Source:       "cli",
-					}
-				}
-
-				flagRequestJSON, err_ := json.Marshal(flagRequest)
-				if err_ != nil {
-					log.Fatalf("error occurred: %s", err)
-				}
-
-				createdFlag, errCreatedFlag := httprequest.HTTPCreateFlag(string(flagRequestJSON))
-
-				if errCreatedFlag != nil {
-					log.Fatalf("error occurred: %v", err)
-				}
-
-				err_json := json.Unmarshal(createdFlag, &flagResponse)
-
-				if err_json != nil {
-					log.Fatalf("error occurred: %v", err)
-				}
-
-				if flagResponse.Id != "" {
-					flagCreatedLen += 1
-					tbl.AddRow(result.FlagKey, result.FlagType, result.FlagDefaultValue, r.File+":"+strconv.Itoa(result.LineNumber), emoji.Sprint(":check_mark_button:"))
-				}
-
-			}
-		}
-
-		totalFlag := flagCreatedLen + flagAlreadyExistLen + flagNotCreatedLen
-		if totalFlag == 0 {
-			tbl.AddRow("No flag found")
-		}
-
-		tbl.Print()
-
-		summtbl.AddRow("Total flags: " + strconv.Itoa(totalFlag) + " (" + strconv.Itoa(flagCreatedLen) + " Flag created " + emoji.Sprint(":check_mark_button:") + ", " + strconv.Itoa(flagNotCreatedLen) + " Flag not created" + emoji.Sprint(":cross_mark:") + ", " + strconv.Itoa(flagAlreadyExistLen) + " Flag that already exist" + emoji.Sprint(":white_large_square:") + ")")
-		summtbl.Print()
-
-		if flagNotCreatedLen != 0 {
-			fmt.Fprintf(cmd.OutOrStdout(), "\n%sTips: To create these flags use these commands: \n", emoji.Sprint(":bulb:"))
-			for _, flagKey := range flagKeyNotCreated {
-				fmt.Fprintf(cmd.OutOrStdout(), "flagship flag create --data-raw '{\"name\": \"%s\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}'\n", flagKey)
-			}
+			log.Fatalf("error occurred in created flag table: %s", err)
 		}
 	},
 }

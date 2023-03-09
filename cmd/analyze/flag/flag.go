@@ -28,44 +28,46 @@ var (
 )
 var FSConfig *cbaConfig.Config
 
+func PreRunConfiguration() {
+	var filesToExcludeArray []string
+	var searchCustomRegex string = SearchCustomRegex
+
+	err := json.Unmarshal([]byte(FilesToExclude), &filesToExcludeArray)
+	if err != nil {
+		log.Fatalf("error occurred when unmarshal: %s", err)
+	}
+
+	if CustomRegexJson != "" {
+		searchCustomRegex = CustomRegexJson
+	}
+
+	FSConfig = &cbaConfig.Config{
+		FlagshipAPIURL:        utils.GetHost(),
+		FlagshipAuthAPIURL:    utils.GetHostAuth(),
+		FlagshipAPIToken:      viper.GetString("token"),
+		FlagshipAccountID:     viper.GetString("account_id"),
+		FlagshipEnvironmentID: viper.GetString("account_environment_id"),
+		Directory:             Directory,
+		RepositoryURL:         RepoURL,
+		RepositoryBranch:      RepoBranch,
+		NbLineCodeEdges:       NbLineCodeEdges,
+		FilesToExclude:        filesToExcludeArray,
+		SearchCustomRegex:     searchCustomRegex,
+	}
+}
+
 // FlagCmd represents the flag command
 var FlagCmd = &cobra.Command{
 	Use:   "flag [create|list]",
 	Short: "Analyze your codebase and detect the usage of Flagship or custom flags",
 	Long:  `Analyze your codebase and detect the usage of Flagship or custom flags, in order to synchronize them with your Flag view in the platform`,
 	PreRun: func(cmd *cobra.Command, args []string) {
-		var filesToExclude_ []string
-		var searchCustomRegex string = SearchCustomRegex
-
-		err := json.Unmarshal([]byte(FilesToExclude), &filesToExclude_)
-		if err != nil {
-			log.Fatalf("error occurred: %s", err)
-		}
-
-		if CustomRegexJson != "" {
-			searchCustomRegex = CustomRegexJson
-		}
-
-		FSConfig = &cbaConfig.Config{
-			FlagshipAPIURL:        utils.GetHost(),
-			FlagshipAuthAPIURL:    utils.GetHostAuth(),
-			FlagshipAPIToken:      viper.GetString("token"),
-			FlagshipClientID:      viper.GetString("client_id"),
-			FlagshipClientSecret:  viper.GetString("client_secret"),
-			FlagshipAccountID:     viper.GetString("account_id"),
-			FlagshipEnvironmentID: viper.GetString("account_environment_id"),
-			Directory:             Directory,
-			RepositoryURL:         RepoURL,
-			RepositoryBranch:      RepoBranch,
-			NbLineCodeEdges:       NbLineCodeEdges,
-			FilesToExclude:        filesToExclude_,
-			SearchCustomRegex:     searchCustomRegex,
-		}
+		PreRunConfiguration()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		err := handler.AnalyzeCode(FSConfig)
 		if err != nil {
-			log.Fatalf("error occured: %s", err)
+			log.Fatalf("error occured when analyzing: %s", err)
 		}
 	},
 }
@@ -77,7 +79,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&RepoURL, "repository-url", "", "https://github.com/org/repo", "root URL of your repository, and is used to track the links of the files where your flags are used")
 	FlagCmd.PersistentFlags().StringVarP(&RepoBranch, "repository-branch", "", "main", "branch of the code you want to analyse, and is used to track the links of the files where your flags are used")
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
-	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\"]", "list of files to exclude in analysis")
+	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\", \".yarn\", \"node_modules\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that the regex for the pattern you want to analyze")
 }
