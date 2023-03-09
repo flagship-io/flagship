@@ -11,21 +11,21 @@ import (
 )
 
 var TestTargetingKey = models.TargetingKey{
-	ID:          "testTargetingKeyID",
+	Id:          "testTargetingKeyID",
 	Name:        "testTargetingKeyName",
 	Type:        "string",
 	Description: "testTargetingKeyDescription",
 }
 
 var TestTargetingKey1 = models.TargetingKey{
-	ID:          "testTargetingKeyID1",
+	Id:          "testTargetingKeyID1",
 	Name:        "testTargetingKeyName1",
 	Type:        "string",
 	Description: "testTargetingKeyDescription1",
 }
 
 var TestTargetingKeyEdit = models.TargetingKey{
-	ID:          "testTargetingKeyID",
+	Id:          "testTargetingKeyID",
 	Name:        "testTargetingKeyName1",
 	Type:        "string",
 	Description: "testTargetingKeyDescription1",
@@ -49,7 +49,7 @@ func APITargetingKey() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
+	httpmock.RegisterResponder("GET", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestTargetingKey)
 			return resp, nil
@@ -70,14 +70,14 @@ func APITargetingKey() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
+	httpmock.RegisterResponder("PATCH", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestTargetingKeyEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.ID,
+	httpmock.RegisterResponder("DELETE", utils.Host+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+TestTargetingKey.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 		},
