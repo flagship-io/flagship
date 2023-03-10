@@ -3,3 +3,20 @@ account_environment_id: aei
 client_id: ci
 client_secret: cs
 output_format: table
+env_id: env_id # Your Flagship Environment ID
+api_key: api_key # Your Flagship API Key
+address: ":8080" # the listening address of the server
+log:
+  level: "trace" # minimal log level to output
+  format: "text" # log format output
+polling_internal: "1m" # the polling interval to synchronize with Flagship platform
+
+# Cache
+cache:
+  type: local # or 'redis' or 'none' (if you do not want to using visitor cache)
+  options:
+    dbPath: ./data
+    #redisHost: 'localhost:6379' # for redis storage
+    #redisUsername: username     # (Optional) for redis storage
+    #redisPassword: password     # (Optional) for redis storage
+    #redisDb: 0    # (Optional) for redis storage
