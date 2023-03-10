@@ -2,7 +2,7 @@
 Copyright © 2022 Flagship Team flagship@abtasty.com
 
 */
-package targetingkey
+package targeting_key
 
 import (
 	"fmt"
