@@ -16,6 +16,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	visitorId      string
+	visitorContext []string
+)
+
 var decisionResponse models.DecisionAPIInfo
 
 // DecisionCmd represents the decision command
@@ -25,7 +30,7 @@ var DecisionCmd = &cobra.Command{
 	Long:  `use of the decison api in the CLI`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		resp, err := httprequest.HTTPDecisionApi("random")
+		resp, err := httprequest.HTTPDecisionApi(visitorId)
 		if err != nil {
 			log.Fatalf("error occured: %s", err)
 		}
@@ -35,11 +40,18 @@ var DecisionCmd = &cobra.Command{
 			log.Fatalf("error occured: %s", err)
 		}
 
-		fmt.Println(decisionResponse)
+		fmt.Println(string(resp))
 
 	},
 }
 
 func init() {
+
+	DecisionCmd.Flags().StringVarP(&visitorId, "visitor-id", "", "", "visitorId")
+
+	if err := DecisionCmd.MarkFlagRequired("visitor-id"); err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
+
 	DecisionCmd.AddCommand(self_hosted.DecisionSelfHostedCmd)
 }

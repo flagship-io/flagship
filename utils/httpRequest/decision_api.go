@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func HTTPDecisionApi(name string) ([]byte, error) {
+func HTTPDecisionApi(visitorId string) ([]byte, error) {
 	decisionRequest := models.Visitor{
-		VisitorId:      "jflsdkjlsf",
+		VisitorId:      visitorId,
 		VisitorContext: map[string]any{"device": "firefox"},
 	}
 	decisionRequestJSON, err := json.Marshal(decisionRequest)
