@@ -1,6 +1,10 @@
 package utils
 
-import "os"
+import (
+	"os"
+
+	"github.com/spf13/viper"
+)
 
 func GetHost() string {
 	if os.Getenv("STAGING") == "true" {
@@ -8,6 +12,18 @@ func GetHost() string {
 	}
 
 	return "https://api.flagship.io"
+}
+
+func GetDecisionAPIHost() string {
+	if os.Getenv("STAGING") == "true" {
+		return "https://staging-decision.flagship.io"
+	}
+
+	if viper.GetString("self-hosted") != "" {
+		return viper.GetString("self-hosted")
+	}
+
+	return "https://decision.flagship.io"
 }
 
 func GetHostAuth() string {
