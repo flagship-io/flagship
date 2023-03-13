@@ -3,6 +3,7 @@ module github.com/flagship-io/flagship
 go 1.18
 
 require (
+	github.com/aws/aws-sdk-go v1.40.45
 	github.com/flagship-io/codebase-analyzer v0.7.1
 	github.com/flagship-io/decision-api v0.3.3
 	github.com/kyokomi/emoji/v2 v2.2.12
@@ -19,7 +20,6 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/abcum/lcp v0.0.0-20201209214815-7a3f3840be81 // indirect
-	github.com/aws/aws-sdk-go v1.40.45 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/flagship-io/flagship-common v0.0.18-beta.1 // indirect

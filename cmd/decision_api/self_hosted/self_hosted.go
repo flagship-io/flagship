@@ -111,7 +111,7 @@ func createServer(cfg *config.Config, log *logger.Logger) (*server.Server, error
 
 // DecisionSelfHostedCmd represents the self hosted decision api command
 var DecisionSelfHostedCmd = &cobra.Command{
-	Use:   "self-hosted",
+	Use:   "serve",
 	Short: "use of decision api self-hosted",
 	Long:  `use of the decison api self-hosted in the CLI`,
 	Run: func(cmd *cobra.Command, args []string) {
