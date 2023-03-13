@@ -98,6 +98,49 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	return respBody, err
 }
 
+func HTTPRequestDecisionAPI(method string, resource string, body []byte) ([]byte, error) {
+	var bodyIO io.Reader = nil
+	if body != nil {
+		bodyIO = bytes.NewBuffer(body)
+	}
+
+	req, err := http.NewRequest(method, resource, bodyIO)
+	if err != nil {
+		log.Panicf("error occurred on request creation: %v", err)
+	}
+
+	req.Header.Add("Accept", `*/*`)
+	req.Header.Add("x-api-key", viper.GetString("api_key"))
+	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
+	if body != nil {
+		req.Header.Add("Content-Type", `application/json`)
+	}
+
+	resp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var reader io.ReadCloser
+	switch resp.Header.Get("Content-Encoding") {
+	case "gzip":
+		reader, err = gzip.NewReader(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		defer reader.Close()
+	default:
+		reader = resp.Body
+	}
+	respBody, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return nil, err
+	}
+
+	return respBody, err
+}
+
 func HTTPGetItem[T any](resource string) (T, error) {
 	var result T
 	respBody, err := HTTPRequest(http.MethodGet, resource, nil)

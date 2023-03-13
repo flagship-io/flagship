@@ -10,11 +10,12 @@ import (
 	"github.com/flagship-io/flagship/cmd/analyze"
 	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/cmd/campaign"
+	"github.com/flagship-io/flagship/cmd/decision_api"
 	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/goal"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
-	targetingkey "github.com/flagship-io/flagship/cmd/targeting_key"
+	"github.com/flagship-io/flagship/cmd/targeting_key"
 	"github.com/flagship-io/flagship/cmd/token"
 	"github.com/flagship-io/flagship/cmd/user"
 	"github.com/flagship-io/flagship/cmd/variation"
@@ -67,10 +68,11 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(variation.VariationCmd)
 	rootCmd.AddCommand(flag.FlagCmd)
 	rootCmd.AddCommand(goal.GoalCmd)
-	rootCmd.AddCommand(targetingkey.TargetingKeyCmd)
+	rootCmd.AddCommand(targeting_key.TargetingKeyCmd)
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(analyze.AnalyzeCmd)
+	rootCmd.AddCommand(decision_api.DecisionCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)

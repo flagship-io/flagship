@@ -3,3 +3,4 @@ config.yaml
 fixtures
 coverage
 /bin
+data

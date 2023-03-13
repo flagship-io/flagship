@@ -1,4 +1,9 @@
-package targetingkey
+/*
+Copyright © 2022 Flagship Team flagship@abtasty.com
+
+*/
+
+package targeting_key
 
 import (
 	"encoding/json"
