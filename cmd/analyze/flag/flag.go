@@ -25,6 +25,7 @@ var (
 	SearchCustomRegex   string
 	CustomRegexJsonFile string
 	CustomRegexJson     string
+	LaunchDarkly        bool
 )
 var FSConfig *cbaConfig.Config
 
@@ -39,6 +40,10 @@ func PreRunConfiguration() {
 
 	if CustomRegexJson != "" {
 		searchCustomRegex = CustomRegexJson
+	}
+
+	if LaunchDarkly {
+		searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))?)\\\\s*[)]\"]}]"
 	}
 
 	FSConfig = &cbaConfig.Config{
@@ -81,7 +86,8 @@ func init() {
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
 	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\", \".yarn\", \"node_modules\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
-	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that the regex for the pattern you want to analyze")
+	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
+	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launch-darkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
 }
 
 func initConfig() {
