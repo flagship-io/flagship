@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/flagship-io/codebase-analyzer/internal/files"
@@ -32,13 +31,6 @@ func ExtractFlagsInfo(cfg *config.Config) ([]model.FileSearchResult, error) {
 	for range filePaths {
 		r := <-resultsChan
 		results = append(results, r)
-	}
-
-	for _, result := range results {
-		fmt.Println(result.File)
-		for _, r := range result.Results {
-			fmt.Println(r.FlagKey, r.FlagDefaultValue, r.FlagType, r.LineNumber)
-		}
 	}
 
 	return results, err
