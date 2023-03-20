@@ -30,8 +30,8 @@ ldClient.waitForInitialization().then(function () {
     showMessage("SDK successfully initialized!");
 
     const btnColorFlag = client.variation("LD-analyze-btnColor", 'red');
-    const backgroundColorFlag = client.variation("LD-analyze-backgroundColor", 'green');
     const backgroundSize = client.variation("LD-analyze-backgroundSize", 16);
+    const backgroundSize = client.variation("LD-analyze-backgroundSizeFloat", 16.3);
     const showBackground = client.variation("LD-analyze-showBackground", true);
 
     showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context");

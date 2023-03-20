@@ -1,5 +1,7 @@
 module github.com/flagship-io/flagship
 
+replace github.com/flagship-io/codebase-analyzer => /home/blackbeard/codebase-analyzer
+
 go 1.18
 
 require (
