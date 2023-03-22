@@ -43,7 +43,7 @@ func PreRunConfiguration() {
 	}
 
 	if LaunchDarkly {
-		searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))?)\\\\s*[)]\"]}]"
+		searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
 	}
 
 	FSConfig = &cbaConfig.Config{

@@ -33,6 +33,7 @@ ldClient.waitForInitialization().then(function () {
     const backgroundSize = client.variation("LD-analyze-backgroundSize", 16);
     const backgroundSize = client.variation("LD-analyze-backgroundSizeFloat", 16.3);
     const showBackground = client.variation("LD-analyze-showBackground", true);
+    const showBackground = client.variation(LDAnalyze, true);
 
     showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context");
 

@@ -32,10 +32,11 @@ func summaryTableFlagListed(flagExistLen, flagNotExistLen int) {
 	summtbl.Print()
 }
 
-func flagListedTable(listedFlags []models.Flag) error {
+func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 
 	var flagExistLen int = 0
 	var flagNotExistLen int = 0
+	var flagKeyNotDetected []string
 
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
@@ -62,8 +63,15 @@ func flagListedTable(listedFlags []models.Flag) error {
 				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
 				continue
 			}
+
+			if analyzedFlag.FlagKey == "" {
+				flagKeyNotDetected = append(flagKeyNotDetected, fmt.Sprintf("%s, line: %d", r.File, analyzedFlag.LineNumber))
+				continue
+			}
+
 			flagNotExistLen += 1
 			tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:"))
+
 		}
 	}
 
@@ -76,6 +84,15 @@ func flagListedTable(listedFlags []models.Flag) error {
 	tbl.Print()
 
 	summaryTableFlagListed(flagExistLen, flagNotExistLen)
+
+	if len(flagKeyNotDetected) != 0 {
+		fmt.Fprintf(cmd.OutOrStdout(), "\n%sWarning: feature flags functions detected in these files, but flags are unknown: \n", emoji.Sprint(":construction:"))
+		for _, flag := range flagKeyNotDetected {
+			fmt.Fprintf(cmd.OutOrStdout(), "%s", flag)
+		}
+
+		fmt.Fprintf(cmd.OutOrStdout(), "\n\n%sTips: To create these flags use these commands: flagship flag create --data-raw '{\"name\": \"<NAME>\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}' \n", emoji.Sprint(":bulb:"))
+	}
 
 	return nil
 }
@@ -95,7 +112,7 @@ var listCmd = &cobra.Command{
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
 		}
 
-		err := flagListedTable(listExistingFlags)
+		err := flagListedTable(cmd, listExistingFlags)
 		if err != nil {
 			log.Fatalf("error occurred in listed flag table: %s", err)
 		}
