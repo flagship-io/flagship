@@ -60,7 +60,7 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 		for _, analyzedFlag := range r.Results {
 			if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
 				flagExistLen += 1
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
 				continue
 			}
 
@@ -70,7 +70,7 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			}
 
 			flagNotExistLen += 1
-			tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:"))
+			tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:"))
 
 		}
 	}
@@ -88,7 +88,7 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	if len(flagKeyNotDetected) != 0 {
 		fmt.Fprintf(cmd.OutOrStdout(), "\n%sWarning: feature flags functions detected in these files, but flags are unknown: \n", emoji.Sprint(":construction:"))
 		for _, flag := range flagKeyNotDetected {
-			fmt.Fprintf(cmd.OutOrStdout(), "%s", flag)
+			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", flag)
 		}
 
 		fmt.Fprintf(cmd.OutOrStdout(), "\n\n%sTips: To create these flags use these commands: flagship flag create --data-raw '{\"name\": \"<NAME>\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}' \n", emoji.Sprint(":bulb:"))

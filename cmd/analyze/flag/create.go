@@ -67,14 +67,14 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 
 			if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
 				flagAlreadyExistLen += 1
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":white_large_square:"))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":white_large_square:"))
 				continue
 			}
 
 			if analyzedFlag.FlagType == "unknown" {
 				flagNotCreatedLen += 1
 				flagKeyNotCreated = append(flagKeyNotCreated, analyzedFlag.FlagKey)
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
 				continue
 			}
 
@@ -115,7 +115,7 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			if flagResponse.Id != "" {
 				flagCreatedLen += 1
 				existedFlagKey = append(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey))
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
 			}
 
 		}
