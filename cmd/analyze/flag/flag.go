@@ -29,6 +29,18 @@ var (
 )
 var FSConfig *cbaConfig.Config
 
+func RemoveDuplicateStr(strSlice []string) []string {
+	allKeys := make(map[string]bool)
+	list := []string{}
+	for _, item := range strSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			list = append(list, item)
+		}
+	}
+	return list
+}
+
 func PreRunConfiguration() {
 	var filesToExcludeArray []string
 	var searchCustomRegex string = SearchCustomRegex
@@ -43,7 +55,14 @@ func PreRunConfiguration() {
 	}
 
 	if LaunchDarkly {
-		searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
+		bytes, err := os.ReadFile("predefined-regexes/launch-darkly-regexes.json")
+
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+		searchCustomRegex = string(bytes)
+
+		//searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
 	}
 
 	FSConfig = &cbaConfig.Config{

@@ -37,6 +37,7 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	var flagExistLen int = 0
 	var flagNotExistLen int = 0
 	var flagKeyNotDetected []string
+	var flagLocationAddedToTable []string
 
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
@@ -58,6 +59,16 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	for _, r := range results {
 		pathArray := strings.Split(r.File, "/")
 		for _, analyzedFlag := range r.Results {
+
+			if analyzedFlag.FlagKey == "" {
+				if !slices.Contains(flagLocationAddedToTable, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber)) {
+					flagKeyNotDetected = append(flagKeyNotDetected, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber))
+				}
+				continue
+			}
+
+			flagLocationAddedToTable = append(flagLocationAddedToTable, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber))
+
 			if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
 				flagExistLen += 1
 				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
@@ -87,7 +98,7 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 
 	if len(flagKeyNotDetected) != 0 {
 		fmt.Fprintf(cmd.OutOrStdout(), "\n%sWarning: feature flags functions detected in these files, but flags are unknown: \n", emoji.Sprint(":construction:"))
-		for _, flag := range flagKeyNotDetected {
+		for _, flag := range RemoveDuplicateStr(flagKeyNotDetected) {
 			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", flag)
 		}
 
