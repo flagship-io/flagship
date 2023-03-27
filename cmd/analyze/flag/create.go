@@ -40,6 +40,8 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	var flagAlreadyExistLen int = 0
 
 	var flagKeyNotCreated []string
+	var flagKeyNotDetected []string
+	var flagLocationAddedToTable []string
 
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
@@ -65,16 +67,25 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			var flagRequest models.Flag
 			var flagResponse models.Flag
 
+			if analyzedFlag.FlagKey == "" {
+				if !slices.Contains(flagLocationAddedToTable, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber)) {
+					flagKeyNotDetected = append(flagKeyNotDetected, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber))
+				}
+				continue
+			}
+
+			flagLocationAddedToTable = append(flagLocationAddedToTable, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber))
+
 			if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
 				flagAlreadyExistLen += 1
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":white_large_square:"))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":white_large_square:"))
 				continue
 			}
 
 			if analyzedFlag.FlagType == "unknown" {
 				flagNotCreatedLen += 1
 				flagKeyNotCreated = append(flagKeyNotCreated, analyzedFlag.FlagKey)
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:")+"reason: Unknown type and no default value")
 				continue
 			}
 
@@ -115,7 +126,7 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			if flagResponse.Id != "" {
 				flagCreatedLen += 1
 				existedFlagKey = append(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey))
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s/%s:%d", pathArray[len(pathArray)-2], pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
+				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
 			}
 
 		}
@@ -135,6 +146,15 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 		for _, flagKey := range flagKeyNotCreated {
 			fmt.Fprintf(cmd.OutOrStdout(), "flagship flag create --data-raw '{\"name\": \"%s\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}'\n", flagKey)
 		}
+	}
+
+	if len(flagKeyNotDetected) != 0 {
+		fmt.Fprintf(cmd.OutOrStdout(), "\n%sWarning: feature flags functions detected in these files, but flags are unknown: \n", emoji.Sprint(":construction:"))
+		for _, flag := range RemoveDuplicateStr(flagKeyNotDetected) {
+			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", flag)
+		}
+
+		fmt.Fprintf(cmd.OutOrStdout(), "\n\n%sTips: To create these flags use these commands: flagship flag create --data-raw '{\"name\": \"<NAME>\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}' \n", emoji.Sprint(":bulb:"))
 	}
 
 	return nil

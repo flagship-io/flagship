@@ -28,6 +28,18 @@ var (
 )
 var FSConfig *cbaConfig.Config
 
+func RemoveDuplicateStr(strSlice []string) []string {
+	allKeys := make(map[string]bool)
+	list := []string{}
+	for _, item := range strSlice {
+		if _, value := allKeys[item]; !value {
+			allKeys[item] = true
+			list = append(list, item)
+		}
+	}
+	return list
+}
+
 func PreRunConfiguration() {
 	var filesToExcludeArray []string
 	var searchCustomRegex string = SearchCustomRegex
