@@ -5,7 +5,7 @@ replace github.com/flagship-io/codebase-analyzer => /home/blackbeard/codebase-an
 go 1.18
 
 require (
-	github.com/flagship-io/codebase-analyzer v0.7.1
+	github.com/flagship-io/codebase-analyzer v0.8.0
 	github.com/kyokomi/emoji/v2 v2.2.12
 	github.com/rodaine/table v1.1.0
 	github.com/sirupsen/logrus v1.9.0

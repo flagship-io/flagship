@@ -12,6 +12,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/campaign"
 	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/goal"
+	"github.com/flagship-io/flagship/cmd/info"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
 	targetingkey "github.com/flagship-io/flagship/cmd/targeting_key"
@@ -71,6 +72,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(analyze.AnalyzeCmd)
+	rootCmd.AddCommand(info.InfoCmd)
 }
 func init() {
 	cobra.OnInitialize(initConfig)
