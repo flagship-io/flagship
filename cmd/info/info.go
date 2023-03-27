@@ -15,8 +15,8 @@ import (
 // InfoCmd represents the info command
 var InfoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "Show the information like account environment id, account id and client id",
-	Long:  `Show the information like account environment id, account id and client id your Flagship CLI runs on`,
+	Short: "Show informations related to your Flagship CLI",
+	Long:  `Show informations like account environment id, account id and client id your Flagship CLI runs on`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		yellow := color.New(color.FgYellow).SprintFunc()
