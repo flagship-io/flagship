@@ -81,8 +81,8 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			}
 
 			flagNotExistLen += 1
-			tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:"))
 
+			tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":cross_mark:"))
 		}
 	}
 
@@ -101,8 +101,6 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 		for _, flag := range RemoveDuplicateStr(flagKeyNotDetected) {
 			fmt.Fprintf(cmd.OutOrStdout(), "%s\n", flag)
 		}
-
-		fmt.Fprintf(cmd.OutOrStdout(), "\n\n%sTips: To create these flags use these commands: flagship flag create --data-raw '{\"name\": \"<NAME>\",\"type\":\"<TYPE>\",\"description\":\"<DESCRIPTION>\",\"source\":\"cli\"}' \n", emoji.Sprint(":bulb:"))
 	}
 
 	return nil
