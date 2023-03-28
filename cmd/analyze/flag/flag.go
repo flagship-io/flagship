@@ -14,6 +14,7 @@ import (
 	"github.com/flagship-io/flagship/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/thoas/go-funk"
 )
 
 var (
@@ -29,15 +30,7 @@ var (
 var FSConfig *cbaConfig.Config
 
 func RemoveDuplicateStr(strSlice []string) []string {
-	allKeys := make(map[string]bool)
-	list := []string{}
-	for _, item := range strSlice {
-		if _, value := allKeys[item]; !value {
-			allKeys[item] = true
-			list = append(list, item)
-		}
-	}
-	return list
+	return funk.UniqString(strSlice)
 }
 
 func PreRunConfiguration() {
