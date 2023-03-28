@@ -14,6 +14,7 @@ import (
 	"github.com/flagship-io/flagship/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/thoas/go-funk"
 )
 
 var (
@@ -27,6 +28,10 @@ var (
 	CustomRegexJson     string
 )
 var FSConfig *cbaConfig.Config
+
+func RemoveDuplicateStr(strSlice []string) []string {
+	return funk.UniqString(strSlice)
+}
 
 func PreRunConfiguration() {
 	var filesToExcludeArray []string
