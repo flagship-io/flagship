@@ -1,21 +1,14 @@
-////////////////////////////////
-///////    Get Flag      ///////
-////////////////////////////////
-
-import 'package:flagship/flagship.dart';
-import 'package:flagship/model/flag.dart';
-
-
 // Get the current visitor
-    var currentVisitor = Flagship.getCurrentVisitor();
+  var currentVisitor = FeatureFlag.getCurrentVisitor();
 
 // Fetch flags
     currentVisitor?.fetchFlags().whenComplete(() {
       // Ex: get flag for vip feature
-      Flag flag = currentVisitor.getFlag("displayVipFeature",false);
-      Flag flag = currentVisitor.getFlag("backgroundColor", "green");
-      Flag flag = currentVisitor.getFlag("backgroundSize", 16);
-    });
+      Flag flag = currentVisitor.boolVariation("LD-bool-flag-dart", false);
+      Flag flag = currentVisitor.stringVariation("LD-string-flag-dart", "green");
+      Flag flag = currentVisitor.intVariation("LD-int-flag-dart", 16);
 
-// The getFlag function can be directly called through the "currentVisitor" instance if you
-// already fetched it elsewhere in the application
+      Flag flag = currentVisitor.boolVariationDetail("LD-bool-flag-dart-1", true);
+      Flag flag = currentVisitor.stringVariationDetail("LD-string-flag-dart-1", "red");
+      Flag flag = currentVisitor.intVariationDetail("LD-int-flag-dart-1", 15);
+    });

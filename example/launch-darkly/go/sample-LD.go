@@ -26,7 +26,11 @@ func main() {
 
 	featureFlagVisitor.UpdateContext(newContext)
 
-	flagValue, _ := featureFlagVisitor.BoolVariation("my-boolean-flag", false)
-	flagValue1, _ := featureFlagVisitor.StringVariation("my-string-flag", "defaltVal")
-	flagValue2, _ := featureFlagVisitor.Float64Variation("my-numbers-flag", 13.6)
+	flagValue, _ := featureFlagVisitor.BoolVariation("LD-Boolean-flag-go", context, false)
+	flagValue1, _ := featureFlagVisitor.StringVariation("LD-string-flag-go", context, "defaultVal")
+	flagValue2, _ := featureFlagVisitor.Float64Variation("LD-Number-flag-go", context, 13.6)
+
+	flagValue, _ := featureFlagVisitor.BoolVariationDetail("LD-Boolean-flag-go-1", context, true)
+	flagValue1, _ := featureFlagVisitor.StringVariationDetail("LD-string-flag-go-1", context, "defaultVal1")
+	flagValue2, _ := featureFlagVisitor.Float64VariationDetail("LD-Number-flag-go-1", context, 15.6)
 }

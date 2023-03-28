@@ -1,13 +1,10 @@
 /// Create visitor
-FSVisitor * visitor1 = [[[[Flagship sharedInstance] newVisitor:@"visitor_1" instanceType:InstanceSHARED_INSTANCE] withContextWithContext:@{@"age":@18} ] build];
+FFVisitor * visitor1 = [[[[FeatureFlag sharedInstance] newVisitor:@"visitor_1" instanceType:InstanceSHARED_INSTANCE] withContextWithContext:@{@"age":@18} ] build];
 
 /// Fetch flags
 [visitor1 fetchFlagsOnFetchCompleted:^{
-  
-  // Ex: get flag for vip feature
-  FSFlag * flag = [visitor1 getFlagWithKey:@"btnColor" defaultValue:@"red"];
-  FSFlag * flag = [visitor1 getFlagWithKey:@"showBtn" defaultValue:TRUE];
-  FSFlag * flag = [visitor1 getFlagWithKey:@"btnSize" defaultValue:13];
-  FSFlag * flag = [visitor1 getFlagWithKey:@"btnSizeFloat" defaultValue:14.5];
-  // Use this flag to enable displaying the vip feature
+  LDFlag * flag = [visitor1 stringVariationForKey:@"LD-string-flag-m" defaultValue:@"red"];
+  LDFlag * flag = [visitor1 boolVariationForKey:@"LD-bool-flag-m" defaultValue:TRUE];
+  LDFlag * flag = [visitor1 intVariationForKey:@"LD-int-flag-m" defaultValue:13];
+  LDFlag * flag = [visitor1 doubleVariationForKey:@"LD-double-flag-m" defaultValue:14.5];
 }];
