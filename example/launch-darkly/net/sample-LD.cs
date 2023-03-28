@@ -1,6 +1,4 @@
-using Flagship.Main;
-
-var visitor = Fs.NewVisitor("<VISITOR_ID>")
+var visitor = Ff.NewVisitor("<VISITOR_ID>")
   .IsAuthenticated(true)
   .HasConsented(true)
   .WithContext(new Dictionary<string, object> {
@@ -12,6 +10,10 @@ var visitor = Fs.NewVisitor("<VISITOR_ID>")
 
   await visitor.FetchFlags();
 
-var flag = visitor.GetFlag("btnColor", 'red');
-var flag = visitor.GetFlag("btnSize", 13);
-var flag = visitor.GetFlag("showBtn", true);
+var flag = visitor.StringVariation("LD-string-flag-cs", context, 'red');
+var flag = visitor.IntVariation("LD-int-flag-cs", context, 13);
+var flag = visitor.BoolVariation("LD-bool-flag-cs", context, true);
+
+var flag = visitor.StringVariationDetail("LD-string-flag-cs", context, 'red');
+var flag = visitor.IntVariationDetail("LD-int-flag-cs", context, 13);
+var flag = visitor.BoolVariationDetail("LD-bool-flag-cs", context, true);

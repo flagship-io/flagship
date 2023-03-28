@@ -1,11 +1,9 @@
 import React from "react";
-import {useFsFlag} from "@flagship.io/react-sdk";
 
 export const MyReactComponent = () => {
-    const backgroundColorFlag = useFsFlag("backgroundColor", "green")
-    const btnColorFlag = useFsFlag("btnColor", "red")
-    const backgroundSize = useFsFlag("backgroundColor", 16)
-    const showBtn = useFsFlag("showBtn", true)
+    const backgroundColorFlag = stringVariation("LD-string-flag-jsx", "green", environment)
+    const backgroundSize = numberVariation("LD-number-flag-jsx", 16, environment)
+    const showBtn = boolVariation("LD-bool-flag-jsx", true, environment)
 
     return (
         <div

@@ -1,32 +1,25 @@
-from flagship.app import Flagship
-from flagship.config import Config
-
-from flagship.app import Flagship
-from flagship.config import Config
-from flagship.handler import FlagshipEventHandler
-
-class CustomEventHandler(FlagshipEventHandler):
+class CustomEventHandler(FeatureFlagEventHandler):
     def __init__(self):
-        FlagshipEventHandler.__init__(self)
+        FeatureFlagEventHandler.__init__(self)
 
     def on_log(self, level, message):
         print("Log >> " + message)
         pass
 
     def on_exception_raised(self, exception, traceback):
-        FlagshipEventHandler.on_exception_raised(self, exception, traceback)
+        FeatureFlagEventHandler.on_exception_raised(self, exception, traceback)
         print("Exception >> " + str(exception))
         pass
 
 
- Flagship.instance().start("your_env_id", "your_api_key"
+ FeatureFlag.instance().start("your_env_id", "your_api_key"
         Config(event_handler=CustomEventHandler())
 
-Flagship.instance().start("your_env_id", "your_api_key", Config())
+FeatureFlag.instance().start("your_env_id", "your_api_key", Config())
 
-visitor = Flagship.instance().create_visitor("user_#1234", {'isVip':True})
+visitor = FeatureFlag.instance().create_visitor("user_#1234", {'isVip':True})
 visitor.synchronize_modifications()
 
-vip_feature_enabled = visitor.get_modification('showBtn', False)
-vip_feature_color = visitor.get_modification('btnColor', "red")
-vip_feature_size = visitor.get_modification('btnSize', 16)
+vip_feature_enabled = visitor.variation('LD-bool-flag-py', context, False)
+vip_feature_color = visitor.variation('LD-string-flag-py', context, "red")
+vip_feature_size = visitor.variation('LD-number-flag-py', context, 16)
