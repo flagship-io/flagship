@@ -29,6 +29,7 @@ var (
 	LaunchDarkly        bool
 	Optimizely          bool
 	VWO                 bool
+	SplitIO             bool
 )
 var FSConfig *cbaConfig.Config
 
@@ -82,6 +83,17 @@ func PreRunConfiguration() {
 
 	}
 
+	if SplitIO {
+
+		bytes, err := os.ReadFile("predefined-regexes/split-io-regexes.json")
+
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+		searchCustomRegex = string(bytes)
+
+	}
+
 	FSConfig = &cbaConfig.Config{
 		FlagshipAPIURL:        utils.GetHost(),
 		FlagshipAuthAPIURL:    utils.GetHostAuth(),
@@ -126,6 +138,7 @@ func init() {
 	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launch-darkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
 	FlagCmd.PersistentFlags().BoolVarP(&Optimizely, "optimizely", "", false, "analyze flags made with optimizely (only latest ones)")
 	FlagCmd.PersistentFlags().BoolVarP(&VWO, "vwo", "", false, "analyze flags made with VWO (only latest ones)")
+	FlagCmd.PersistentFlags().BoolVarP(&SplitIO, "split-io", "", false, "analyze flags made with Split-io (only latest ones)")
 }
 
 func initConfig() {
