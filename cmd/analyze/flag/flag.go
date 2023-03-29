@@ -28,6 +28,7 @@ var (
 	CustomRegexJson     string
 	LaunchDarkly        bool
 	Optimizely          bool
+	VWO                 bool
 )
 var FSConfig *cbaConfig.Config
 
@@ -68,8 +69,17 @@ func PreRunConfiguration() {
 			log.Fatalf("error occurred: %v", err)
 		}
 		searchCustomRegex = string(bytes)
+	}
 
-		//searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
+	if VWO {
+
+		bytes, err := os.ReadFile("predefined-regexes/vwo-regexes.json")
+
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+		searchCustomRegex = string(bytes)
+
 	}
 
 	FSConfig = &cbaConfig.Config{
@@ -115,6 +125,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launch-darkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
 	FlagCmd.PersistentFlags().BoolVarP(&Optimizely, "optimizely", "", false, "analyze flags made with optimizely (only latest ones)")
+	FlagCmd.PersistentFlags().BoolVarP(&VWO, "vwo", "", false, "analyze flags made with VWO (only latest ones)")
 }
 
 func initConfig() {
