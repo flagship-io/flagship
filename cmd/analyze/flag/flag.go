@@ -27,6 +27,7 @@ var (
 	CustomRegexJsonFile string
 	CustomRegexJson     string
 	LaunchDarkly        bool
+	Optimizely          bool
 )
 var FSConfig *cbaConfig.Config
 
@@ -48,7 +49,20 @@ func PreRunConfiguration() {
 	}
 
 	if LaunchDarkly {
+
 		bytes, err := os.ReadFile("predefined-regexes/launch-darkly-regexes.json")
+
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+		searchCustomRegex = string(bytes)
+
+		//searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
+	}
+
+	if Optimizely {
+
+		bytes, err := os.ReadFile("predefined-regexes/optimizely-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
@@ -100,6 +114,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launch-darkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
+	FlagCmd.PersistentFlags().BoolVarP(&Optimizely, "optimizely", "", false, "analyze flags made with optimizely (only latest ones)")
 }
 
 func initConfig() {

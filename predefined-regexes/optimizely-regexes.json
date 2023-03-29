@@ -1,0 +1,62 @@
+[
+    {
+        "file_extension": ".[jt]s$",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|Json)?[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".[jt]sx$",
+        "regexes": [
+            "getFeatureVariables[(](?:\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".kt$",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|JSON)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".java$",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|JSON)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".go$",
+        "regexes": [
+            "GetFeatureVariable(?:Double|Boolean|Integer|String|JSON)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".py$",
+        "regexes": [
+            "get_feature_variable_(?:double|boolean|integer|string|json)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".php?",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|Json)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".swift?",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|JSON)[(](?:\\s*featureKey\\s*:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*variableKey\\s*:\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*userId\\s*:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*attributes\\s*:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    },
+    {
+        "file_extension": ".m?",
+        "regexes": [
+            "getFeatureVariable(?:Double|Boolean|Integer|String|JSON)[:]@?(?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*variableKey\\s*:\\s*@?\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*userId\\s*:\\s*@?\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*attributes\\s*:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[]])?"
+        ]
+    },
+    {
+        "file_extension": ".[fc]s?",
+        "regexes": [
+            "GetFeatureVariable(?:Double|Boolean|Integer|String|JSON)[(](?:\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\'](.*)[\\\"\\\\']\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*,\\s*[\\\"\\\\']?.*[\\\"\\\\']?\\s*[)])?"
+        ]
+    }
+]
