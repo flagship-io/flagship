@@ -20,4 +20,4 @@ FeatureFlag.instance().start("your_env_id", "your_api_key", Config())
 visitor = FeatureFlag.instance().create_visitor("user_#1234", {'isVip':True})
 visitor.synchronize_modifications()
 
-vip_feature_enabled = visitor..get_feature_variable_double('my_feature_key', 'OPT-flag-py', 'user_123', attributes)
+vip_feature_enabled = visitor.get_feature_variable_double('my_feature_key', 'OPT-flag-py', 'user_123', attributes)

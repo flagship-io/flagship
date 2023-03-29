@@ -3,5 +3,5 @@ FFVisitor * visitor1 = [[[[FeatureFlag sharedInstance] newVisitor:@"visitor_1" i
 
 /// Fetch flags
 [visitor1 fetchFlagsOnFetchCompleted:^{
-  LDFlag * flag = [visitor1 getFeatureVariableString:@"featureKey", variableKey:@"OPT-flag-m", userId:@"user_123", attributes:attributes];
+    flag = [visitor1 getFeatureVariableString:@"featureKey", variableKey:@"OPT-flag-m", userId:@"user_123", attributes:attributes];
 }];

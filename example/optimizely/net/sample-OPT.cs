@@ -10,4 +10,4 @@ var visitor = Ff.NewVisitor("<VISITOR_ID>")
 
   await visitor.FetchFlags();
 
-var flag = visitor..GetFeatureVariableDouble("my_feature_key", "OPT-flag-cs", "user_123", attributes);
+var flag = visitors.GetFeatureVariableDouble("my_feature_key", "OPT-flag-cs", "user_123", attributes);

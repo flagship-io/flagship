@@ -5,5 +5,4 @@ $visitor->updateContext("isVip", true);
 $visitor->fetchFlags();
 
 $flag = $visitor->getFeatureVariableDouble('my_feature_key', 'OPT-flag-php', 'user_123', $attributes);
-$flag = $visitor->variation("LD-number-flag-php", $context, 13);
 
