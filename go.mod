@@ -1,7 +1,5 @@
 module github.com/flagship-io/flagship
 
-replace github.com/flagship-io/codebase-analyzer => /home/blackbeard/codebase-analyzer
-
 go 1.18
 
 require (
@@ -12,6 +10,7 @@ require (
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.8.1
+	github.com/thoas/go-funk v0.9.2
 	golang.org/x/exp v0.0.0-20230213192124-5e25df0256eb
 )
 
@@ -19,7 +18,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/thoas/go-funk v0.9.2 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )
 
