@@ -5,6 +5,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package flag
 
 import (
+	"embed"
 	"encoding/json"
 	"log"
 	"os"
@@ -37,6 +38,12 @@ func RemoveDuplicateStr(strSlice []string) []string {
 	return funk.UniqString(strSlice)
 }
 
+//go:embed predefined-regexes/launchDarkly-regexes.json
+//go:embed predefined-regexes/optimizely-regexes.json
+//go:embed predefined-regexes/vwo-regexes.json
+//go:embed predefined-regexes/split-regexes.json
+var f embed.FS
+
 func PreRunConfiguration() {
 	var filesToExcludeArray []string
 	var searchCustomRegex string = SearchCustomRegex
@@ -52,19 +59,18 @@ func PreRunConfiguration() {
 
 	if LaunchDarkly {
 
-		bytes, err := os.ReadFile("predefined-regexes/launchDarkly-regexes.json")
+		bytes, err := f.ReadFile("predefined-regexes/launchDarkly-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
 		searchCustomRegex = string(bytes)
 
-		//searchCustomRegex = "[{\"file_extension\":\".js?\",\"regexes\": [\"variation(?:Detail)?[(](?:\\\\s*[\\\"\\\\'](.*?)[\\\"\\\\']\\\\s*(?:,\\\\s*([\\\"\\\\'].*\\\\s*[^\\\"]*[\\\"\\\\']|[^)]*))\\\\s*[)])?\"]}]"
 	}
 
 	if Optimizely {
 
-		bytes, err := os.ReadFile("predefined-regexes/optimizely-regexes.json")
+		bytes, err := f.ReadFile("predefined-regexes/optimizely-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
@@ -74,7 +80,7 @@ func PreRunConfiguration() {
 
 	if VWO {
 
-		bytes, err := os.ReadFile("predefined-regexes/vwo-regexes.json")
+		bytes, err := f.ReadFile("predefined-regexes/vwo-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
@@ -85,7 +91,7 @@ func PreRunConfiguration() {
 
 	if Split {
 
-		bytes, err := os.ReadFile("predefined-regexes/split-regexes.json")
+		bytes, err := f.ReadFile("predefined-regexes/split-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
