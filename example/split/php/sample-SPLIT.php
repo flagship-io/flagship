@@ -4,5 +4,5 @@ $visitor = FeatureFlag::newVisitor("your_visitor_id")->build();
 $visitor->updateContext("isVip", true);
 $visitor->fetchFlags();
 
-$flag = $visitor->getTreatment($key, 'SPLITIO-flag-php');
+$flag = $visitor->getTreatment($key, 'SPLIT-flag-php');
 

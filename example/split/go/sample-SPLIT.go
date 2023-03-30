@@ -26,6 +26,6 @@ func main() {
 
 	featureFlagVisitor.UpdateContext(newContext)
 
-	flagValue, _ := featureFlagVisitor.Treatment("key", "SPLITIO-flag-go", nil)
+	flagValue, _ := featureFlagVisitor.Treatment("key", "SPLIT-flag-go", nil)
 
 }

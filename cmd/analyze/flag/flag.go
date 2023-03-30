@@ -29,7 +29,7 @@ var (
 	LaunchDarkly        bool
 	Optimizely          bool
 	VWO                 bool
-	SplitIO             bool
+	Split               bool
 )
 var FSConfig *cbaConfig.Config
 
@@ -52,7 +52,7 @@ func PreRunConfiguration() {
 
 	if LaunchDarkly {
 
-		bytes, err := os.ReadFile("predefined-regexes/launch-darkly-regexes.json")
+		bytes, err := os.ReadFile("predefined-regexes/launchDarkly-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
@@ -83,9 +83,9 @@ func PreRunConfiguration() {
 
 	}
 
-	if SplitIO {
+	if Split {
 
-		bytes, err := os.ReadFile("predefined-regexes/split-io-regexes.json")
+		bytes, err := os.ReadFile("predefined-regexes/split-regexes.json")
 
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
@@ -135,10 +135,10 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\", \".yarn\", \"node_modules\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
-	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launch-darkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
+	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launchDarkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
 	FlagCmd.PersistentFlags().BoolVarP(&Optimizely, "optimizely", "", false, "analyze flags made with optimizely (only latest ones)")
 	FlagCmd.PersistentFlags().BoolVarP(&VWO, "vwo", "", false, "analyze flags made with VWO (only latest ones)")
-	FlagCmd.PersistentFlags().BoolVarP(&SplitIO, "split-io", "", false, "analyze flags made with Split-io (only latest ones)")
+	FlagCmd.PersistentFlags().BoolVarP(&Split, "split", "", false, "analyze flags made with Split (only latest ones)")
 }
 
 func initConfig() {

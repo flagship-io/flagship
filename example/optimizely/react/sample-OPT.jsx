@@ -1,7 +1,7 @@
 import React from "react";
 
 export const MyReactComponent = () => {
-    const backgroundColorFlag = instance.getFeatureVariables('OPT-number-flag-jsx')
+    const backgroundColorFlag = instance.getFeatureVariables('OPT-flag-jsx')
 
     return (
         <div

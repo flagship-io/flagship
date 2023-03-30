@@ -20,4 +20,4 @@ FeatureFlag.instance().start("your_env_id", "your_api_key", Config())
 visitor = FeatureFlag.instance().create_visitor("user_#1234", {'isVip':True})
 visitor.synchronize_modifications()
 
-vip_feature_enabled = visitor.get_treatment(key, 'SPLITIO-flag-py')
+vip_feature_enabled = visitor.get_treatment(key, 'SPLIT-flag-py')

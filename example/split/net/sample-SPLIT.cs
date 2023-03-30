@@ -10,4 +10,4 @@ var visitor = Ff.NewVisitor("<VISITOR_ID>")
 
   await visitor.FetchFlags();
 
-var flag = visitor.GetTreatment(key, "SPLITIO-flag-cs");
+var flag = visitor.GetTreatment(key, "SPLIT-flag-cs");

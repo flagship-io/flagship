@@ -47,7 +47,7 @@
 - .php
 - .ts
 
-## Supported file languages for SplitIO
+## Supported file languages for Split
 - .cs
 - .go
 - .java
@@ -56,6 +56,3 @@
 - .py
 - .php
 - .ts
-
-
-

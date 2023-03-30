@@ -10,7 +10,7 @@ visitor.on("ready",  (error) => {
         return;
     }
 
-    const btnColorFlag: string = client.getTreatment(key, 'SPLITIO-flag-ts');
+    const btnColorFlag: string = client.getTreatment(key, 'SPLIT-flag-ts');
 
 });
 
