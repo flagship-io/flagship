@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"strings"
 
 	cbaConfig "github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
@@ -27,10 +28,7 @@ var (
 	SearchCustomRegex   string
 	CustomRegexJsonFile string
 	CustomRegexJson     string
-	LaunchDarkly        bool
-	Optimizely          bool
-	VWO                 bool
-	Split               bool
+	OriginPlatform      string
 )
 var FSConfig *cbaConfig.Config
 
@@ -38,7 +36,7 @@ func RemoveDuplicateStr(strSlice []string) []string {
 	return funk.UniqString(strSlice)
 }
 
-//go:embed predefined-regexes/launchDarkly-regexes.json
+//go:embed predefined-regexes/launchdarkly-regexes.json
 //go:embed predefined-regexes/optimizely-regexes.json
 //go:embed predefined-regexes/vwo-regexes.json
 //go:embed predefined-regexes/split-regexes.json
@@ -57,47 +55,12 @@ func PreRunConfiguration() {
 		searchCustomRegex = CustomRegexJson
 	}
 
-	if LaunchDarkly {
-
-		bytes, err := f.ReadFile("predefined-regexes/launchDarkly-regexes.json")
-
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
+	if OriginPlatform != "" {
+		competitorRegexed, exists := f.ReadFile("predefined-regexes/" + strings.ToLower(OriginPlatform) + "-regexes.json")
+		if exists != nil {
+			log.Println("error occurred when reading competitor file: competitor not found")
 		}
-		searchCustomRegex = string(bytes)
-
-	}
-
-	if Optimizely {
-
-		bytes, err := f.ReadFile("predefined-regexes/optimizely-regexes.json")
-
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-		searchCustomRegex = string(bytes)
-	}
-
-	if VWO {
-
-		bytes, err := f.ReadFile("predefined-regexes/vwo-regexes.json")
-
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-		searchCustomRegex = string(bytes)
-
-	}
-
-	if Split {
-
-		bytes, err := f.ReadFile("predefined-regexes/split-regexes.json")
-
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-		searchCustomRegex = string(bytes)
-
+		searchCustomRegex = string(competitorRegexed)
 	}
 
 	FSConfig = &cbaConfig.Config{
@@ -141,10 +104,7 @@ func init() {
 	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\", \".yarn\", \"node_modules\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
 	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
-	FlagCmd.PersistentFlags().BoolVarP(&LaunchDarkly, "launchDarkly", "", false, "analyze flags made with launchdarkly (only latest ones)")
-	FlagCmd.PersistentFlags().BoolVarP(&Optimizely, "optimizely", "", false, "analyze flags made with optimizely (only latest ones)")
-	FlagCmd.PersistentFlags().BoolVarP(&VWO, "vwo", "", false, "analyze flags made with VWO (only latest ones)")
-	FlagCmd.PersistentFlags().BoolVarP(&Split, "split", "", false, "analyze flags made with Split (only latest ones)")
+	FlagCmd.PersistentFlags().StringVarP(&OriginPlatform, "origin-platform", "", "", "analyze flags made with feature flag platform, we support launchdarkly, optimizely, split and vwo (latest version only)")
 }
 
 func initConfig() {
