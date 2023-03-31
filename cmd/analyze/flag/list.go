@@ -126,6 +126,10 @@ var listCmd = &cobra.Command{
 			log.Fatalf("error occurred in listed flag table: %s", err)
 		}
 
+		if CustomRegexJson != "" {
+			fmt.Fprintf(cmd.OutOrStdout(), "\n%sContribution: If this custom regexes comes from a competitor or it's an improuvement of existing regexes, we invite you to create a PR in our github repo: https://github.com/flagship-io/flagship \n", emoji.Sprint(":glowing_star:"))
+		}
+
 	},
 }
 
