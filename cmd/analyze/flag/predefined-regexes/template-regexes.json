@@ -1,0 +1,50 @@
+[
+    {
+        "file_extension": ".[jt]s$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".[jt]sx$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".java$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".kt$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".go$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".py$",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".php?",
+        "regexes": [
+            ""
+        ]
+    },
+    {
+        "file_extension": ".[fc]s?",
+        "regexes": [
+            ""
+        ]
+    }
+]

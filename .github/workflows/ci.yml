@@ -15,9 +15,9 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: Run tests
-        run: go test -race `go list ./... | grep -v cmd/analyze/competitor-example` -coverprofile cover.out.tmp
+        run: go test -race `go list ./... | grep -v cmd/analyze/code-samples` -coverprofile cover.out.tmp
       - name: Removes mocks from tests
-        run: cat cover.out.tmp | grep -v "mock_\|cmd/analyze/competitor-example" > cover.out
+        run: cat cover.out.tmp | grep -v "mock_\|cmd/analyze/code-samples-example" > cover.out
       - uses: codecov/codecov-action@v2
         with:
           file: ./cover.out
