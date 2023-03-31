@@ -33,7 +33,7 @@ func main() {
 	discountName, err := fsVisitor.GetModificationBool("showBtn", false, true)
 
 	// these flags will be analyzed using the custom-regex file example-regex.json
-	// try the command: flagship analyze flag list --json ./cmd/analyze/flag/example-regex.json --directory ./example/
+	// try the command: flagship analyze flag list --custom-regex-json ./cmd/analyze/flag/example-regex.json --directory ./cmd/analyze/code-samples/flagship/go/
 	flagValue, _ := example.BoolVariation("my-boolean-flag", false)
 	flagValue1, _ := example.StringVariation("my-string-flag", "defaltVal")
 	flagValue2, _ := example.Float64Variation("my-numbers-flag", 13.6)
