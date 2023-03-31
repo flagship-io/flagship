@@ -5,9 +5,11 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package flag
 
 import (
+	"embed"
 	"encoding/json"
 	"log"
 	"os"
+	"strings"
 
 	cbaConfig "github.com/flagship-io/codebase-analyzer/pkg/config"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
@@ -26,12 +28,19 @@ var (
 	SearchCustomRegex   string
 	CustomRegexJsonFile string
 	CustomRegexJson     string
+	OriginPlatform      string
 )
 var FSConfig *cbaConfig.Config
 
 func RemoveDuplicateStr(strSlice []string) []string {
 	return funk.UniqString(strSlice)
 }
+
+//go:embed predefined-regexes/launchdarkly-regexes.json
+//go:embed predefined-regexes/optimizely-regexes.json
+//go:embed predefined-regexes/vwo-regexes.json
+//go:embed predefined-regexes/split-regexes.json
+var f embed.FS
 
 func PreRunConfiguration() {
 	var filesToExcludeArray []string
@@ -44,6 +53,14 @@ func PreRunConfiguration() {
 
 	if CustomRegexJson != "" {
 		searchCustomRegex = CustomRegexJson
+	}
+
+	if OriginPlatform != "" {
+		competitorRegexed, exists := f.ReadFile("predefined-regexes/" + strings.ToLower(OriginPlatform) + "-regexes.json")
+		if exists != nil {
+			log.Println("error occurred when reading competitor file: competitor not found")
+		}
+		searchCustomRegex = string(competitorRegexed)
 	}
 
 	FSConfig = &cbaConfig.Config{
@@ -86,7 +103,8 @@ func init() {
 	FlagCmd.PersistentFlags().IntVarP(&NbLineCodeEdges, "code-edge", "", 1, "nombre of line code edges")
 	FlagCmd.PersistentFlags().StringVarP(&FilesToExclude, "files-exclude", "", "[\".git\", \".github\", \".vscode\", \".idea\", \".yarn\", \"node_modules\"]", "list of files to exclude in analysis")
 	FlagCmd.PersistentFlags().StringVarP(&SearchCustomRegex, "custom-regex", "", "", "regex for the pattern you want to analyze")
-	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that the regex for the pattern you want to analyze")
+	FlagCmd.PersistentFlags().StringVarP(&CustomRegexJsonFile, "custom-regex-json", "", "", "json file that contains the regex for the pattern you want to analyze")
+	FlagCmd.PersistentFlags().StringVarP(&OriginPlatform, "origin-platform", "", "", "analyze flags made with feature flag platform, we support launchdarkly, optimizely, split and vwo (latest version only)")
 }
 
 func initConfig() {

@@ -178,6 +178,14 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occurred in created flag table: %s", err)
 		}
+
+		if CustomRegexJson != "" {
+			fmt.Fprintf(cmd.OutOrStdout(), "\n%sContribution: If this custom regexes comes from a competitor or it's an improuvement of an existing regexes, we invite you to create a PR in our github repo: https://github.com/flagship-io/flagship \n", emoji.Sprint(":glowing_star:"))
+		}
+
+		if OriginPlatform != "" {
+			fmt.Fprintf(cmd.OutOrStdout(), "\n%sContribution: If these regexes is outdated or contains errors, we invite you to create an issue or contribute in our github repo: https://github.com/flagship-io/flagship \n", emoji.Sprint(":glowing_star:"))
+		}
 	},
 }
 
