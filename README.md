@@ -70,6 +70,10 @@ You can pull the project from github and build it using golang latest stable ver
 - Chadi Laoulaou [@Chadiii](https://github.com/chadiii)
 - Guillaume Jacquart [@GuillaumeJacquart](https://github.com/guillaumejacquart)
 
+## Contributing
+
+Please read our [contributing guide](./CONTRIBUTING.md).
+
 ## Licence
 
 [Apache License.](https://github.com/flagship-io/flagship/blob/main/LICENSE)
