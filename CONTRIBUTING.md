@@ -10,7 +10,7 @@ In order to contribute your custom regex make sure to:
 
 - Fork the project
 - Read the [documentation](https://docs.developers.flagship.io/docs/codebase-analyzer) on the codebase analyzer integration.
-- Create a predefined regex using the template `template-regexes.json` following the format origin_plateform-regexes.json in case of a new feature flag provider, if you want to improuve or fix an existing one just commit your changes.
+- Create a predefined regex using the template `template-regexes.json` following the format origin_plateform-regexes.json in case of a new feature flag provider, if you want to improve or fix an existing one just commit your changes.
 - Adapt the analyze command with your changes (if necessary).
 - Create a Pull Request.
 
