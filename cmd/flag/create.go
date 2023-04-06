@@ -23,10 +23,6 @@ var createCmd = &cobra.Command{
 		var data string
 		var predefinedValues_ []string
 
-		if DataRaw != "" && FlagName != "" {
-			log.Fatalln("error occurred: You can either use --data-raw or the flags --name --description --type --default-value to create a flag")
-		}
-
 		if DataRaw != "" {
 			data = DataRaw
 		} else {
