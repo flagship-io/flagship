@@ -1,11 +1,7 @@
 package models
 
 type Project struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-type ProjectRequest struct {
+	ID   string `json:"id,omitempty"`
 	Name string `json:"name"`
 }
 

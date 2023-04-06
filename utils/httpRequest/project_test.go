@@ -1,8 +1,11 @@
 package httprequest
 
 import (
+	"encoding/json"
+	"log"
 	"testing"
 
+	"github.com/flagship-io/flagship/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,8 +35,14 @@ func TestHTTPListProject(t *testing.T) {
 }
 
 func TestHTTPCreateProject(t *testing.T) {
-
-	respBody, err := HTTPCreateProject("testProjectName")
+	projectRequest := models.Project{
+		Name: "testProjectName",
+	}
+	projectRequestJSON, err := json.Marshal(projectRequest)
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
+	respBody, err := HTTPCreateProject(projectRequestJSON)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -42,8 +51,14 @@ func TestHTTPCreateProject(t *testing.T) {
 }
 
 func TestHTTPEditProject(t *testing.T) {
-
-	respBody, err := HTTPEditProject("testProjectID", "testProjectName1")
+	projectRequest := models.Project{
+		Name: "testProjectName1",
+	}
+	projectRequestJSON, err := json.Marshal(projectRequest)
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
+	respBody, err := HTTPEditProject("testProjectID", projectRequestJSON)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
