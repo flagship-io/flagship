@@ -48,26 +48,26 @@ func TestHTTPFlagUsage(t *testing.T) {
 
 func TestHTTPCreateFlag(t *testing.T) {
 
-	data := "{\"name\":\"testFlagName\", \"type\":\"string\", \"description\":\"testFlagDescription\", \"source\":\"manual\"}"
+	data := "{\"name\":\"testFlagName\", \"type\":\"string\", \"description\":\"testFlagDescription\", \"source\":\"cli\"}"
 
 	respBody, err := HTTPCreateFlag(data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"testFlagID\",\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"manual\"}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testFlagID\",\"name\":\"testFlagName\",\"type\":\"string\",\"description\":\"testFlagDescription\",\"source\":\"cli\"}"), respBody)
 }
 
 func TestHTTPEditFlag(t *testing.T) {
 
-	data := "{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"manual\"}"
+	data := "{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"cli\"}"
 
 	respBody, err := HTTPEditFlag("testFlagID", data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"testFlagID\",\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"manual\"}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testFlagID\",\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"cli\"}"), respBody)
 }
 
 func TestHTTPDeleteFlag(t *testing.T) {

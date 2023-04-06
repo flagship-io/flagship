@@ -15,7 +15,7 @@ var TestFlag = models.Flag{
 	Name:        "testFlagName",
 	Type:        "string",
 	Description: "testFlagDescription",
-	Source:      "manual",
+	Source:      "cli",
 }
 
 var TestFlag1 = models.Flag{
@@ -23,7 +23,7 @@ var TestFlag1 = models.Flag{
 	Name:        "testFlagName1",
 	Type:        "string",
 	Description: "testFlagDescription1",
-	Source:      "manual",
+	Source:      "cli",
 }
 
 var TestFlagEdit = models.Flag{
@@ -31,7 +31,7 @@ var TestFlagEdit = models.Flag{
 	Name:        "testFlagName1",
 	Type:        "string",
 	Description: "testFlagDescription1",
-	Source:      "manual",
+	Source:      "cli",
 }
 
 var TestFlagList = []models.Flag{
