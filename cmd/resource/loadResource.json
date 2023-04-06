@@ -23,14 +23,39 @@
                             {
                                 "name": "Original",
                                 "reference": true,
-                                "allocation": 50
+                                "allocation": 50,
+                                "modifications": {
+                                    "type": "FLAG",
+                                    "value": {
+                                        "color": "red"
+                                    }
+                                }
                             },
                             {
                                 "name": "Variation 1",
                                 "reference": false,
-                                "allocation": 50
+                                "allocation": 50,
+                                "modifications": {
+                                    "type": "FLAG",
+                                    "value": {
+                                        "color": "blue"
+                                    }
+                                }
                             }
-                        ]
+                        ],
+                        "targeting": {
+                            "targeting_groups": [
+                                {
+                                    "targetings": [
+                                        {
+                                            "operator": "EQUALS",
+                                            "key": "device",
+                                            "value": "firefox"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     }
                 ]
             }

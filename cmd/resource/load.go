@@ -298,6 +298,9 @@ func ScriptResource(resources []Resource) {
 		var response []byte
 		var responseData interface{}
 		var url = ""
+		var resourceName = ""
+		const color = "\033[0;33m"
+		const colorNone = "\033[0m"
 
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
@@ -307,18 +310,25 @@ func ScriptResource(resources []Resource) {
 		switch resource.Name {
 		case Project:
 			url = "/projects"
+			resourceName = "Project"
 		case Flag:
 			url = "/flags"
+			resourceName = "Flag"
 		case TargetingKey:
 			url = "/targeting_keys"
+			resourceName = "Targeting Key"
 		case Goal:
 			url = "/goals"
+			resourceName = "Goal"
 		case VariationGroup:
-			url = "/variable_groups"
+			url = "/variation_groups"
+			resourceName = "Variation Group"
 		case Variation:
 			url = "/variations"
+			resourceName = "Variation"
 		case Campaign:
 			url = "/campaigns"
+			resourceName = "Campaign"
 		}
 
 		err = json.Unmarshal(data, &resourceData)
@@ -365,7 +375,7 @@ func ScriptResource(resources []Resource) {
 			log.Fatalf("error occurred http call: %v\n", err)
 		}
 
-		fmt.Println(string(response))
+		fmt.Fprintf(os.Stdout, "%s - %s: %s %s\n", color, resourceName, colorNone, string(response))
 
 		err = json.Unmarshal(response, &responseData)
 
