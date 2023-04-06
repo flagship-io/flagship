@@ -35,7 +35,7 @@ type ResourceData struct {
 }
 
 func (f ProjectData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateProject(data)
+	return httprequest.HTTPCreateProject([]byte(data))
 }
 
 type CampaignData struct {
