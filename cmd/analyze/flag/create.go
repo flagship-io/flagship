@@ -50,6 +50,9 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	tbl.WithHeaderFormatter(headerFmt).WithFirstColumnFormatter(columnFmt).WithPadding(2)
 
 	var existedFlagKey []string
+	var multipleFlagRequest models.MultiFlagRequest
+	var multipleFlagResponse models.MultiFlagResponse
+	var multipleFlag []models.Flag
 
 	for _, flag := range listedFlags {
 		existedFlagKey = append(existedFlagKey, strings.ToLower(flag.Name))
@@ -65,7 +68,6 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 		for _, analyzedFlag := range r.Results {
 
 			var flagRequest models.Flag
-			var flagResponse models.Flag
 
 			if analyzedFlag.FlagKey == "" {
 				if !slices.Contains(flagLocationAddedToTable, fmt.Sprintf("%s:%d", r.File, analyzedFlag.LineNumber)) {
@@ -106,29 +108,39 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 				}
 			}
 
-			flagRequestJSON, err_ := json.Marshal(flagRequest)
-			if err_ != nil {
-				return err_
-			}
+			multipleFlag = append(multipleFlag, flagRequest)
+		}
 
-			createdFlag, errCreatedFlag := httprequest.HTTPCreateFlag(string(flagRequestJSON))
+		multipleFlagRequest.Flags = multipleFlag
 
-			if errCreatedFlag != nil {
-				return errCreatedFlag
-			}
+		multipleflagRequestJSON, err_ := json.Marshal(multipleFlagRequest)
+		if err_ != nil {
+			return err_
+		}
 
-			err_json := json.Unmarshal(createdFlag, &flagResponse)
+		createdFlags, errCreatedFlags := httprequest.HTTPCreateFlag(string(multipleflagRequestJSON))
 
-			if err_json != nil {
-				return err_json
-			}
+		if errCreatedFlags != nil {
+			return errCreatedFlags
+		}
 
-			if flagResponse.Id != "" {
+		err_json := json.Unmarshal(createdFlags, &multipleFlagResponse)
+
+		if err_json != nil {
+			return err_json
+		}
+
+		listExistingFlags, errListFlag := httprequest.HTTPListFlag()
+		if errListFlag != nil {
+			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
+		}
+
+		for _, flag := range listExistingFlags {
+			if slices.Contains(multipleFlagResponse.CreatedIds, flag.Id) {
 				flagCreatedLen += 1
-				existedFlagKey = append(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey))
-				tbl.AddRow(analyzedFlag.FlagKey, analyzedFlag.FlagType, analyzedFlag.FlagDefaultValue, fmt.Sprintf("%s:%d", pathArray[len(pathArray)-1], analyzedFlag.LineNumber), emoji.Sprint(":check_mark_button:"))
+				existedFlagKey = append(existedFlagKey, strings.ToLower(flag.Name))
+				tbl.AddRow(flag.Name, flag.Type, "", "", emoji.Sprint(":check_mark_button:"))
 			}
-
 		}
 	}
 

@@ -20,3 +20,11 @@ type FlagUsage struct {
 	CodeLineHighlight string `json:"code_line_highlight"`
 	Code              string `json:"code"`
 }
+
+type MultiFlagRequest struct {
+	Flags []Flag `json:"flags"`
+}
+
+type MultiFlagResponse struct {
+	CreatedIds []string `json:"created_ids"`
+}
