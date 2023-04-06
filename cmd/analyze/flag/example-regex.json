@@ -1,8 +1,8 @@
 [
     {
-        "file_extension": ".go?",
+        "file_extension": ".go$",
         "regexes": [
-            "(?:Bool|String|Float64)Variation[(](?:\\s*[\\\"'](.*)[\\\"']\\s*,\\s*([\\\"'].*\\s*[^\\\"]*[\\\"']|[^)]*))\\s*[)]"
+            "(?:Bool|String|Float64)Variation[(](?:(?:\\s*[\\\"'](.*)[\\\"']\\s*,\\s*([\\\"'].*\\s*[^\\\"]*[\\\"']|[^)]*))\\s*[)])?"
         ]
     }
 ]
