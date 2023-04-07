@@ -73,9 +73,9 @@ func TestHTTPDeleteProject(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestHTTPToggleProject(t *testing.T) {
+func TestHTTPSwitchProject(t *testing.T) {
 
-	err := HTTPToggleProject("testProjectID", "active")
+	err := HTTPSwitchProject("testProjectID", "active")
 
 	assert.Nil(t, err)
 }

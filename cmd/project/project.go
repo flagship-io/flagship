@@ -16,7 +16,7 @@ var (
 
 // ProjectCmd represents the project command
 var ProjectCmd = &cobra.Command{
-	Use:   "project [create|edit|get|list|delete|toggle]",
+	Use:   "project [create|edit|get|list|delete|switch]",
 	Short: "Manage your projects",
 	Long:  `Manage your projects`,
 	Run: func(cmd *cobra.Command, args []string) {

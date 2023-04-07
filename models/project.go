@@ -5,6 +5,6 @@ type Project struct {
 	Name string `json:"name"`
 }
 
-type ProjectToggleRequest struct {
+type ProjectSwitchRequest struct {
 	State string `json:"state"`
 }

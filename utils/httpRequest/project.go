@@ -25,8 +25,8 @@ func HTTPEditProject(id string, data []byte) ([]byte, error) {
 	return HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, data)
 }
 
-func HTTPToggleProject(id, state string) error {
-	projectRequest := models.ProjectToggleRequest{
+func HTTPSwitchProject(id, state string) error {
+	projectRequest := models.ProjectSwitchRequest{
 		State: state,
 	}
 
