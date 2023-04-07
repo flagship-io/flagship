@@ -25,17 +25,17 @@ func HTTPEditCampaign(id, data string) ([]byte, error) {
 	return HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id, []byte(data))
 }
 
-func HTTPToggleCampaign(id, state string) error {
-	campaignToggleRequest := models.CampaignToggleRequest{
+func HTTPSwitchCampaign(id, state string) error {
+	campaignSwitchRequest := models.CampaignSwitchRequest{
 		State: state,
 	}
 
-	campaignToggleRequestJSON, err := json.Marshal(campaignToggleRequest)
+	campaignSwitchRequestJSON, err := json.Marshal(campaignSwitchRequest)
 	if err != nil {
 		return err
 	}
 
-	_, err = HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id+"/toggle", campaignToggleRequestJSON)
+	_, err = HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id+"/toggle", campaignSwitchRequestJSON)
 	return err
 }
 

@@ -17,6 +17,6 @@ type Scheduler struct {
 	TimeZone  string `json:"timezone"`
 }
 
-type CampaignToggleRequest struct {
+type CampaignSwitchRequest struct {
 	State string `json:"state"`
 }

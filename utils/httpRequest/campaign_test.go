@@ -70,9 +70,9 @@ func TestHTTPDeleteCampaign(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestHTTPToggleCampaign(t *testing.T) {
+func TestHTTPSwitchCampaign(t *testing.T) {
 
-	err := HTTPToggleCampaign("testCampaignID", "active")
+	err := HTTPSwitchCampaign("testCampaignID", "active")
 
 	assert.Nil(t, err)
 }
