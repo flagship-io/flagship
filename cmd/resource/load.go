@@ -202,51 +202,6 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 	return resources, nil
 }
 
-func loadResources(resources []Resource) (string, error) {
-
-	for _, resource := range resources {
-		var url = ""
-		var resp []byte
-		data, err := json.Marshal(resource.Data)
-		if err != nil {
-			return "", err
-		}
-
-		switch resource.Name {
-		case Project:
-			url = "/projects"
-		case Flag:
-			url = "/flags"
-		case TargetingKey:
-			url = "/targeting_keys"
-		case Goal:
-			url = "/goals"
-		case VariationGroup:
-			url = "/variable_groups"
-		case Variation:
-			url = "/variations"
-		case Campaign:
-			url = "/campaigns"
-		}
-
-		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+url, data)
-		}
-
-		if resource.Name == Goal || resource.Name == Campaign {
-			resp, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, data)
-		}
-
-		if err != nil {
-			return "", err
-		}
-
-		log.Println(string(resp))
-
-	}
-	return "done", nil
-}
-
 var gResources []Resource
 
 // LoadCmd represents the load command
@@ -255,11 +210,6 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		/* 		res, err := loadResources(gResources)
-		   		if err != nil {
-		   			log.Fatalf("error occurred: %v", err)
-		   		}
-		   		fmt.Fprintf(cmd.OutOrStdout(), "%s\n", res) */
 		ScriptResource(gResources)
 	},
 }
@@ -294,8 +244,8 @@ func ScriptResource(resources []Resource) {
 	resourceVariables := make(map[string]interface{})
 
 	for _, resource := range resources {
-		var resourceData map[string]interface{}
 		var response []byte
+		var resourceData map[string]interface{}
 		var responseData interface{}
 		var url = ""
 		var resourceName = ""
@@ -343,12 +293,11 @@ func ScriptResource(resources []Resource) {
 				if strings.Contains(v, "$") {
 					vTrim := strings.Trim(v, "$")
 					for k_, variable := range resourceVariables {
-						script, err := tengo.Eval(context.Background(), vTrim, map[string]interface{}{
+						script, _ := tengo.Eval(context.Background(), vTrim, map[string]interface{}{
 							k_: variable,
 						})
-
-						if err != nil {
-							log.Fatalf("error compiled: %v", err)
+						if script == nil {
+							continue
 						}
 						resourceData[k] = script.(string)
 					}
