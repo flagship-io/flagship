@@ -5,7 +5,7 @@
             "resourceVariable": "p1",
             "method": "create",
             "data": {
-                "name": "Generic wizard_all"
+                "name": "Resource loader Project"
             }
         },
         {
@@ -14,8 +14,8 @@
             "method": "create",
             "data": {
                 "project_id": "$p1.id",
-                "name": "campaign_resource_loader",
-                "description": "from resource loader",
+                "name": "Resource loader Campaign",
+                "description": "Loaded from resource loader",
                 "type": "ab",
                 "variation_groups": [
                     {
@@ -64,9 +64,9 @@
             "name": "flag",
             "resourceVariable": "f1",
             "data": {
-                "name": "Flag_created_with_resource_loader",
+                "name": "flag_created_with_resource_loader",
                 "type": "string",
-                "description": "I'am flag number 1, i have been created by the CLI resource loader",
+                "description": "Loaded from resource loaderr",
                 "source": "manual"
             }
         },
@@ -75,9 +75,9 @@
             "resourceVariable": "g1",
             "data": {
                 "type": "screenview",
-                "label": "goal_loader_resource_loader",
+                "label": "goal_created_with_resource_loader",
                 "operator": "contains",
-                "value": "working"
+                "value": "Performance"
             }
         },
         {
@@ -85,8 +85,8 @@
             "resourceVariable": "t1",
             "data": {
                 "type": "string",
-                "name": "targeting_resource_loader",
-                "description": "from resource loader"
+                "name": "targeting_key_created_with_resource_loader",
+                "description": "Loaded from resource loader"
             }
         }
     ]
