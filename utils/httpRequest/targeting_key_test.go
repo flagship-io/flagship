@@ -13,7 +13,7 @@ func TestHTTPGetTargetingKey(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testTargetingKeyID", respBody.ID)
+	assert.Equal(t, "testTargetingKeyID", respBody.Id)
 	assert.Equal(t, "testTargetingKeyName", respBody.Name)
 }
 
@@ -24,10 +24,10 @@ func TestHTTPListTargetingKey(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testTargetingKeyID", respBody[0].ID)
+	assert.Equal(t, "testTargetingKeyID", respBody[0].Id)
 	assert.Equal(t, "testTargetingKeyName", respBody[0].Name)
 
-	assert.Equal(t, "testTargetingKeyID1", respBody[1].ID)
+	assert.Equal(t, "testTargetingKeyID1", respBody[1].Id)
 	assert.Equal(t, "testTargetingKeyName1", respBody[1].Name)
 }
 

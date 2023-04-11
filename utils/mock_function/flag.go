@@ -41,7 +41,7 @@ var TestFlagList = []models.Flag{
 
 var TestFlagUsageList = []models.FlagUsage{
 	{
-		ID:                "testFlagUsageID",
+		Id:                "testFlagUsageID",
 		FlagKey:           "isVIP",
 		Repository:        "flagship",
 		FilePath:          "https://github.com/flagship-io/flagship",

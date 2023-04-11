@@ -11,17 +11,17 @@ import (
 )
 
 var TestProject = models.Project{
-	ID:   "testProjectID",
+	Id:   "testProjectID",
 	Name: "testProjectName",
 }
 
 var TestProject1 = models.Project{
-	ID:   "testProjectID1",
+	Id:   "testProjectID1",
 	Name: "testProjectName1",
 }
 
 var TestProjectEdit = models.Project{
-	ID:   "testProjectID",
+	Id:   "testProjectID",
 	Name: "testProjectName1",
 }
 
@@ -43,7 +43,7 @@ func APIProject() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID,
+	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestProject)
 			return resp, nil
@@ -64,21 +64,21 @@ func APIProject() {
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID,
+	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestProjectEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID,
+	httpmock.RegisterResponder("DELETE", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.ID+"/toggle",
+	httpmock.RegisterResponder("PATCH", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+TestProject.Id+"/toggle",
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(200, ""), nil
 		},

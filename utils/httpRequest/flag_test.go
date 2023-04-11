@@ -38,7 +38,7 @@ func TestHTTPFlagUsage(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testFlagUsageID", respBody[0].ID)
+	assert.Equal(t, "testFlagUsageID", respBody[0].Id)
 	assert.Equal(t, "isVIP", respBody[0].FlagKey)
 	assert.Equal(t, "flagship", respBody[0].Repository)
 	assert.Equal(t, "https://github.com/flagship-io/flagship", respBody[0].FilePath)

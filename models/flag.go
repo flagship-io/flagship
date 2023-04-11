@@ -11,7 +11,7 @@ type Flag struct {
 }
 
 type FlagUsage struct {
-	ID                string `json:"id"`
+	Id                string `json:"id,omitempty"`
 	FlagKey           string `json:"flag_key"`
 	Repository        string `json:"repository"`
 	FilePath          string `json:"file_path"`

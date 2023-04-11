@@ -96,14 +96,14 @@ func TestProjectDeleteCommand(t *testing.T) {
 	assert.Equal(t, "Project deleted\n", successOutput)
 }
 
-func TestProjectToggleCommand(t *testing.T) {
+func TestProjectSwitchCommand(t *testing.T) {
 
-	failOutput, _ := utils.ExecuteCommand(ProjectCmd, "toggle")
+	failOutput, _ := utils.ExecuteCommand(ProjectCmd, "switch")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"id\", \"status\" not set")
 
-	failOutput1, _ := utils.ExecuteCommand(ProjectCmd, "toggle", "--id=testProjectID", "--status=notKnown")
+	failOutput1, _ := utils.ExecuteCommand(ProjectCmd, "switch", "--id=testProjectID", "--status=notKnown")
 	assert.Equal(t, "Status can only have 3 values: active or paused or interrupted\n", failOutput1)
 
-	successOutput, _ := utils.ExecuteCommand(ProjectCmd, "toggle", "--id=testProjectID", "--status=active")
-	assert.Equal(t, "project set to active\n", successOutput)
+	successOutput, _ := utils.ExecuteCommand(ProjectCmd, "switch", "--id=testProjectID", "--status=active")
+	assert.Equal(t, "project status set to active\n", successOutput)
 }

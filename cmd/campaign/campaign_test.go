@@ -94,3 +94,15 @@ func TestCampaignDeleteCommand(t *testing.T) {
 	successOutput, _ := utils.ExecuteCommand(CampaignCmd, "delete", "--id=testCampaignID")
 	assert.Equal(t, "Campaign deleted\n", successOutput)
 }
+
+func TestCampaignSwitchCommand(t *testing.T) {
+
+	failOutput, _ := utils.ExecuteCommand(CampaignCmd, "switch")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"id\", \"status\" not set")
+
+	failOutput1, _ := utils.ExecuteCommand(CampaignCmd, "switch", "--id=testCampaignID", "--status=notKnown")
+	assert.Equal(t, "Status can only have 3 values: active or paused or interrupted\n", failOutput1)
+
+	successOutput, _ := utils.ExecuteCommand(CampaignCmd, "switch", "--id=testCampaignID", "--status=active")
+	assert.Equal(t, "campaign status set to active\n", successOutput)
+}

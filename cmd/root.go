@@ -15,6 +15,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/info"
 	"github.com/flagship-io/flagship/cmd/panic"
 	"github.com/flagship-io/flagship/cmd/project"
+	"github.com/flagship-io/flagship/cmd/resource"
 	targetingkey "github.com/flagship-io/flagship/cmd/targeting_key"
 	"github.com/flagship-io/flagship/cmd/token"
 	"github.com/flagship-io/flagship/cmd/user"
@@ -72,6 +73,7 @@ func addSubCommandPalettes() {
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(analyze.AnalyzeCmd)
+	rootCmd.AddCommand(resource.ResourceCmd)
 	rootCmd.AddCommand(info.InfoCmd)
 }
 func init() {

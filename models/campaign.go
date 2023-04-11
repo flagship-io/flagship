@@ -1,14 +1,14 @@
 package models
 
 type Campaign struct {
-	ID              string           `json:"id"`
-	ProjectID       string           `json:"project_id"`
-	Name            string           `json:"name"`
-	Description     string           `json:"description"`
-	Type            string           `json:"type"`
-	Status          string           `json:"status"`
-	VariationGroups []VariationGroup `json:"variation_groups"`
-	Scheduler       Scheduler        `json:"scheduler"`
+	Id              string            `json:"id,omitempty"`
+	ProjectId       string            `json:"project_id"`
+	Name            string            `json:"name"`
+	Description     string            `json:"description"`
+	Type            string            `json:"type"`
+	Status          string            `json:"status"`
+	VariationGroups *[]VariationGroup `json:"variation_groups"`
+	Scheduler       Scheduler         `json:"scheduler"`
 }
 
 type Scheduler struct {
@@ -17,6 +17,6 @@ type Scheduler struct {
 	TimeZone  string `json:"timezone"`
 }
 
-type CampaignToggleRequest struct {
+type CampaignSwitchRequest struct {
 	State string `json:"state"`
 }

@@ -1,7 +1,7 @@
 package models
 
 type Variation struct {
-	ID            string       `json:"id"`
+	Id            string       `json:"id,omitempty"`
 	Name          string       `json:"name"`
 	Reference     bool         `json:"reference"`
 	Allocation    int          `json:"allocation"`

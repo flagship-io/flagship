@@ -13,9 +13,9 @@ func TestHTTPGetCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testCampaignID", respBody.ID)
+	assert.Equal(t, "testCampaignID", respBody.Id)
 	assert.Equal(t, "testCampaignName", respBody.Name)
-	assert.Equal(t, "testProjectID", respBody.ProjectID)
+	assert.Equal(t, "testProjectID", respBody.ProjectId)
 	assert.Equal(t, "testCampaignDescription", respBody.Description)
 	assert.Equal(t, "toggle", respBody.Type)
 }
@@ -27,15 +27,15 @@ func TestHTTPListCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "testCampaignID", respBody[0].ID)
+	assert.Equal(t, "testCampaignID", respBody[0].Id)
 	assert.Equal(t, "testCampaignName", respBody[0].Name)
-	assert.Equal(t, "testProjectID", respBody[0].ProjectID)
+	assert.Equal(t, "testProjectID", respBody[0].ProjectId)
 	assert.Equal(t, "testCampaignDescription", respBody[0].Description)
 	assert.Equal(t, "toggle", respBody[0].Type)
 
-	assert.Equal(t, "testCampaignID1", respBody[1].ID)
+	assert.Equal(t, "testCampaignID1", respBody[1].Id)
 	assert.Equal(t, "testCampaignName1", respBody[1].Name)
-	assert.Equal(t, "testProjectID1", respBody[1].ProjectID)
+	assert.Equal(t, "testProjectID1", respBody[1].ProjectId)
 	assert.Equal(t, "testCampaignDescription1", respBody[1].Description)
 	assert.Equal(t, "toggle", respBody[1].Type)
 }
@@ -48,7 +48,7 @@ func TestHTTPCreateCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"testCampaignID\",\"project_id\":\"testProjectID\",\"name\":\"testCampaignName\",\"description\":\"testCampaignDescription\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"id\":\"\",\"name\":\"variationGroupName\",\"variations\":[{\"id\":\"\",\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"id\":\"\",\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testCampaignID\",\"project_id\":\"testProjectID\",\"name\":\"testCampaignName\",\"description\":\"testCampaignDescription\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"name\":\"variationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
 }
 
 func TestHTTPEditCampaign(t *testing.T) {
@@ -60,7 +60,7 @@ func TestHTTPEditCampaign(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, []byte("{\"id\":\"testCampaignID\",\"project_id\":\"testProjectID1\",\"name\":\"testCampaignName1\",\"description\":\"testCampaignDescription1\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"id\":\"\",\"name\":\"variationGroupName\",\"variations\":[{\"id\":\"\",\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"id\":\"\",\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
+	assert.Equal(t, []byte("{\"id\":\"testCampaignID\",\"project_id\":\"testProjectID1\",\"name\":\"testCampaignName1\",\"description\":\"testCampaignDescription1\",\"type\":\"toggle\",\"status\":\"\",\"variation_groups\":[{\"name\":\"variationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"blue\"}}},{\"name\":\"My variation 2\",\"reference\":false,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":{\"color\":\"red\"}}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"key\":\"isVIP\",\"operator\":\"CONTAINS\",\"value\":true}]}]}}],\"scheduler\":{\"start_date\":\"2022-02-01 10:00:00\",\"stop_date\":\"2022-02-02 08:00:00\",\"timezone\":\"Europe/Paris\"}}"), respBody)
 }
 
 func TestHTTPDeleteCampaign(t *testing.T) {
@@ -70,9 +70,9 @@ func TestHTTPDeleteCampaign(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestHTTPToggleCampaign(t *testing.T) {
+func TestHTTPSwitchCampaign(t *testing.T) {
 
-	err := HTTPToggleCampaign("testCampaignID", "active")
+	err := HTTPSwitchCampaign("testCampaignID", "active")
 
 	assert.Nil(t, err)
 }
