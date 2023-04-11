@@ -34,7 +34,7 @@ type ResourceData struct {
 	Id string `json:"id"`
 }
 
-func (f ProjectData) Save(data string) ([]byte, error) {
+func (f *ProjectData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateProject([]byte(data))
 }
 
@@ -47,7 +47,7 @@ type CampaignData struct {
 	VariationGroups []VariationGroupData `json:"variation_groups"`
 }
 
-func (f CampaignData) Save(data string) ([]byte, error) {
+func (f *CampaignData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateCampaign(data)
 }
 
@@ -55,7 +55,7 @@ type FlagData struct {
 	*models.Flag
 }
 
-func (f FlagData) Save(data string) ([]byte, error) {
+func (f *FlagData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateFlag(data)
 }
 
@@ -63,7 +63,7 @@ type GoalData struct {
 	*models.Goal
 }
 
-func (f GoalData) Save(data string) ([]byte, error) {
+func (f *GoalData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateGoal(data)
 }
 
@@ -71,7 +71,7 @@ type TargetingKeysData struct {
 	*models.TargetingKey
 }
 
-func (f TargetingKeysData) Save(data string) ([]byte, error) {
+func (f *TargetingKeysData) Save(data string) ([]byte, error) {
 	return httprequest.HTTPCreateTargetingKey(data)
 }
 
@@ -79,19 +79,9 @@ type VariationGroupData struct {
 	*models.VariationGroup
 }
 
-/* func (f VariationGroupData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateVariationGroup(campaignID, data)
-} */
-
 type VariationData struct {
 	*models.Variation
 }
-
-/* func (f VariationData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateVariation(campaignID, variationGroupID, data)
-} */
-
-// define structs for other resource types
 
 type ResourceType int
 
@@ -155,39 +145,27 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 		case Project:
 			projectData := ProjectData{}
 			err = json.Unmarshal(r.Data, &projectData)
-			data = projectData
-			//fmt.Println(data)
+			data = &projectData
 
-		//data = &ProjectData{}
 		case Flag:
 			flagData := FlagData{}
 			err = json.Unmarshal(r.Data, &flagData)
-			data = flagData
-			//fmt.Println(data)
+			data = &flagData
 
 		case TargetingKey:
 			targetingKeyData := TargetingKeysData{}
 			err = json.Unmarshal(r.Data, &targetingKeyData)
-			data = targetingKeyData
-			//fmt.Println(data)
+			data = &targetingKeyData
 
 		case Campaign:
 			campaignData := CampaignData{}
 			err = json.Unmarshal(r.Data, &campaignData)
-			data = campaignData
+			data = &campaignData
 
 		case Goal:
 			goalData := GoalData{}
 			err = json.Unmarshal(r.Data, &goalData)
-			data = goalData
-			//fmt.Println(data)
-
-			/* 		case VariationGroup:
-			variationGroupData := VariationGroupData{}
-			err = json.Unmarshal(r.Data, &variationGroupData)
-			data = variationGroupData
-			fmt.Println(data) */
-
+			data = &goalData
 		}
 
 		if err != nil {
@@ -197,8 +175,6 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 		resources = append(resources, Resource{Name: name, Data: data, ResourceVariable: r.ResourceVariable})
 	}
 
-	//flag := resources[1].Data.(ProjectData).Name
-	//fmt.Println(flag)
 	return resources, nil
 }
 
@@ -240,7 +216,6 @@ func initResource() {
 
 func ScriptResource(resources []Resource) {
 
-	//var resourceVariables map[string]interface{}
 	resourceVariables := make(map[string]interface{})
 
 	for _, resource := range resources {
