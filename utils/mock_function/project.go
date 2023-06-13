@@ -32,7 +32,7 @@ var TestProjectList = []models.Project{
 
 func APIProject() {
 
-	config.SetViper()
+	config.SetViperMock()
 
 	resp := utils.HTTPListResponse[models.Project]{
 		Items:             TestProjectList,

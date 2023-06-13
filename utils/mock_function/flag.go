@@ -53,7 +53,7 @@ var TestFlagUsageList = []models.FlagUsage{
 }
 
 func APIFlag() {
-	config.SetViper()
+	config.SetViperMock()
 
 	resp := utils.HTTPListResponse[models.Flag]{
 		Items:             TestFlagList,

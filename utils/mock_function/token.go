@@ -19,7 +19,7 @@ var TestToken = models.Token{
 }
 
 func APIToken() {
-	config.SetViper()
+	config.SetViperMock()
 
 	token := "token"
 	tokenExpiration := 0

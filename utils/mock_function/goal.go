@@ -40,7 +40,7 @@ var TestGoalList = []models.Goal{
 }
 
 func APIGoal() {
-	config.SetViper()
+	config.SetViperMock()
 
 	resp := utils.HTTPListResponse[models.Goal]{
 		Items:             TestGoalList,

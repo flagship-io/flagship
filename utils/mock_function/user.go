@@ -23,7 +23,7 @@ var TestUserList = []models.User{
 }
 
 func APIUser() {
-	config.SetViper()
+	config.SetViperMock()
 
 	email := "example@abtasty.com"
 

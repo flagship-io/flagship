@@ -5,6 +5,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package flag
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -16,6 +17,7 @@ import (
 	"github.com/kyokomi/emoji/v2"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"golang.org/x/exp/slices"
 )
 
@@ -54,6 +56,12 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	results, err := handler.ExtractFlagsInfo(FSConfig)
 	if err != nil {
 		return err
+	}
+
+	if viper.GetString("output_format") == "json" {
+		json, _ := json.Marshal(results)
+		fmt.Fprintln(cmd.OutOrStdout(), string(json))
+		return nil
 	}
 
 	for _, r := range results {

@@ -38,7 +38,7 @@ var TestTargetingKeyList = []models.TargetingKey{
 
 func APITargetingKey() {
 
-	config.SetViper()
+	config.SetViperMock()
 
 	resp := utils.HTTPListResponse[models.TargetingKey]{
 		Items:             TestTargetingKeyList,

@@ -66,7 +66,7 @@ var TestVariationGroupList = []models.VariationGroup{
 
 func APIVariationGroup() {
 
-	config.SetViper()
+	config.SetViperMock()
 
 	campaignID := "campaignID"
 

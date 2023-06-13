@@ -97,7 +97,7 @@ var TestCampaignlist = []models.Campaign{
 }
 
 func APICampaign() {
-	config.SetViper()
+	config.SetViperMock()
 
 	resp := utils.HTTPListResponse[models.Campaign]{
 		Items:             TestCampaignlist,

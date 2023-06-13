@@ -140,6 +140,15 @@ func SetViper() {
 	viper.GetViper().Set("client_id", "client_id")
 	viper.GetViper().Set("client_secret", "client_secret")
 	viper.GetViper().Set("token", "token")
+	viper.GetViper().Set("output_format", "table")
+}
+
+func SetViperMock() {
+	viper.GetViper().Set("account_id", "account_id")
+	viper.GetViper().Set("account_environment_id", "account_environment_id")
+	viper.GetViper().Set("client_id", "client_id")
+	viper.GetViper().Set("client_secret", "client_secret")
+	viper.GetViper().Set("token", "token")
 	viper.GetViper().Set("output_format", "json")
 }
 

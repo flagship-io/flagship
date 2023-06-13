@@ -50,7 +50,7 @@ var TestVariationList = []models.Variation{
 
 func APIVariation() {
 
-	config.SetViper()
+	config.SetViperMock()
 
 	campaignID := "campaignID"
 	variationGroupID := "variationGroupID"

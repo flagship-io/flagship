@@ -13,7 +13,7 @@ type TestRequest struct {
 }
 
 func Request() {
-	config.SetViper()
+	config.SetViperMock()
 
 	testRequest := TestRequest{
 		Name: "TestName",
