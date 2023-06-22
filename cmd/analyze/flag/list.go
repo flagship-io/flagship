@@ -59,7 +59,43 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	}
 
 	if viper.GetString("output_format") == "json" {
-		json, _ := json.Marshal(results)
+		var filesAnalyzed []models.FileAnalyzed
+		for _, r := range results {
+			var fileAnalyzed = models.FileAnalyzed{
+				File:    r.File,
+				FileURL: r.FileURL,
+				Error:   r.Error,
+			}
+			var flagsAnalyzed []models.FlagAnalyzed
+			for _, analyzedFlag := range r.Results {
+				var flagAnalyzed = models.FlagAnalyzed{
+					LineNumber:       analyzedFlag.LineNumber,
+					FlagKey:          analyzedFlag.FlagKey,
+					FlagDefaultValue: analyzedFlag.FlagDefaultValue,
+					FlagType:         analyzedFlag.FlagType,
+					Exists:           false,
+				}
+
+				if analyzedFlag.FlagKey == "" {
+					continue
+				}
+
+				if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
+					flagAnalyzed.Exists = true
+					flagsAnalyzed = append(flagsAnalyzed, flagAnalyzed)
+					continue
+				}
+				flagsAnalyzed = append(flagsAnalyzed, flagAnalyzed)
+
+			}
+			fileAnalyzed.Results = flagsAnalyzed
+			if len(fileAnalyzed.Results) != 0 {
+				filesAnalyzed = append(filesAnalyzed, fileAnalyzed)
+			}
+
+		}
+
+		json, _ := json.Marshal(filesAnalyzed)
 		fmt.Fprintln(cmd.OutOrStdout(), string(json))
 		return nil
 	}

@@ -12,10 +12,6 @@ func HTTPListFlag() ([]models.Flag, error) {
 	return HTTPGetAllPages[models.Flag](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags")
 }
 
-func HTTPFlagUsage() ([]models.FlagUsage, error) {
-	return HTTPGetAllPages[models.FlagUsage](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/flags_usage")
-}
-
 func HTTPGetFlag(id string) (models.Flag, error) {
 	return HTTPGetItem[models.Flag](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags/" + id)
 }
