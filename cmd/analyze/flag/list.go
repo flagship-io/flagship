@@ -21,7 +21,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-var all bool
+var codebaseAnalyzer bool
 
 func summaryTableFlagListed(flagExistLen, flagNotExistLen int) {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
@@ -162,7 +162,7 @@ var listCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 
-		if all {
+		if codebaseAnalyzer {
 			results, err := handler.ExtractFlagsInfo(FSConfig)
 			if err != nil {
 				log.Fatalf("error occurred when extracting flags info: %s", err)
@@ -196,5 +196,5 @@ var listCmd = &cobra.Command{
 func init() {
 	FlagCmd.AddCommand(listCmd)
 
-	listCmd.Flags().BoolVarP(&all, "all", "", false, "list codebase analyzed extract informations.")
+	listCmd.Flags().BoolVarP(&codebaseAnalyzer, "codebase-analyzer", "", false, "list codebase analyzer extract informations.")
 }
