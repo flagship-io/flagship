@@ -21,6 +21,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+var all bool
+
 func summaryTableFlagListed(flagExistLen, flagNotExistLen int) {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
@@ -160,6 +162,16 @@ var listCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 
+		if all {
+			results, err := handler.ExtractFlagsInfo(FSConfig)
+			if err != nil {
+				log.Fatalf("error occurred when extracting flags info: %s", err)
+			}
+			json, _ := json.Marshal(results)
+			fmt.Fprintln(cmd.OutOrStdout(), string(json))
+			return
+		}
+
 		listExistingFlags, errListFlag := httprequest.HTTPListFlag()
 		if errListFlag != nil {
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
@@ -183,4 +195,6 @@ var listCmd = &cobra.Command{
 
 func init() {
 	FlagCmd.AddCommand(listCmd)
+
+	listCmd.Flags().BoolVarP(&all, "all", "", false, "list codebase analyzed extract informations.")
 }
