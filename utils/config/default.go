@@ -1,5 +1,7 @@
 package config
 
+import "github.com/flagship-io/flagship/cmd/version"
+
 const (
 	OutputFormat         = "table"
 	GrantType            = "client_credentials"
@@ -12,3 +14,5 @@ const (
 	AccountEnvironmentID = "accountEnvironmentID"
 	CredentialsFile      = "credentials.yaml"
 )
+
+var DefaultUserAgent = "flagship-cli/" + version.Version
