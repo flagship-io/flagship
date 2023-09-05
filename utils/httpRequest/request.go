@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -64,6 +63,8 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Authorization", "Bearer "+viper.GetString("token"))
 	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
+	req.Header.Set("User-Agent", viper.GetString("user_agent"))
+
 	if body != nil {
 		req.Header.Add("Content-Type", `application/json`)
 	}
@@ -85,7 +86,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	default:
 		reader = resp.Body
 	}
-	respBody, err := ioutil.ReadAll(reader)
+	respBody, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
 	}
