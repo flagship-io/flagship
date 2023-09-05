@@ -31,7 +31,7 @@ var (
 	cfgFile      string
 	cmdToken     string
 	outputFormat string
-	UserAgent    string
+	userAgent    string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -81,7 +81,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cmdToken, "token", "t", "", "access token to manage flagship resources")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
-	rootCmd.PersistentFlags().StringVarP(&UserAgent, "user-agent", "u", config.DefaultUserAgent, "custom user agent")
+	rootCmd.PersistentFlags().StringVarP(&userAgent, "user-agent", "u", config.DefaultUserAgent, "custom user agent")
 
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
