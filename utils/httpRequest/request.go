@@ -16,6 +16,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var UserAgent string
+
 func regenerateToken(configFile string) {
 	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetInt("expiration"))
 	if err != nil {
@@ -63,7 +65,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Authorization", "Bearer "+viper.GetString("token"))
 	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
-	req.Header.Set("User-Agent", viper.GetString("user_agent"))
+	req.Header.Set("User-Agent", UserAgent)
 
 	if body != nil {
 		req.Header.Add("Content-Type", `application/json`)
