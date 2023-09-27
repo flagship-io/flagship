@@ -17,21 +17,8 @@ func TestSetOptionalsDefault(t *testing.T) {
 	assert.Equal(t, cfg.GetInt("expiration"), Expiration)
 }
 
-func TestWriteCredentials(t *testing.T) {
-	cfg, err := WriteCredentials("credentialsTest.yaml", "clientID", "clientSecret", "accountID", "accountEnvironmentID")
-
-	assert.NotNil(t, cfg)
-	assert.Nil(t, err)
-
-	assert.Equal(t, cfg.GetString("client_id"), ClientID)
-	assert.Equal(t, cfg.GetString("client_secret"), ClientSecret)
-	assert.Equal(t, cfg.GetString("account_id"), AccountID)
-	assert.Equal(t, cfg.GetString("account_environment_id"), AccountEnvironmentID)
-
-}
-
 func TestWriteOptionals(t *testing.T) {
-	cfg, err := WriteOptionals("credentialsTest.yaml", "client_credentials", "*", 86400)
+	cfg, err := WriteOptionals("test_configuration", "client_credentials", "*", 86400)
 
 	assert.NotNil(t, cfg)
 	assert.Nil(t, err)
@@ -42,16 +29,16 @@ func TestWriteOptionals(t *testing.T) {
 }
 
 func TestInitLocalConfigureConfig(t *testing.T) {
-	cfg := InitLocalConfigureConfig("/home/blackbeard/.flagship/credentialsTest.yaml")
+	cfg := InitLocalConfigureConfig("/home/blackbeard/.flagship/configurations/test_configuration.yaml")
 
 	assert.NotNil(t, cfg)
 
-	assert.Equal(t, cfg.ConfigFileUsed(), "/home/blackbeard/.flagship/credentialsTest.yaml")
+	assert.Equal(t, cfg.ConfigFileUsed(), "/home/blackbeard/.flagship/configurations/test_configuration.yaml")
 
 }
 
 func TestWriteToken(t *testing.T) {
-	cfg, err := WriteToken("credentialsTest.yaml", "token")
+	cfg, err := WriteToken("test_configuration", "token")
 
 	assert.NotNil(t, cfg)
 	assert.Nil(t, err)
