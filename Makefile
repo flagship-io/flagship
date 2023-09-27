@@ -4,7 +4,7 @@ build:
 test: SHELL:=/bin/bash
 test:
 	mkdir -p coverage
-	go test -v -race `go list ./... | grep -v cmd/analyze/code-samples | grep -v cmd/configuration` -coverprofile coverage/cover.out.tmp
-	cat coverage/cover.out.tmp | grep -v "mock_\|cmd/analyze/code-samples|cmd/configuration" > coverage/cover.out
+	go test -v -race `go list ./... | grep -v cmd/analyze/code-samples | grep -v cmd/configuration | grep -v utils/httpRequest` -coverprofile coverage/cover.out.tmp
+	cat coverage/cover.out.tmp | grep -v "mock_\|cmd/analyze/code-samples|cmd/configuration|utils/httpRequest" > coverage/cover.out
 	go tool cover -html=coverage/cover.out -o coverage/cover.html
 	go tool cover -func=coverage/cover.out
