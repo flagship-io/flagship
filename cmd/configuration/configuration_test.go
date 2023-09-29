@@ -1,6 +1,7 @@
 package configuration
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
@@ -15,6 +16,8 @@ func TestMain(m *testing.M) {
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
+
+	mockfunction.InitMockConfiguration()
 
 	m.Run()
 }
@@ -38,7 +41,7 @@ func TestConfigurationCreateCommand(t *testing.T) {
 
 	assert.Contains(t, failOutput, "Configuration not created")
 
-	successOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "create", "--name=testConfigurationName1", "-i=testConfigurationClientID", "-s=testConfigurationClientSecret", "-a=testConfigurationAccountID", "-e=testConfigurationAccountEnvID")
+	successOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "create", "--name=test_configuration", "-i=testConfigurationClientID", "-s=testConfigurationClientSecret", "-a=testConfigurationAccountID", "-e=testConfigurationAccountEnvID")
 	assert.Equal(t, "Configuration created successfully\n", successOutput)
 
 }
@@ -49,6 +52,34 @@ func TestConfigurationDeleteCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "delete")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"name\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "delete", "--name=testConfigurationName")
+	successOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "delete", "--name=test_configuration")
 	assert.Equal(t, "Configuration deleted successfully\n", successOutput)
+}
+
+func TestConfigurationListCommand(t *testing.T) {
+	config.CreateConfigurationFile(mockfunction.TestConfiguration.Name, mockfunction.TestConfiguration.ClientID, mockfunction.TestConfiguration.ClientSecret, mockfunction.TestConfiguration.AccountID, mockfunction.TestConfiguration.AccountEnvironmentID)
+
+	output, _ := utils.ExecuteCommand(ConfigurationCmd, "list")
+
+	err := json.Unmarshal([]byte(output), &testConfigurationList)
+
+	byt, err := json.Marshal(mockfunction.TestConfiguration)
+
+	assert.Nil(t, err)
+
+	assert.Contains(t, output, string(byt))
+}
+
+func TestConfigurationGetCommand(t *testing.T) {
+	config.CreateConfigurationFile(mockfunction.TestConfiguration.Name, mockfunction.TestConfiguration.ClientID, mockfunction.TestConfiguration.ClientSecret, mockfunction.TestConfiguration.AccountID, mockfunction.TestConfiguration.AccountEnvironmentID)
+
+	failOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "get")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"name\" not set")
+
+	successOutput, _ := utils.ExecuteCommand(ConfigurationCmd, "get", "--name=test_configuration")
+	err := json.Unmarshal([]byte(successOutput), &testConfiguration)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction.TestConfiguration, testConfiguration)
 }
