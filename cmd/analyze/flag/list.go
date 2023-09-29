@@ -21,6 +21,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+var codebaseAnalyzer bool
+
 func summaryTableFlagListed(flagExistLen, flagNotExistLen int) {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	columnFmt := color.New(color.FgYellow).SprintfFunc()
@@ -59,7 +61,43 @@ func flagListedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 	}
 
 	if viper.GetString("output_format") == "json" {
-		json, _ := json.Marshal(results)
+		var filesAnalyzed []models.FileAnalyzed
+		for _, r := range results {
+			var fileAnalyzed = models.FileAnalyzed{
+				File:    r.File,
+				FileURL: r.FileURL,
+				Error:   r.Error,
+			}
+			var flagsAnalyzed []models.FlagAnalyzed
+			for _, analyzedFlag := range r.Results {
+				var flagAnalyzed = models.FlagAnalyzed{
+					LineNumber:       analyzedFlag.LineNumber,
+					FlagKey:          analyzedFlag.FlagKey,
+					FlagDefaultValue: analyzedFlag.FlagDefaultValue,
+					FlagType:         analyzedFlag.FlagType,
+					Exists:           false,
+				}
+
+				if analyzedFlag.FlagKey == "" {
+					continue
+				}
+
+				if slices.Contains(existedFlagKey, strings.ToLower(analyzedFlag.FlagKey)) {
+					flagAnalyzed.Exists = true
+					flagsAnalyzed = append(flagsAnalyzed, flagAnalyzed)
+					continue
+				}
+				flagsAnalyzed = append(flagsAnalyzed, flagAnalyzed)
+
+			}
+			fileAnalyzed.Results = flagsAnalyzed
+			if len(fileAnalyzed.Results) != 0 {
+				filesAnalyzed = append(filesAnalyzed, fileAnalyzed)
+			}
+
+		}
+
+		json, _ := json.Marshal(filesAnalyzed)
 		fmt.Fprintln(cmd.OutOrStdout(), string(json))
 		return nil
 	}
@@ -124,6 +162,16 @@ var listCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 
+		if codebaseAnalyzer {
+			results, err := handler.ExtractFlagsInfo(FSConfig)
+			if err != nil {
+				log.Fatalf("error occurred when extracting flags info: %s", err)
+			}
+			json, _ := json.Marshal(results)
+			fmt.Fprintln(cmd.OutOrStdout(), string(json))
+			return
+		}
+
 		listExistingFlags, errListFlag := httprequest.HTTPListFlag()
 		if errListFlag != nil {
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
@@ -147,4 +195,6 @@ var listCmd = &cobra.Command{
 
 func init() {
 	FlagCmd.AddCommand(listCmd)
+
+	listCmd.Flags().BoolVarP(&codebaseAnalyzer, "codebase-analyzer", "", false, "list codebase analyzer extract informations.")
 }

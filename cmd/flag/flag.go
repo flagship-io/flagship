@@ -5,7 +5,6 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package flag
 
 import (
-	"github.com/flagship-io/flagship/cmd/flag/usage"
 	"github.com/spf13/cobra"
 )
 
@@ -27,8 +26,4 @@ var FlagCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
-}
-
-func init() {
-	FlagCmd.AddCommand(usage.UsageCmd)
 }

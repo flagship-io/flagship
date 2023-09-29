@@ -22,7 +22,6 @@ func TestMain(m *testing.M) {
 
 var testFlag models.Flag
 var testFlagList []models.Flag
-var testFlagUsageList []models.FlagUsage
 
 func TestFlagCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(FlagCmd)
@@ -91,15 +90,4 @@ func TestFlagDeleteCommand(t *testing.T) {
 
 	successOutput, _ := utils.ExecuteCommand(FlagCmd, "delete", "--id=testFlagID")
 	assert.Equal(t, "Flag deleted\n", successOutput)
-}
-
-func TestFlagUsageListCommand(t *testing.T) {
-
-	output, _ := utils.ExecuteCommand(FlagCmd, "usage", "get")
-
-	err := json.Unmarshal([]byte(output), &testFlagUsageList)
-
-	assert.Nil(t, err)
-
-	assert.Equal(t, mockfunction.TestFlagUsageList, testFlagUsageList)
 }

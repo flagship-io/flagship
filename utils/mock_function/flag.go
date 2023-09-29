@@ -39,19 +39,6 @@ var TestFlagList = []models.Flag{
 	TestFlag1,
 }
 
-var TestFlagUsageList = []models.FlagUsage{
-	{
-		Id:                "testFlagUsageID",
-		FlagKey:           "isVIP",
-		Repository:        "flagship",
-		FilePath:          "https://github.com/flagship-io/flagship",
-		Branch:            "main",
-		Line:              "Line116",
-		CodeLineHighlight: "codeLineHighlight",
-		Code:              "code",
-	},
-}
-
 func APIFlag() {
 	config.SetViperMock()
 
@@ -60,15 +47,6 @@ func APIFlag() {
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
 		TotalCount:        2,
-		ItemsPerPage:      10,
-		LastPage:          1,
-	}
-
-	respUsage := utils.HTTPListResponse[models.FlagUsage]{
-		Items:             TestFlagUsageList,
-		CurrentItemsCount: 2,
-		CurrentPage:       1,
-		TotalCount:        1,
 		ItemsPerPage:      10,
 		LastPage:          1,
 	}
@@ -83,13 +61,6 @@ func APIFlag() {
 	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, resp)
-			return resp, nil
-		},
-	)
-
-	httpmock.RegisterResponder("GET", utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/flags_usage",
-		func(req *http.Request) (*http.Response, error) {
-			resp, _ := httpmock.NewJsonResponse(200, respUsage)
 			return resp, nil
 		},
 	)

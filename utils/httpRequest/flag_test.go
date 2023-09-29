@@ -31,21 +31,6 @@ func TestHTTPListFlag(t *testing.T) {
 	assert.Equal(t, "testFlagName1", respBody[1].Name)
 }
 
-func TestHTTPFlagUsage(t *testing.T) {
-
-	respBody, err := HTTPFlagUsage()
-
-	assert.NotNil(t, respBody)
-	assert.Nil(t, err)
-
-	assert.Equal(t, "testFlagUsageID", respBody[0].Id)
-	assert.Equal(t, "isVIP", respBody[0].FlagKey)
-	assert.Equal(t, "flagship", respBody[0].Repository)
-	assert.Equal(t, "https://github.com/flagship-io/flagship", respBody[0].FilePath)
-	assert.Equal(t, "main", respBody[0].Branch)
-
-}
-
 func TestHTTPCreateFlag(t *testing.T) {
 
 	data := "{\"name\":\"testFlagName\", \"type\":\"string\", \"description\":\"testFlagDescription\", \"source\":\"cli\"}"
