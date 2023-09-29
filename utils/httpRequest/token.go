@@ -11,8 +11,8 @@ import (
 )
 
 func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (string, error) {
-	var authenticationResponse models.AuthenticationResponse
-	authRequest := models.AuthenticationRequest{
+	var authenticationResponse models.TokenResponse
+	authRequest := models.TokenRequest{
 		ClientID:     client_id,
 		ClientSecret: client_secret,
 		Scope:        scope,

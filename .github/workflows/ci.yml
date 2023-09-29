@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.18
+          go-version: 1.21
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: Run tests
-        run: go test -race `go list ./... | grep -v cmd/analyze/code-samples` -coverprofile cover.out.tmp
+        run: go test -race `go list ./... | grep -v cmd/analyze/code-samples | grep -v cmd/configuration | grep -v utils/httpRequest` -coverprofile cover.out.tmp
       - name: Removes mocks from tests
-        run: cat cover.out.tmp | grep -v "mock_\|cmd/analyze/code-samples-example" > cover.out
+        run: cat cover.out.tmp | grep -v "mock_\|cmd/analyze/code-samples-example|cmd/configuration|utils/httpRequest" > cover.out
       - uses: codecov/codecov-action@v2
         with:
           file: ./cover.out

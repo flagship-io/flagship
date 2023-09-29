@@ -24,7 +24,7 @@ func APIToken() {
 	token := "token"
 	tokenExpiration := 0
 
-	testAuthenticationResponse := models.AuthenticationResponse{
+	testAuthenticationResponse := models.TokenResponse{
 		AccessToken:  "access_token",
 		RefreshToken: "refresh_token",
 	}

@@ -15,6 +15,7 @@ func TestMain(m *testing.M) {
 	mockfunction.APIProject()
 	mockfunction.APICampaign()
 	mockfunction.APIFlag()
+	mockfunction.APIGoal()
 	mockfunction.APITargetingKey()
 	mockfunction.APIVariationGroup()
 	mockfunction.APIVariation()

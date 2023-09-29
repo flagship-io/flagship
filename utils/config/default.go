@@ -12,7 +12,6 @@ const (
 	Token                = "token"
 	AccountID            = "accountID"
 	AccountEnvironmentID = "accountEnvironmentID"
-	CredentialsFile      = "credentials.yaml"
 )
 
 var DefaultUserAgent = "flagship-cli/" + version.Version

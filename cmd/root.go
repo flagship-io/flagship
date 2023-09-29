@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/analyze"
-	"github.com/flagship-io/flagship/cmd/authorization"
 	"github.com/flagship-io/flagship/cmd/campaign"
+	"github.com/flagship-io/flagship/cmd/configuration"
 	"github.com/flagship-io/flagship/cmd/flag"
 	"github.com/flagship-io/flagship/cmd/goal"
 	"github.com/flagship-io/flagship/cmd/info"
@@ -61,8 +61,7 @@ func Execute() {
 func addSubCommandPalettes() {
 	rootCmd.AddCommand(campaign.CampaignCmd)
 	rootCmd.AddCommand(project.ProjectCmd)
-	rootCmd.AddCommand(authorization.ConfigureCmd)
-	rootCmd.AddCommand(authorization.AuthenticateCmd)
+	rootCmd.AddCommand(configuration.ConfigurationCmd)
 	rootCmd.AddCommand(panic.PanicCmd)
 	rootCmd.AddCommand(user.UserCmd)
 	rootCmd.AddCommand(variation_group.VariationGroupCmd)
@@ -102,10 +101,10 @@ func initConfig() {
 		homeDir, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 		// Search config in home directory with name ".flagship" (without extension).
-		viper.SetConfigFile(homeDir + "/.flagship/credentials.yaml")
+		viper.SetConfigFile(homeDir + "/.flagship/configurations/.cli.yaml")
+		viper.MergeInConfig()
+		if viper.GetString("current_used_configuration") != "" {
+			config.SelectConfiguration(viper.GetString("current_used_configuration"))
+		}
 	}
-
-	// read in environment variables that match
-	// If a config file is found, read it in.
-	viper.MergeInConfig()
 }

@@ -18,7 +18,7 @@ import (
 
 var UserAgent string
 
-func regenerateToken(configFile string) {
+func regenerateToken(configName string) {
 	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetInt("expiration"))
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -27,7 +27,7 @@ func regenerateToken(configFile string) {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
 		fmt.Fprintln(os.Stdout, "Token generated successfully")
-		config.WriteToken(configFile, token)
+		config.WriteToken(configName, token)
 	}
 }
 
@@ -59,7 +59,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	}
 
 	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
-		regenerateToken(config.CredentialsFile)
+		regenerateToken(viper.GetString("current_used_configuration"))
 	}
 
 	req.Header.Add("Accept", `*/*`)
@@ -95,7 +95,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 
 	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
 		counter = true
-		regenerateToken(config.CredentialsFile)
+		regenerateToken(viper.GetString("current_used_configuration"))
 		return HTTPRequest(method, resource, body)
 	}
 	return respBody, err
