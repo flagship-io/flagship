@@ -30,7 +30,6 @@ var createCmd = &cobra.Command{
 
 		if credentialsFile != "" {
 			conf := config.ReadCredentialsFromFile(credentialsFile)
-			fmt.Println(conf.GetString("name"))
 			if slices.Contains(existingConfigurationsName, conf.GetString("name")) {
 				fmt.Fprintln(cmd.OutOrStdout(), "Configuration name already exists")
 				return
