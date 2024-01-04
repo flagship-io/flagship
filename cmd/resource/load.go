@@ -21,6 +21,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	resourceFile string
+	outputFile   string
+)
+
 type Data interface {
 	Save(data string) ([]byte, error)
 	Delete(id string) error
@@ -132,6 +137,11 @@ type Resource struct {
 	Method           string
 }
 
+type ResourceCmdStruct struct {
+	Name string `json:"name,omitempty"`
+	Data string `json:"data,omitempty"`
+}
+
 func UnmarshalConfig(filePath string) ([]Resource, error) {
 	var config struct {
 		Resources []struct {
@@ -208,10 +218,14 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		loadResult := ScriptResource(cmd, gResources)
-		if err := json.NewEncoder(cmd.OutOrStdout()).Encode(loadResult); err != nil {
-			panic(err)
+		jsonBytes := ScriptResource(cmd, gResources)
+		if outputFile != "" {
+			os.WriteFile(outputFile, jsonBytes, os.ModePerm)
+			fmt.Fprintf(cmd.OutOrStdout(), "File created at %s\n", outputFile)
+			return
 		}
+
+		fmt.Fprintf(cmd.OutOrStdout(), "%s", string(jsonBytes))
 	},
 }
 
@@ -223,6 +237,8 @@ func init() {
 	if err := loadCmd.MarkFlagRequired("file"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
+
+	loadCmd.Flags().StringVarP(&outputFile, "output-file", "", "", "result of the command that contains all resource informations")
 
 	ResourceCmd.AddCommand(loadCmd)
 }
@@ -239,13 +255,15 @@ func initResource() {
 	}
 }
 
-func ScriptResource(cmd *cobra.Command, resources []Resource) []string {
+func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 
 	resourceVariables := make(map[string]interface{})
 	var loadResultJSON []string
+	var loadResultOutputFile []ResourceCmdStruct
 
 	for _, resource := range resources {
 		var response []byte
+		var resultOutputFile ResourceCmdStruct
 		var resourceData map[string]interface{}
 		var responseData interface{}
 		var url = ""
@@ -325,12 +343,18 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []string {
 			if resource.Name == Goal || resource.Name == Campaign {
 				response, err = httprequest.HTTPRequest(httpMethod, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
 			}
+
+			resultOutputFile = ResourceCmdStruct{
+				Name: resourceName,
+				Data: string(response),
+			}
+			loadResultOutputFile = append(loadResultOutputFile, resultOutputFile)
+
 		}
 
 		if httpMethod == "DELETE" {
 			if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
 				response, err = httprequest.HTTPRequest(httpMethod, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+url+"/"+fmt.Sprintf("%v", resourceData["id"]), nil)
-
 			}
 
 			if resource.Name == Goal || resource.Name == Campaign {
@@ -364,7 +388,24 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []string {
 
 			resourceVariables[resource.ResourceVariable] = responseData
 		}
+
 		loadResultJSON = append(loadResultJSON, string(response))
 	}
-	return loadResultJSON
+
+	var jsonBytes []byte
+	var jsonString any
+
+	if outputFile != "" {
+		jsonString = loadResultOutputFile
+	} else {
+		jsonString = loadResultJSON
+	}
+
+	jsonBytes, err := json.Marshal(jsonString)
+
+	if err != nil {
+		log.Fatalf("Error marshaling struct: %v", err)
+	}
+
+	return jsonBytes
 }

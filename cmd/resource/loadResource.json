@@ -61,7 +61,60 @@
             }
         },
         {
+            "name": "campaign",
+            "resourceVariable": "c2",
+            "method": "create",
+            "data": {
+                "project_id": "$p1.id",
+                "name": "Resource loader Campaign to delete",
+                "description": "Loaded from resource loader",
+                "type": "ab",
+                "variation_groups": [
+                    {
+                        "variations": [
+                            {
+                                "name": "Original",
+                                "reference": true,
+                                "allocation": 50,
+                                "modifications": {
+                                    "type": "FLAG",
+                                    "value": {
+                                        "color": "red"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "Variation 1",
+                                "reference": false,
+                                "allocation": 50,
+                                "modifications": {
+                                    "type": "FLAG",
+                                    "value": {
+                                        "color": "blue"
+                                    }
+                                }
+                            }
+                        ],
+                        "targeting": {
+                            "targeting_groups": [
+                                {
+                                    "targetings": [
+                                        {
+                                            "operator": "EQUALS",
+                                            "key": "device",
+                                            "value": "firefox"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "name": "flag",
+            "method": "create",
             "resourceVariable": "f1",
             "data": {
                 "name": "flag_created_with_resource_loader",
@@ -72,6 +125,7 @@
         },
         {
             "name": "goal",
+            "method": "create",
             "resourceVariable": "g1",
             "data": {
                 "type": "screenview",
@@ -82,11 +136,20 @@
         },
         {
             "name": "targeting_key",
+            "method": "create",
             "resourceVariable": "t1",
             "data": {
                 "type": "string",
                 "name": "targeting_key_created_with_resource_loader",
                 "description": "Loaded from resource loader"
+            }
+        },
+        {
+            "name": "campaign",
+            "resourceVariable": "c8",
+            "method": "delete",
+            "data": {
+                "id": "$c2.id"
             }
         }
     ]
