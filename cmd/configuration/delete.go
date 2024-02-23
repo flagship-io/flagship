@@ -23,7 +23,7 @@ var deleteCmd = &cobra.Command{
 		cobra.CheckErr(err)
 
 		if _, err := os.Stat(homeDir + "/.flagship/configurations"); errors.Is(err, os.ErrNotExist) {
-			err := os.Mkdir(homeDir+"/.flagship/configurations", os.ModePerm)
+			err := os.MkdirAll(homeDir+"/.flagship/configurations", os.ModePerm)
 			if err != nil {
 				log.Fatal(err)
 			}

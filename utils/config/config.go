@@ -37,7 +37,7 @@ func SetPathForConfigName(fileName string) (filePath string) {
 	cobra.CheckErr(err)
 
 	if _, err := os.Stat(homeDir + "/.flagship/configurations"); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(homeDir+"/.flagship/configurations", os.ModePerm)
+		err := os.MkdirAll(homeDir+"/.flagship/configurations", os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -56,7 +56,7 @@ func GetConfigurationsName() ([]string, error) {
 	var fileNames []string
 
 	if _, err := os.Stat(homeDir + "/.flagship/configurations"); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(homeDir+"/.flagship/configurations", os.ModePerm)
+		err := os.MkdirAll(homeDir+"/.flagship/configurations", os.ModePerm)
 		if err != nil {
 			log.Fatal(err)
 		}
