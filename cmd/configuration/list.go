@@ -6,6 +6,7 @@ package configuration
 import (
 	"log"
 	"os"
+	"fmt"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
@@ -26,7 +27,7 @@ var listCmd = &cobra.Command{
 		existingConfigurationsName, nil := config.GetConfigurationsName()
 
 		for _, fileName := range existingConfigurationsName {
-			if fileName != "" {
+			if fileName != "" && fileName != ".cli" {
 				var configurationYaml models.ConfigurationYaml
 				var configuration models.Configuration
 				yamlFile, err := os.ReadFile(config.SetPathForConfigName(fileName))
