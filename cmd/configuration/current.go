@@ -29,7 +29,7 @@ var currentCmd = &cobra.Command{
 		v.SetConfigFile(configFilepath)
 		v.MergeInConfig()
 
-		configurationName := v.GetString("current_used_configuration")
+		configurationName := v.GetString("name")
 
 		yamlFile, err := os.ReadFile(config.SetPathForConfigName(configurationName))
 		if err != nil {
