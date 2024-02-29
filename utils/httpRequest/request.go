@@ -59,7 +59,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	}
 
 	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
-		regenerateToken(viper.GetString("current_used_configuration"))
+		regenerateToken(viper.GetString("name"))
 	}
 
 	req.Header.Add("Accept", `*/*`)
@@ -95,7 +95,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 
 	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
 		counter = true
-		regenerateToken(viper.GetString("current_used_configuration"))
+		regenerateToken(viper.GetString("name"))
 		return HTTPRequest(method, resource, body)
 	}
 	return respBody, err
