@@ -6,7 +6,6 @@ package configuration
 import (
 	"log"
 	"os"
-	"fmt"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
