@@ -39,11 +39,11 @@ var rootCmd = &cobra.Command{
 	Use:   "flagship",
 	Short: "flagship manage your campaigns, project, users etc...",
 	Long: `flagship is the main command, used to manage campaigns, projects, users, variation groups and variations
-	
-	Flagship is a feature flagging platform for modern developers. 
-	Separate code deployments from feature releases to accelerate development cycles and mitigate risks.
-	
-	Complete documentation is available at https://docs.developers.flagship.io/docs/flagship-command-line-interface`,
+    
+    Flagship is a feature flagging platform for modern developers. 
+    Separate code deployments from feature releases to accelerate development cycles and mitigate risks.
+    
+    Complete documentation is available at https://docs.developers.flagship.io/docs/flagship-command-line-interface`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Root().Help()
 	},
