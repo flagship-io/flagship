@@ -2,7 +2,6 @@ package configuration
 
 import (
 	"encoding/json"
-	"os"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
@@ -17,7 +16,6 @@ func TestMain(m *testing.M) {
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
-	defer os.Remove(config.SetPathForConfigName("test_configuration"))
 
 	mockfunction.InitMockConfiguration()
 

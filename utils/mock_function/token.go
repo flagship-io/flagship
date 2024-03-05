@@ -22,7 +22,7 @@ func APIToken() {
 	config.SetViperMock()
 
 	token := "token"
-	tokenExpiration := 0
+	tokenExpiration := 86400
 
 	testAuthenticationResponse := models.TokenResponse{
 		AccessToken:  "access_token",
