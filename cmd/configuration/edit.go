@@ -10,6 +10,7 @@ import (
 
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -39,22 +40,22 @@ var editCmd = &cobra.Command{
 			return
 		}
 
-		conf := config.ReadCredentialsFromFile(config.SetPathForConfigName(ConfigurationName))
+		config.ReadCredentialsFromFile(config.SetPathForConfigName(ConfigurationName))
 
 		if newConfigurationName == "" {
-			newConfigurationName = conf.GetString("name")
+			newConfigurationName = viper.GetString("name")
 		}
 		if ConfigurationClientID == "" {
-			ConfigurationClientID = conf.GetString("client_id")
+			ConfigurationClientID = viper.GetString("client_id")
 		}
 		if ConfigurationClientSecret == "" {
-			ConfigurationClientSecret = conf.GetString("client_secret")
+			ConfigurationClientSecret = viper.GetString("client_secret")
 		}
 		if ConfigurationAccountID == "" {
-			ConfigurationAccountID = conf.GetString("account_id")
+			ConfigurationAccountID = viper.GetString("account_id")
 		}
 		if ConfigurationAccountEnvID == "" {
-			ConfigurationAccountEnvID = conf.GetString("account_environment_id")
+			ConfigurationAccountEnvID = viper.GetString("account_environment_id")
 		}
 
 		if newConfigurationName == "" && ConfigurationClientID == "" && ConfigurationClientSecret == "" && ConfigurationAccountID == "" && ConfigurationAccountEnvID == "" {
@@ -65,7 +66,6 @@ var editCmd = &cobra.Command{
 		config.EditConfigurationFile(ConfigurationName, newConfigurationName, ConfigurationClientID, ConfigurationClientSecret, ConfigurationAccountID, ConfigurationAccountEnvID)
 
 		fmt.Fprintln(cmd.OutOrStdout(), "Configuration edited successfully")
-		return
 	},
 }
 

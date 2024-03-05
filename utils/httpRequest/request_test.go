@@ -55,7 +55,7 @@ func TestHTTPGetAllPages(t *testing.T) {
 
 func TestRegenerateToken(t *testing.T) {
 
-	regenerateToken("credentialsTest.yaml")
+	regenerateToken("test_configuration")
 
 	assert.Equal(t, viper.IsSet("token"), true)
 	assert.Equal(t, viper.GetString("token"), "access_token")

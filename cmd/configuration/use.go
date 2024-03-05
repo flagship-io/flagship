@@ -53,7 +53,6 @@ var useCmd = &cobra.Command{
 		}
 
 		fmt.Fprintln(cmd.OutOrStdout(), "Configuration selected successfully")
-		return
 	},
 }
 

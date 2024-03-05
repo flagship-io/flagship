@@ -10,6 +10,7 @@ import (
 
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -29,12 +30,12 @@ var createCmd = &cobra.Command{
 		}
 
 		if credentialsFile != "" {
-			conf := config.ReadCredentialsFromFile(credentialsFile)
-			if slices.Contains(existingConfigurationsName, conf.GetString("name")) {
+			config.ReadCredentialsFromFile(credentialsFile)
+			if slices.Contains(existingConfigurationsName, viper.GetString("name")) {
 				fmt.Fprintln(cmd.OutOrStdout(), "Configuration name already exists")
 				return
 			}
-			config.CreateConfigurationFile(conf.GetString("name"), conf.GetString("client_id"), conf.GetString("client_secret"), conf.GetString("account_id"), conf.GetString("account_environment_id"))
+			config.CreateConfigurationFile(viper.GetString("name"), viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("account_id"), viper.GetString("account_environment_id"))
 			fmt.Fprintln(cmd.OutOrStdout(), "Configuration created successfully")
 			return
 		}

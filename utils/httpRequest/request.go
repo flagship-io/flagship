@@ -19,7 +19,24 @@ import (
 var UserAgent string
 
 func regenerateToken(configName string) {
-	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), viper.GetString("grant_type"), viper.GetString("scope"), viper.GetInt("expiration"))
+	gt := viper.GetString("grant_type")
+	sc := viper.GetString("scope")
+	ex := viper.GetInt("expiration")
+
+	if gt == "" {
+		gt = config.GrantType
+	}
+
+	if sc == "" {
+		sc = config.Scope
+	}
+
+	if ex == 0 {
+		ex = config.Expiration
+	}
+
+	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), gt, sc, ex)
+
 	if err != nil {
 		log.Fatalf("%s", err)
 	}

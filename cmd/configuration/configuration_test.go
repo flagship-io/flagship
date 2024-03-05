@@ -63,6 +63,8 @@ func TestConfigurationListCommand(t *testing.T) {
 
 	err := json.Unmarshal([]byte(output), &testConfigurationList)
 
+	assert.Nil(t, err)
+
 	byt, err := json.Marshal(mockfunction.TestConfiguration)
 
 	assert.Nil(t, err)

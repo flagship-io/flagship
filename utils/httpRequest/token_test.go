@@ -20,7 +20,7 @@ func TestHTTPCheckToken(t *testing.T) {
 }
 
 func TestHTTPCreateToken(t *testing.T) {
-	respBody, err := HTTPCreateToken("client_id", "client_secret", "client_credentials", "*", 0)
+	respBody, err := HTTPCreateToken("client_id", "client_secret", "client_credentials", "*", 86400)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
