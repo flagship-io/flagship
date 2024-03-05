@@ -32,7 +32,7 @@ func Unset(key string) error {
 	return nil
 }
 
-func SetPathForConfigName(fileName string) (filePath string) {
+func CheckFlagshipHomeDirectory() string {
 	homeDir, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 
@@ -43,24 +43,24 @@ func SetPathForConfigName(fileName string) (filePath string) {
 		}
 	}
 
-	filepath, _ := filepath.Abs(homeDir + "/.flagship/configurations/" + fileName + ".yaml")
-	v.SetConfigFile(filepath)
+	return homeDir
+}
+
+func SetPathForConfigName(fileName string) string {
+	homeDir := CheckFlagshipHomeDirectory()
+
+	filepath, err := filepath.Abs(homeDir + "/.flagship/configurations/" + fileName + ".yaml")
+	if err != nil {
+		log.Fatalf("error occured: %v", err)
+	}
 
 	return filepath
 }
 
 func GetConfigurationsName() ([]string, error) {
-	homeDir, err := os.UserHomeDir()
-	cobra.CheckErr(err)
+	homeDir := CheckFlagshipHomeDirectory()
 	r := regexp.MustCompile(`(?P<ConfigurationName>[^/]+)\.yaml`)
 	var fileNames []string
-
-	if _, err := os.Stat(homeDir + "/.flagship/configurations"); errors.Is(err, os.ErrNotExist) {
-		err := os.MkdirAll(homeDir+"/.flagship/configurations", os.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
 
 	f, err := os.Open(homeDir + "/.flagship/configurations")
 	if err != nil {
@@ -80,22 +80,23 @@ func GetConfigurationsName() ([]string, error) {
 		if len(match) == 0 {
 			log.Fatalln("Error: File not found")
 		}
+
+		if match[configurationName] == ".cli" {
+			continue
+		}
+
 		fileNames = append(fileNames, match[configurationName])
 	}
-
 	return fileNames, nil
 }
 
-func SetOptionalsDefault(grantType, scope string, expiration int) (*Config, error) {
+func SetOptionalsDefault(grantType, scope string, expiration int) {
 	viper.Set("grant_type", grantType)
 	viper.Set("scope", scope)
 	viper.Set("expiration", expiration)
-
-	return &Config{viper.GetViper()}, nil
 }
 
-func CreateConfigurationFile(configurationName, clientId, clientSecret, accountId, accountEnvId string) (*Config, error) {
-
+func CreateConfigurationFile(configurationName, clientId, clientSecret, accountId, accountEnvId string) {
 	filepath := SetPathForConfigName(configurationName)
 
 	v.Set("name", configurationName)
@@ -109,14 +110,10 @@ func CreateConfigurationFile(configurationName, clientId, clientSecret, accountI
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	return &Config{v}, nil
-
 }
 
-func SelectConfiguration(configurationName string) (*Config, error) {
-
+func SelectConfiguration(configurationName string) {
 	filepath := SetPathForConfigName(".cli")
-	configFilepath := SetPathForConfigName(configurationName)
 	v.Set("current_used_configuration", configurationName)
 
 	err := v.WriteConfigAs(filepath)
@@ -124,15 +121,17 @@ func SelectConfiguration(configurationName string) (*Config, error) {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	viper.SetConfigFile(configFilepath)
-	viper.MergeInConfig()
-
-	return &Config{v}, nil
-
+	ReadConfiguration(configurationName)
 }
 
-func EditConfigurationFile(configurationName, newName, clientId, clientSecret, accountId, accountEnvId string) (*Config, error) {
+func ReadConfiguration(configurationName string) {
+	configFilepath := SetPathForConfigName(configurationName)
+	viper.SetConfigFile(configFilepath)
+	viper.MergeInConfig()
+	fmt.Println(viper.GetString("client_id"))
+}
 
+func EditConfigurationFile(configurationName, newName, clientId, clientSecret, accountId, accountEnvId string) {
 	filepath := SetPathForConfigName(configurationName)
 
 	v.Set("name", newName)
@@ -150,61 +149,33 @@ func EditConfigurationFile(configurationName, newName, clientId, clientSecret, a
 	if e != nil {
 		log.Fatal(e)
 	}
-
-	return &Config{v}, nil
-
 }
 
-func ReadCredentialsFromFile(configurationFile string) *Config {
+func ReadCredentialsFromFile(configurationFile string) {
 	viper.SetConfigFile(configurationFile)
-	viper.MergeInConfig()
-
-	return &Config{viper.GetViper()}
+	err := viper.MergeInConfig()
+	if err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
 }
 
-func WriteOptionals(credentialsFile, grantType, scope string, expiration int) (*Config, error) {
+func WriteToken(configurationName, token string) {
+	configFilepath := SetPathForConfigName(configurationName)
 
-	filepath := SetPathForConfigName(credentialsFile)
-	v.Set("grant_type", grantType)
-	v.Set("scope", scope)
-	v.Set("expiration", expiration)
-	err := v.WriteConfigAs(filepath)
+	viper.SetConfigFile(configFilepath)
+	err := viper.MergeInConfig()
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	return &Config{v}, nil
-}
-
-func InitLocalConfigureConfig(credentialsFile string) *Config {
-
-	if credentialsFile != "" {
-		// Use config file from the flag.
-		v.SetConfigFile(credentialsFile)
-	}
-
-	if err := v.MergeInConfig(); err != nil {
-		return &Config{v}
-	}
-
-	return &Config{v}
-}
-
-func WriteToken(configurationName, token string) (*Config, error) {
-	configFilepath := SetPathForConfigName(configurationName)
-
-	viper.SetConfigFile(configFilepath)
-	viper.MergeInConfig()
 	viper.Set("token", token)
 	viper.Set("current_used_configuration", nil)
 	Unset("current_used_configuration")
 
-	err := viper.WriteConfigAs(configFilepath)
+	err = viper.WriteConfigAs(configFilepath)
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
-
-	return &Config{viper.GetViper()}, nil
 }
 
 func SetViperMock() {

@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
@@ -16,6 +17,7 @@ func TestMain(m *testing.M) {
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
+	defer os.Remove(config.SetPathForConfigName("test_configuration"))
 
 	mockfunction.InitMockConfiguration()
 
@@ -62,6 +64,8 @@ func TestConfigurationListCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(ConfigurationCmd, "list")
 
 	err := json.Unmarshal([]byte(output), &testConfigurationList)
+
+	assert.Nil(t, err)
 
 	byt, err := json.Marshal(mockfunction.TestConfiguration)
 

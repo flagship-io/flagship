@@ -96,15 +96,17 @@ func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		homeDir, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-		// Search config in home directory with name ".flagship" (without extension).
-		viper.SetConfigFile(homeDir + "/.flagship/configurations/.cli.yaml")
 		viper.MergeInConfig()
-		if viper.GetString("current_used_configuration") != "" {
-			config.SelectConfiguration(viper.GetString("current_used_configuration"))
-		}
+		return
 	}
+	// Find home directory.
+	homeDir, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+	// Search config in home directory with name ".flagship" (without extension).
+	viper.SetConfigFile(homeDir + "/.flagship/configurations/.cli.yaml")
+	viper.MergeInConfig()
+	if viper.GetString("current_used_configuration") != "" {
+		config.ReadConfiguration(viper.GetString("current_used_configuration"))
+	}
+
 }

@@ -4,7 +4,6 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package configuration
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -19,22 +18,14 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a configuration",
 	Long:  `Delete a configuration`,
 	Run: func(cmd *cobra.Command, args []string) {
-		homeDir, err := os.UserHomeDir()
-		cobra.CheckErr(err)
 
-		if _, err := os.Stat(homeDir + "/.flagship/configurations"); errors.Is(err, os.ErrNotExist) {
-			err := os.MkdirAll(homeDir+"/.flagship/configurations", os.ModePerm)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+		config.CheckFlagshipHomeDirectory()
 
 		if err := os.Remove(config.SetPathForConfigName(ConfigurationName)); err != nil {
 			log.Fatal(err)
 		}
 
 		fmt.Fprintln(cmd.OutOrStdout(), "Configuration deleted successfully")
-		return
 	},
 }
 

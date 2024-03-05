@@ -23,11 +23,15 @@ var currentCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var configurationYaml models.ConfigurationYaml
 		var configuration models.Configuration
-
 		var v = viper.New()
+
 		configFilepath := config.SetPathForConfigName(".cli")
 		v.SetConfigFile(configFilepath)
-		v.MergeInConfig()
+
+		err := v.MergeInConfig()
+		if err != nil {
+			log.Fatalf("error occurred: %s", err)
+		}
 
 		configurationName := v.GetString("current_used_configuration")
 
