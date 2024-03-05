@@ -26,7 +26,7 @@ var listCmd = &cobra.Command{
 		existingConfigurationsName, nil := config.GetConfigurationsName()
 
 		for _, fileName := range existingConfigurationsName {
-			if fileName != "" && fileName != ".cli" {
+			if fileName != "" {
 				var configurationYaml models.ConfigurationYaml
 				var configuration models.Configuration
 				yamlFile, err := os.ReadFile(config.SetPathForConfigName(fileName))
