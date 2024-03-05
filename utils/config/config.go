@@ -128,7 +128,6 @@ func ReadConfiguration(configurationName string) {
 	configFilepath := SetPathForConfigName(configurationName)
 	viper.SetConfigFile(configFilepath)
 	viper.MergeInConfig()
-	fmt.Println(viper.GetString("client_id"))
 }
 
 func EditConfigurationFile(configurationName, newName, clientId, clientSecret, accountId, accountEnvId string) {
