@@ -13,7 +13,7 @@ import (
 
 	"github.com/flagship-io/flagship/cmd/version"
 	"github.com/flagship-io/flagship/utils/config"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
+	httprequest_fe "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -66,7 +66,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cmdToken, "token", "t", "", "access token to manage flagship resources")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
-	rootCmd.PersistentFlags().StringVarP(&httprequest.UserAgent, "user-agent", "u", config.DefaultUserAgent, "custom user agent")
+	rootCmd.PersistentFlags().StringVarP(&httprequest_fe.UserAgent, "user-agent", "u", config.DefaultUserAgent, "custom user agent")
 
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))

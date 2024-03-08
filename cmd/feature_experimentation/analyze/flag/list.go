@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package flag
 
@@ -13,7 +12,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
 	"github.com/flagship-io/flagship/models"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
 	"github.com/kyokomi/emoji/v2"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"

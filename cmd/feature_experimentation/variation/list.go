@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package variation
 
@@ -8,7 +7,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -6,7 +6,7 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )

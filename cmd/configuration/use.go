@@ -9,7 +9,7 @@ import (
 	"slices"
 
 	"github.com/flagship-io/flagship/utils/config"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

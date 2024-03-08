@@ -17,7 +17,7 @@ import (
 	"github.com/d5/tengo/v2"
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
+	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
