@@ -6,20 +6,11 @@ package cmd
 import (
 	"os"
 
-	"github.com/flagship-io/flagship/cmd/analyze"
-	"github.com/flagship-io/flagship/cmd/campaign"
 	"github.com/flagship-io/flagship/cmd/configuration"
-	"github.com/flagship-io/flagship/cmd/flag"
-	"github.com/flagship-io/flagship/cmd/goal"
+	"github.com/flagship-io/flagship/cmd/feature_experimentation"
 	"github.com/flagship-io/flagship/cmd/info"
-	"github.com/flagship-io/flagship/cmd/panic"
-	"github.com/flagship-io/flagship/cmd/project"
-	"github.com/flagship-io/flagship/cmd/resource"
-	targetingkey "github.com/flagship-io/flagship/cmd/targeting_key"
 	"github.com/flagship-io/flagship/cmd/token"
-	"github.com/flagship-io/flagship/cmd/user"
-	"github.com/flagship-io/flagship/cmd/variation"
-	"github.com/flagship-io/flagship/cmd/variation_group"
+
 	"github.com/flagship-io/flagship/cmd/version"
 	"github.com/flagship-io/flagship/utils/config"
 	httprequest "github.com/flagship-io/flagship/utils/httpRequest"
@@ -58,23 +49,18 @@ func Execute() {
 	}
 }
 
-func addSubCommandPalettes() {
-	rootCmd.AddCommand(campaign.CampaignCmd)
-	rootCmd.AddCommand(project.ProjectCmd)
+func addFeatureExpSubCommandPalettes() {
 	rootCmd.AddCommand(configuration.ConfigurationCmd)
-	rootCmd.AddCommand(panic.PanicCmd)
-	rootCmd.AddCommand(user.UserCmd)
-	rootCmd.AddCommand(variation_group.VariationGroupCmd)
-	rootCmd.AddCommand(variation.VariationCmd)
-	rootCmd.AddCommand(flag.FlagCmd)
-	rootCmd.AddCommand(goal.GoalCmd)
-	rootCmd.AddCommand(targetingkey.TargetingKeyCmd)
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
-	rootCmd.AddCommand(analyze.AnalyzeCmd)
-	rootCmd.AddCommand(resource.ResourceCmd)
 	rootCmd.AddCommand(info.InfoCmd)
+	rootCmd.AddCommand(feature_experimentation.FeatureExperimentationCmd)
 }
+
+func addWebExpSubCommandPalettes() {
+
+}
+
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -87,7 +73,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file that contains your credentials (default is $HOME/.flagship/credentials.yaml)")
 
-	addSubCommandPalettes()
+	addFeatureExpSubCommandPalettes()
 }
 
 // initConfig reads in config file and ENV variables if set.
