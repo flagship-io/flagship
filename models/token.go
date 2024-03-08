@@ -12,9 +12,15 @@ type TokenResponse struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type TokenRequest struct {
+type ClientCredentialsRequest struct {
 	GrantType    string `json:"grant_type"`
 	Scope        string `json:"scope"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
+}
+
+type RefreshTokenRequest struct {
+	GrantType    string `json:"grant_type"`
+	ClientID     string `json:"client_id"`
+	RefreshToken string `json:"refresh_token"`
 }

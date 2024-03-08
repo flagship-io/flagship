@@ -58,5 +58,7 @@ func TestRegenerateToken(t *testing.T) {
 	regenerateToken("test_configuration")
 
 	assert.Equal(t, viper.IsSet("token"), true)
+	assert.Equal(t, viper.IsSet("refresh_token"), true)
 	assert.Equal(t, viper.GetString("token"), "access_token")
+	assert.Equal(t, viper.GetString("refresh_token"), "refresh_token")
 }

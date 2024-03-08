@@ -38,17 +38,17 @@ var useCmd = &cobra.Command{
 		config.SelectConfiguration(ConfigurationName)
 		config.SetOptionalsDefault(grantType, scope, expiration)
 
-		token, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
+		authenticationResponse, err := httprequest.HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), grantType, scope, expiration)
 		if err != nil {
 			log.Fatalf("%s", err)
 			return
 		}
 
-		if token == "" {
+		if authenticationResponse.AccessToken == "" {
 			log.Fatal("client_id or client_secret not valid")
 			return
 		} else {
-			config.WriteToken(ConfigurationName, token)
+			config.WriteToken(ConfigurationName, authenticationResponse)
 			fmt.Fprintln(cmd.OutOrStdout(), "Token generated successfully")
 		}
 

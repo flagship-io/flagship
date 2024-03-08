@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/flagship-io/flagship/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -158,7 +159,7 @@ func ReadCredentialsFromFile(configurationFile string) {
 	}
 }
 
-func WriteToken(configurationName, token string) {
+func WriteToken(configurationName string, authenticationResponse models.TokenResponse) {
 	configFilepath := SetPathForConfigName(configurationName)
 
 	viper.SetConfigFile(configFilepath)
@@ -167,7 +168,8 @@ func WriteToken(configurationName, token string) {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	viper.Set("token", token)
+	viper.Set("token", authenticationResponse.AccessToken)
+	viper.Set("refresh_token", authenticationResponse.RefreshToken)
 	viper.Set("current_used_configuration", nil)
 	Unset("current_used_configuration")
 
@@ -182,6 +184,7 @@ func SetViperMock() {
 	viper.GetViper().Set("account_environment_id", "account_environment_id")
 	viper.GetViper().Set("client_id", "client_id")
 	viper.GetViper().Set("client_secret", "client_secret")
-	viper.GetViper().Set("token", "token")
+	viper.GetViper().Set("token", "access_token")
+	viper.GetViper().Set("refresh_token", "refresh_token")
 	viper.GetViper().Set("output_format", "json")
 }

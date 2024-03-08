@@ -10,30 +10,55 @@ import (
 	"github.com/spf13/viper"
 )
 
-func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (string, error) {
+func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
-	authRequest := models.TokenRequest{
+	authRequest := models.ClientCredentialsRequest{
 		ClientID:     client_id,
 		ClientSecret: client_secret,
 		Scope:        scope,
-		GrantType:    grant_type,
+		GrantType:    "client_credentials",
 	}
 	authRequestJSON, err := json.Marshal(authRequest)
 	if err != nil {
-		return "", err
+		return models.TokenResponse{}, err
 	}
 
 	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
 	if err != nil {
-		return "", err
+		return models.TokenResponse{}, err
 	}
 
 	err = json.Unmarshal(respBody, &authenticationResponse)
 	if err != nil {
-		return "", err
+		return models.TokenResponse{}, err
 	}
 
-	return authenticationResponse.AccessToken, err
+	return authenticationResponse, err
+}
+
+func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, error) {
+	var authenticationResponse models.TokenResponse
+	authRequest := models.RefreshTokenRequest{
+		ClientID:     client_id,
+		GrantType:    "refresh_token",
+		RefreshToken: refresh_token,
+	}
+	authRequestJSON, err := json.Marshal(authRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token", authRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(respBody, &authenticationResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	return authenticationResponse, err
 }
 
 func HTTPCheckToken(token string) (models.Token, error) {

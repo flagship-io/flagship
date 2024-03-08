@@ -35,16 +35,47 @@ func regenerateToken(configName string) {
 		ex = config.Expiration
 	}
 
-	token, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), gt, sc, ex)
+	authenticationResponse, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), gt, sc, ex)
 
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
-	if token == "" {
+	if authenticationResponse.AccessToken == "" {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
 		fmt.Fprintln(os.Stdout, "Token generated successfully")
-		config.WriteToken(configName, token)
+		config.WriteToken(configName, authenticationResponse)
+	}
+}
+
+func regenerateToken_(configName string) {
+	gt := viper.GetString("grant_type")
+	sc := viper.GetString("scope")
+	ex := viper.GetInt("expiration")
+
+	if gt == "" {
+		gt = config.GrantType
+	}
+
+	if sc == "" {
+		sc = config.Scope
+	}
+
+	if ex == 0 {
+		ex = config.Expiration
+	}
+
+	authenticationResponse, err := HTTPRefreshToken(viper.GetString("client_id"), viper.GetString("refresh_token"))
+	fmt.Println(authenticationResponse)
+
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	if authenticationResponse.AccessToken == "" {
+		log.Fatal("client_id or client_secret not valid")
+	} else {
+		fmt.Fprintln(os.Stdout, "Token generated successfully")
+		config.WriteToken(configName, authenticationResponse)
 	}
 }
 
