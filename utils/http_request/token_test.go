@@ -1,4 +1,4 @@
-package feature_experimentation
+package http_request
 
 import (
 	"testing"
@@ -25,5 +25,6 @@ func TestHTTPCreateToken(t *testing.T) {
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "access_token", respBody)
+	assert.Equal(t, "access_token", respBody.AccessToken)
+	assert.Equal(t, "refresh_token", respBody.RefreshToken)
 }

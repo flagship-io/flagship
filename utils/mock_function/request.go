@@ -1,4 +1,4 @@
-package feature_experimentation
+package mockfunction
 
 import (
 	"net/http"

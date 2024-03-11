@@ -7,7 +7,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

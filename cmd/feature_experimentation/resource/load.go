@@ -17,7 +17,8 @@ import (
 	"github.com/d5/tengo/v2"
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/httpRequest/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
+	featureexp "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -35,7 +36,7 @@ type ResourceData struct {
 }
 
 func (f *ProjectData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateProject([]byte(data))
+	return featureexp.HTTPCreateProject([]byte(data))
 }
 
 type CampaignData struct {
@@ -48,7 +49,7 @@ type CampaignData struct {
 }
 
 func (f *CampaignData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateCampaign(data)
+	return featureexp.HTTPCreateCampaign(data)
 }
 
 type FlagData struct {
@@ -56,7 +57,7 @@ type FlagData struct {
 }
 
 func (f *FlagData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateFlag(data)
+	return featureexp.HTTPCreateFlag(data)
 }
 
 type GoalData struct {
@@ -64,7 +65,7 @@ type GoalData struct {
 }
 
 func (f *GoalData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateGoal(data)
+	return featureexp.HTTPCreateGoal(data)
 }
 
 type TargetingKeysData struct {
@@ -72,7 +73,7 @@ type TargetingKeysData struct {
 }
 
 func (f *TargetingKeysData) Save(data string) ([]byte, error) {
-	return httprequest.HTTPCreateTargetingKey(data)
+	return featureexp.HTTPCreateTargetingKey(data)
 }
 
 type VariationGroupData struct {

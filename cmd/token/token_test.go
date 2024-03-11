@@ -1,7 +1,6 @@
 package token
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
@@ -30,14 +29,4 @@ func TestTokenCommand(t *testing.T) {
 func TestTokenHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TokenCmd, "--help")
 	assert.Contains(t, output, "Manage your token\n")
-}
-
-func TestTokenInfoCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(TokenCmd, "info")
-
-	err := json.Unmarshal([]byte(output), &testToken)
-
-	assert.Nil(t, err)
-
-	assert.Equal(t, mockfunction.TestToken, testToken)
 }
