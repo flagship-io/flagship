@@ -289,11 +289,11 @@ func ScriptResource(resources []Resource) {
 		}
 
 		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
 		}
 
 		if resource.Name == Goal || resource.Name == Campaign {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
+			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
 		}
 
 		if err != nil {

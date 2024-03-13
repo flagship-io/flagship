@@ -29,14 +29,14 @@ func APIToken() {
 		RefreshToken: "refresh_token",
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetHostAuth()+"/token?access_token="+token,
+	httpmock.RegisterResponder("GET", utils.GetHostFeatureExperimentationAuth()+"/token?access_token="+token,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestToken)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(tokenExpiration),
+	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(tokenExpiration),
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, testAuthenticationResponse)
 			return resp, nil

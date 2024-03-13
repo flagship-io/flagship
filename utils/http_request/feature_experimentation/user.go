@@ -11,14 +11,14 @@ import (
 )
 
 func HTTPListUsers() ([]models.User, error) {
-	return httprequest.HTTPGetAllPages[models.User](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/users")
+	return httprequest.HTTPGetAllPages[models.User](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/users")
 }
 
 func HTTPBatchUpdateUsers(data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPut, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users", []byte(data))
+	return httprequest.HTTPRequest(http.MethodPut, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users", []byte(data))
 }
 
 func HTTPDeleteUsers(email string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+url.QueryEscape(email), nil)
+	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+url.QueryEscape(email), nil)
 	return err
 }

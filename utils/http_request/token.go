@@ -23,7 +23,7 @@ func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expirat
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
+	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -48,7 +48,7 @@ func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, er
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostAuth()+"/"+viper.GetString("account_id")+"/token", authRequestJSON)
+	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+viper.GetString("account_id")+"/token", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -62,5 +62,5 @@ func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, er
 }
 
 func HTTPCheckToken(token string) (models.Token, error) {
-	return HTTPGetItem[models.Token](utils.GetHostAuth() + "/token?access_token=" + token)
+	return HTTPGetItem[models.Token](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + token)
 }

@@ -2,7 +2,7 @@ package utils
 
 import "os"
 
-func GetHost() string {
+func GetFeatureExperimentationHost() string {
 	if os.Getenv("STAGING") == "true" {
 		return "https://staging-api.flagship.io"
 	}
@@ -10,7 +10,15 @@ func GetHost() string {
 	return "https://api.flagship.io"
 }
 
-func GetHostAuth() string {
+func GetWebExperimentationHost() string {
+	if os.Getenv("STAGING") == "true" {
+		return "https://staging-api.abtasty.com/api"
+	}
+
+	return "https://api.abtasty.com/api"
+}
+
+func GetHostFeatureExperimentationAuth() string {
 	if os.Getenv("STAGING") == "true" {
 		return "https://staging-auth.flagship.io"
 	}

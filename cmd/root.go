@@ -10,6 +10,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/feature_experimentation"
 	"github.com/flagship-io/flagship/cmd/info"
 	"github.com/flagship-io/flagship/cmd/token"
+	"github.com/flagship-io/flagship/cmd/web_experimentation"
 
 	"github.com/flagship-io/flagship/cmd/version"
 	"github.com/flagship-io/flagship/utils/config"
@@ -49,16 +50,13 @@ func Execute() {
 	}
 }
 
-func addFeatureExpSubCommandPalettes() {
+func addSubCommandPalettes() {
 	rootCmd.AddCommand(configuration.ConfigurationCmd)
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(info.InfoCmd)
 	rootCmd.AddCommand(feature_experimentation.FeatureExperimentationCmd)
-}
-
-func addWebExpSubCommandPalettes() {
-
+	rootCmd.AddCommand(web_experimentation.WebExperimentationCmd)
 }
 
 func init() {
@@ -73,7 +71,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file that contains your credentials (default is $HOME/.flagship/credentials.yaml)")
 
-	addFeatureExpSubCommandPalettes()
+	addSubCommandPalettes()
 }
 
 // initConfig reads in config file and ENV variables if set.

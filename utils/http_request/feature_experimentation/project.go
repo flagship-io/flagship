@@ -11,19 +11,19 @@ import (
 )
 
 func HTTPListProject() ([]models.Project, error) {
-	return httprequest.HTTPGetAllPages[models.Project](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects")
+	return httprequest.HTTPGetAllPages[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects")
 }
 
 func HTTPGetProject(id string) (models.Project, error) {
-	return httprequest.HTTPGetItem[models.Project](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects/" + id)
+	return httprequest.HTTPGetItem[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects/" + id)
 }
 
 func HTTPCreateProject(data []byte) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects", data)
+	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects", data)
 }
 
 func HTTPEditProject(id string, data []byte) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, data)
+	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, data)
 }
 
 func HTTPSwitchProject(id, state string) error {
@@ -36,11 +36,11 @@ func HTTPSwitchProject(id, state string) error {
 		return err
 	}
 
-	_, err = httprequest.HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
+	_, err = httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
 	return err
 }
 
 func HTTPDeleteProject(id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
+	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
 	return err
 }

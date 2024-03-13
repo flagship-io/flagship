@@ -8,7 +8,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -18,7 +17,7 @@ import (
 
 var UserAgent string
 
-func regenerateToken(configName string) {
+func regenerateToken_(configName string) {
 	gt := viper.GetString("grant_type")
 	sc := viper.GetString("scope")
 	ex := viper.GetInt("expiration")
@@ -43,30 +42,12 @@ func regenerateToken(configName string) {
 	if authenticationResponse.AccessToken == "" {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
-		fmt.Fprintln(os.Stdout, "Token generated successfully")
 		config.WriteToken(configName, authenticationResponse)
 	}
 }
 
-func regenerateToken_(configName string) {
-	gt := viper.GetString("grant_type")
-	sc := viper.GetString("scope")
-	ex := viper.GetInt("expiration")
-
-	if gt == "" {
-		gt = config.GrantType
-	}
-
-	if sc == "" {
-		sc = config.Scope
-	}
-
-	if ex == 0 {
-		ex = config.Expiration
-	}
-
+func regenerateToken(configName string) {
 	authenticationResponse, err := HTTPRefreshToken(viper.GetString("client_id"), viper.GetString("refresh_token"))
-	fmt.Println(authenticationResponse)
 
 	if err != nil {
 		log.Fatalf("%s", err)
@@ -74,7 +55,6 @@ func regenerateToken_(configName string) {
 	if authenticationResponse.AccessToken == "" {
 		log.Fatal("client_id or client_secret not valid")
 	} else {
-		fmt.Fprintln(os.Stdout, "Token generated successfully")
 		config.WriteToken(configName, authenticationResponse)
 	}
 }
@@ -85,6 +65,18 @@ var counter = false
 type PageResult struct {
 	Items      json.RawMessage `json:"items"`
 	TotalCount int             `json:"total_count"`
+}
+
+type PageResultWE struct {
+	Data       json.RawMessage `json:"_data"`
+	Pagination Pagination      `json:"_pagination"`
+}
+
+type Pagination struct {
+	Total      int `json:"_total"`
+	Pages      int `json:"_pages"`
+	Page       int `json:"_page"`
+	MaxPerPage int `json:"_max_per_page"`
 }
 
 func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
@@ -113,6 +105,7 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	req.Header.Add("Accept", `*/*`)
 	req.Header.Add("Authorization", "Bearer "+viper.GetString("token"))
 	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
+	req.Header.Add("Content-Type", "application/json")
 	req.Header.Set("User-Agent", UserAgent)
 
 	if body != nil {
@@ -140,6 +133,8 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	//fmt.Println(string(respBody))
 
 	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
 		counter = true
@@ -181,6 +176,35 @@ func HTTPGetAllPages[T any](resource string) ([]T, error) {
 		results = append(results, typedItems...)
 
 		if len(results) >= pageResult.TotalCount || len(pageResult.Items) == 0 {
+			break
+		}
+		currentPage++
+	}
+	return results, nil
+}
+
+func HTTPGetAllPagesWe[T any](resource string) ([]T, error) {
+	currentPage := 1
+	results := []T{}
+	for {
+		respBody, err := HTTPRequest(http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
+		if err != nil {
+			return nil, err
+		}
+		pageResult := &PageResultWE{}
+		err = json.Unmarshal(respBody, pageResult)
+		if err != nil {
+			return nil, err
+		}
+
+		typedItems := []T{}
+		err = json.Unmarshal(pageResult.Data, &typedItems)
+		if err != nil {
+			return nil, err
+		}
+		results = append(results, typedItems...)
+
+		if len(results) >= pageResult.Pagination.Total || len(pageResult.Data) == 0 {
 			break
 		}
 		currentPage++

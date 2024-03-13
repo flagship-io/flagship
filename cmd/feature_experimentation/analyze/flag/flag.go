@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package flag
 
@@ -64,8 +63,8 @@ func PreRunConfiguration() {
 	}
 
 	FSConfig = &cbaConfig.Config{
-		FlagshipAPIURL:        utils.GetHost(),
-		FlagshipAuthAPIURL:    utils.GetHostAuth(),
+		FlagshipAPIURL:        utils.GetFeatureExperimentationHost(),
+		FlagshipAuthAPIURL:    utils.GetHostFeatureExperimentationAuth(),
 		FlagshipAPIToken:      viper.GetString("token"),
 		FlagshipAccountID:     viper.GetString("account_id"),
 		FlagshipEnvironmentID: viper.GetString("account_environment_id"),

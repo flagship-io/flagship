@@ -10,22 +10,22 @@ import (
 )
 
 func HTTPListTargetingKey() ([]models.TargetingKey, error) {
-	return httprequest.HTTPGetAllPages[models.TargetingKey](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/targeting_keys")
+	return httprequest.HTTPGetAllPages[models.TargetingKey](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/targeting_keys")
 }
 
 func HTTPGetTargetingKey(id string) (models.TargetingKey, error) {
-	return httprequest.HTTPGetItem[models.TargetingKey](utils.GetHost() + "/v1/accounts/" + viper.GetString("account_id") + "/targeting_keys/" + id)
+	return httprequest.HTTPGetItem[models.TargetingKey](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/targeting_keys/" + id)
 }
 
 func HTTPCreateTargetingKey(data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys", []byte(data))
+	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys", []byte(data))
 }
 
 func HTTPEditTargetingKey(id, data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+id, []byte(data))
+	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+id, []byte(data))
 }
 
 func HTTPDeleteTargetingKey(id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+id, nil)
+	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/targeting_keys/"+id, nil)
 	return err
 }
