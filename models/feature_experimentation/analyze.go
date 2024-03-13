@@ -1,4 +1,4 @@
-package models
+package feature_experimentation
 
 type FlagAnalyzed struct {
 	LineNumber       int    `json:"LineNumber"`

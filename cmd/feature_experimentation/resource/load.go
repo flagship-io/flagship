@@ -15,7 +15,7 @@ import (
 	"strings"
 
 	"github.com/d5/tengo/v2"
-	"github.com/flagship-io/flagship/models"
+	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	featureexp "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"

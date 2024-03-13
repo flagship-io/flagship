@@ -3,7 +3,7 @@ package feature_experimentation
 import (
 	"net/http"
 
-	"github.com/flagship-io/flagship/models"
+	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/jarcoal/httpmock"

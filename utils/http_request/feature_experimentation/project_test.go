@@ -5,7 +5,7 @@ import (
 	"log"
 	"testing"
 
-	"github.com/flagship-io/flagship/models"
+	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/stretchr/testify/assert"
 )
 

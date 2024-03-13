@@ -1,4 +1,4 @@
-package models
+package feature_experimentation
 
 type VariationGroup struct {
 	Id         string       `json:"id,omitempty"`
