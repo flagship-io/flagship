@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var createCmd = &cobra.Command{
 	Short: "Create a variation group",
 	Long:  `Create a variation group in your campaign`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPCreateVariationGroup(CampaignID, DataRaw)
+		body, err := httprequest.VariationGroupRequester.HTTPCreateVariationGroup(CampaignID, DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

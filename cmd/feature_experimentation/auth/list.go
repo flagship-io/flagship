@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package configuration
+package auth
 
 import (
 	"log"
@@ -18,18 +18,21 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all configurations",
-	Long:  `List all configurations`,
+	Short: "list all auth",
+	Long:  `list all auth from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var configurations []models.Configuration
-		existingConfigurationsName, nil := config.GetConfigurationsName()
+		var configurations []models.Configuration_new
+		existingCredentials, err := config.GetUsernames(utils.FEATURE_EXPERIMENTATION)
+		if err != nil {
+			log.Fatalf("error occurred: %s", err)
+		}
 
-		for _, fileName := range existingConfigurationsName {
+		for _, fileName := range existingCredentials {
 			if fileName != "" {
-				var configurationYaml models.ConfigurationYaml
-				var configuration models.Configuration
-				yamlFile, err := os.ReadFile(config.SetPathForConfigName(fileName))
+				var configurationYaml models.ConfigurationYaml_new
+				var configuration models.Configuration_new
+				yamlFile, err := os.ReadFile(config.SetPathForCredentials(utils.FEATURE_EXPERIMENTATION, fileName))
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
@@ -39,22 +42,21 @@ var listCmd = &cobra.Command{
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
-				if configurationYaml.Name != "" {
-					configuration.Name = configurationYaml.Name
+				if configurationYaml.Username != "" {
+					configuration.Username = configurationYaml.Username
 					configuration.ClientID = configurationYaml.ClientID
 					configuration.ClientSecret = configurationYaml.ClientSecret
-					configuration.AccountID = configurationYaml.AccountID
-					configuration.AccountEnvironmentID = configurationYaml.AccountEnvironmentID
 					configurations = append(configurations, configuration)
 				}
 			}
 		}
 
-		utils.FormatItem([]string{"Name", "ClientID", "ClientSecret", "AccountID", "AccountEnvironmentID"}, configurations, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, configurations, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }
 
 func init() {
-	ConfigurationCmd.AddCommand(listCmd)
+
+	AuthCmd.AddCommand(listCmd)
 }

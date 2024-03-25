@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package campaign
 

@@ -19,6 +19,13 @@ type ClientCredentialsRequest struct {
 	ClientSecret string `json:"client_secret"`
 }
 
+type AuthorizationCodeRequest struct {
+	GrantType    string `json:"grant_type"`
+	Code         string `json:"code"`
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
+
 type RefreshTokenRequest struct {
 	GrantType    string `json:"grant_type"`
 	ClientID     string `json:"client_id"`

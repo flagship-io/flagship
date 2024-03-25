@@ -6,9 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var targetingKeyRequester = TargetingKeyRequester{}
+
 func TestHTTPGetTargetingKey(t *testing.T) {
 
-	respBody, err := HTTPGetTargetingKey("testTargetingKeyID")
+	respBody, err := targetingKeyRequester.HTTPGetTargetingKey("testTargetingKeyID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -19,7 +21,7 @@ func TestHTTPGetTargetingKey(t *testing.T) {
 
 func TestHTTPListTargetingKey(t *testing.T) {
 
-	respBody, err := HTTPListTargetingKey()
+	respBody, err := targetingKeyRequester.HTTPListTargetingKey()
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -35,7 +37,7 @@ func TestHTTPCreateTargetingKey(t *testing.T) {
 
 	data := "{\"name\":\"testTargetingKeyName\", \"type\":\"string\", \"description\":\"testTargetingKeyDescription\"}"
 
-	respBody, err := HTTPCreateTargetingKey(data)
+	respBody, err := targetingKeyRequester.HTTPCreateTargetingKey(data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -45,7 +47,7 @@ func TestHTTPCreateTargetingKey(t *testing.T) {
 
 func TestHTTPEditTargetingKey(t *testing.T) {
 
-	respBody, err := HTTPEditTargetingKey("testTargetingKeyID", "testTargetingKeyName")
+	respBody, err := targetingKeyRequester.HTTPEditTargetingKey("testTargetingKeyID", "testTargetingKeyName")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -55,7 +57,7 @@ func TestHTTPEditTargetingKey(t *testing.T) {
 
 func TestHTTPDeleteTargetingKey(t *testing.T) {
 
-	err := HTTPDeleteTargetingKey("testTargetingKeyID")
+	err := targetingKeyRequester.HTTPDeleteTargetingKey("testTargetingKeyID")
 
 	assert.Nil(t, err)
 }

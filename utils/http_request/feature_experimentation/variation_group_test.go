@@ -7,10 +7,11 @@ import (
 )
 
 var CampaignID = "campaignID"
+var variationGroupRequester = VariationGroupRequester{}
 
 func TestHTTPGetVariationGroup(t *testing.T) {
 
-	respBody, err := HTTPGetVariationGroup(CampaignID, "testVariationGroupID")
+	respBody, err := variationGroupRequester.HTTPGetVariationGroup(CampaignID, "testVariationGroupID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -21,7 +22,7 @@ func TestHTTPGetVariationGroup(t *testing.T) {
 
 func TestHTTPListVariationGroup(t *testing.T) {
 
-	respBody, err := HTTPListVariationGroup(CampaignID)
+	respBody, err := variationGroupRequester.HTTPListVariationGroup(CampaignID)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -37,7 +38,7 @@ func TestHTTPCreateVariationGroup(t *testing.T) {
 
 	data := "{\"name\":\"testVariationGroupName\",\"variations\":[{\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP\"}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"operator\":\"CONTAINS\",\"key\":\"isVIP\",\"value\":true}]}]}}"
 
-	respBody, err := HTTPCreateVariationGroup(CampaignID, data)
+	respBody, err := variationGroupRequester.HTTPCreateVariationGroup(CampaignID, data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -49,7 +50,7 @@ func TestHTTPEditVariationGroup(t *testing.T) {
 
 	data := "{\"name\":\"testVariationGroupName1\",\"variations\":[{\"name\":\"My variation 1\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP\"}}],\"targeting\":{\"targeting_groups\":[{\"targetings\":[{\"operator\":\"CONTAINS\",\"key\":\"isVIP\",\"value\":true}]}]}}"
 
-	respBody, err := HTTPEditVariationGroup(CampaignID, "testVariationGroupID", data)
+	respBody, err := variationGroupRequester.HTTPEditVariationGroup(CampaignID, "testVariationGroupID", data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -59,7 +60,7 @@ func TestHTTPEditVariationGroup(t *testing.T) {
 
 func TestHTTPDeleteVariationGroup(t *testing.T) {
 
-	err := HTTPDeleteVariationGroup(CampaignID, "testVariationGroupID")
+	err := variationGroupRequester.HTTPDeleteVariationGroup(CampaignID, "testVariationGroupID")
 
 	assert.Nil(t, err)
 }

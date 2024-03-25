@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +20,7 @@ var SwitchCmd = &cobra.Command{
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 3 values: active or paused or interrupted")
 		} else {
-			err := httprequest.HTTPSwitchCampaign(CampaignID, Status)
+			err := httprequest.CampaignRequester.HTTPSwitchCampaign(CampaignID, Status)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}

@@ -1,4 +1,4 @@
-package http_request
+package common
 
 import (
 	"bytes"
@@ -12,52 +12,9 @@ import (
 	"time"
 
 	"github.com/flagship-io/flagship/utils/config"
-	"github.com/spf13/viper"
 )
 
 var UserAgent string
-
-func regenerateToken_(configName string) {
-	gt := viper.GetString("grant_type")
-	sc := viper.GetString("scope")
-	ex := viper.GetInt("expiration")
-
-	if gt == "" {
-		gt = config.GrantType
-	}
-
-	if sc == "" {
-		sc = config.Scope
-	}
-
-	if ex == 0 {
-		ex = config.Expiration
-	}
-
-	authenticationResponse, err := HTTPCreateToken(viper.GetString("client_id"), viper.GetString("client_secret"), gt, sc, ex)
-
-	if err != nil {
-		log.Fatalf("%s", err)
-	}
-	if authenticationResponse.AccessToken == "" {
-		log.Fatal("client_id or client_secret not valid")
-	} else {
-		config.WriteToken(configName, authenticationResponse)
-	}
-}
-
-func regenerateToken(configName string) {
-	authenticationResponse, err := HTTPRefreshToken(viper.GetString("client_id"), viper.GetString("refresh_token"))
-
-	if err != nil {
-		log.Fatalf("%s", err)
-	}
-	if authenticationResponse.AccessToken == "" {
-		log.Fatal("client_id or client_secret not valid")
-	} else {
-		config.WriteToken(configName, authenticationResponse)
-	}
-}
 
 var c = http.Client{Timeout: time.Duration(10) * time.Second}
 var counter = false
@@ -65,6 +22,16 @@ var counter = false
 type PageResult struct {
 	Items      json.RawMessage `json:"items"`
 	TotalCount int             `json:"total_count"`
+}
+
+type ResourceRequest struct {
+	AccountID    string `mapstructure:"account_id"`
+	AccountEnvID string `mapstructure:"account_environment_id"`
+}
+
+func (c *ResourceRequest) Init(cL *RequestConfig) {
+	c.AccountEnvID = cL.AccountEnvID
+	c.AccountID = cL.AccountID
 }
 
 type PageResultWE struct {
@@ -79,6 +46,40 @@ type Pagination struct {
 	MaxPerPage int `json:"_max_per_page"`
 }
 
+type RequestConfig struct {
+	Product                string
+	Username               string `mapstructure:"username"`
+	ClientID               string `mapstructure:"client_id"`
+	ClientSecret           string `mapstructure:"client_secret"`
+	AccountID              string `mapstructure:"account_id"`
+	AccountEnvID           string `mapstructure:"account_environment_id"`
+	Token                  string `mapstructure:"token"`
+	RefreshToken           string `mapstructure:"refresh_token"`
+	CurrentUsedCredentials string `mapstructure:"current_used_credentials"`
+}
+
+var cred RequestConfig
+
+func Init(credL RequestConfig) {
+	cred = credL
+}
+
+func regenerateToken(configName string) {
+	authenticationResponse, err := HTTPRefreshToken(cred.ClientID, cred.RefreshToken)
+
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
+	if authenticationResponse.AccessToken == "" {
+		log.Fatal("client_id or client_secret not valid")
+	} else {
+		cred.RefreshToken = authenticationResponse.RefreshToken
+		cred.Token = authenticationResponse.AccessToken
+		config.WriteToken(configName, authenticationResponse)
+	}
+}
+
 func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 	var bodyIO io.Reader = nil
 	if body != nil {
@@ -90,20 +91,20 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		log.Panicf("error occurred on request creation: %v", err)
 	}
 
-	if !strings.Contains(resource, "token") && viper.GetString("account_id") == "" && viper.GetString("account_environment_id") == "" {
+	if cred.Product == "FE" && !strings.Contains(resource, "token") && (cred.AccountID == "" || cred.AccountEnvID == "") {
 		log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
 	}
 
-	if strings.Contains(resource, "token") && viper.GetString("client_id") == "" && viper.GetString("client_secret") == "" {
+	if cred.Product == "FE" && strings.Contains(resource, "token") && cred.ClientID == "" && cred.ClientSecret == "" {
 		log.Fatalf("client_id or client_secret required, Please configure your CLI")
 	}
 
-	if !strings.Contains(resource, "token") && viper.GetString("token") == "" {
-		regenerateToken(viper.GetString("current_used_configuration"))
+	if !strings.Contains(resource, "token") && cred.Token == "" {
+		regenerateToken(cred.CurrentUsedCredentials)
 	}
 
 	req.Header.Add("Accept", `*/*`)
-	req.Header.Add("Authorization", "Bearer "+viper.GetString("token"))
+	req.Header.Add("Authorization", "Bearer "+cred.Token)
 	req.Header.Add("Accept-Encoding", `gzip, deflate, br`)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Set("User-Agent", UserAgent)
@@ -134,11 +135,12 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	//fmt.Println(string(respBody))
+	fmt.Println(cred.AccountID)
+	fmt.Println(string(respBody))
 
 	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
 		counter = true
-		regenerateToken(viper.GetString("current_used_configuration"))
+		regenerateToken(cred.CurrentUsedCredentials)
 		return HTTPRequest(method, resource, body)
 	}
 	return respBody, err

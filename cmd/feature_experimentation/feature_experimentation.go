@@ -4,7 +4,11 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package feature_experimentation
 
 import (
+	"os"
+
+	"github.com/flagship-io/flagship/cmd/feature_experimentation/account"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/analyze"
+	"github.com/flagship-io/flagship/cmd/feature_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/campaign"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/flag"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/goal"
@@ -15,8 +19,12 @@ import (
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/user"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/variation"
 	variationgroup "github.com/flagship-io/flagship/cmd/feature_experimentation/variation_group"
+	"github.com/flagship-io/flagship/utils/config"
+	"github.com/flagship-io/flagship/utils/http_request"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // FeatureExperimentationCmd represents the feature experimentation command
@@ -42,8 +50,33 @@ func addSubCommandPalettes() {
 	FeatureExperimentationCmd.AddCommand(targetingkey.TargetingKeyCmd)
 	FeatureExperimentationCmd.AddCommand(analyze.AnalyzeCmd)
 	FeatureExperimentationCmd.AddCommand(resource.ResourceCmd)
+	FeatureExperimentationCmd.AddCommand(auth.AuthCmd)
+	FeatureExperimentationCmd.AddCommand(account.AccountCmd)
 }
 
 func init() {
+	cobra.OnInitialize(initConfig)
 	addSubCommandPalettes()
+}
+
+func initConfig() {
+	v := viper.New()
+	homeDir, _ := os.UserHomeDir()
+	var requestConfig = common.RequestConfig{Product: "FE"}
+
+	v.SetConfigFile(homeDir + "/.flagship/credentials/fe/.cli.yaml")
+	v.MergeInConfig()
+	if v.GetString("current_used_credential") != "" {
+
+		vL := config.ReadConfiguration(v.GetString("current_used_credential"))
+		v.MergeConfigMap(vL.AllSettings())
+
+		v.Unmarshal(&requestConfig)
+		common.Init(requestConfig)
+		for _, r := range http_request.HTTPResources {
+			r.Init(&requestConfig)
+		}
+		return
+	}
+
 }

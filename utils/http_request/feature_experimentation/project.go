@@ -6,27 +6,30 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
-	"github.com/spf13/viper"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-func HTTPListProject() ([]models.Project, error) {
-	return httprequest.HTTPGetAllPages[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects")
+type ProjectRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetProject(id string) (models.Project, error) {
-	return httprequest.HTTPGetItem[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/projects/" + id)
+func (p *ProjectRequester) HTTPListProject() ([]models.Project, error) {
+	return common.HTTPGetAllPages[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + p.AccountID + "/projects")
 }
 
-func HTTPCreateProject(data []byte) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects", data)
+func (p *ProjectRequester) HTTPGetProject(id string) (models.Project, error) {
+	return common.HTTPGetItem[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + p.AccountID + "/projects/" + id)
 }
 
-func HTTPEditProject(id string, data []byte) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, data)
+func (p *ProjectRequester) HTTPCreateProject(data []byte) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects", data)
 }
 
-func HTTPSwitchProject(id, state string) error {
+func (p *ProjectRequester) HTTPEditProject(id string, data []byte) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, data)
+}
+
+func (p *ProjectRequester) HTTPSwitchProject(id, state string) error {
 	projectRequest := models.ProjectSwitchRequest{
 		State: state,
 	}
@@ -36,11 +39,11 @@ func HTTPSwitchProject(id, state string) error {
 		return err
 	}
 
-	_, err = httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id+"/toggle", projectRequestJSON)
+	_, err = common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id+"/toggle", projectRequestJSON)
 	return err
 }
 
-func HTTPDeleteProject(id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/projects/"+id, nil)
+func (p *ProjectRequester) HTTPDeleteProject(id string) error {
+	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, nil)
 	return err
 }

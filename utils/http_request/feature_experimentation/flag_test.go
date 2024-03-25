@@ -6,9 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var flagRequester = FlagRequester{}
+
 func TestHTTPGetFlag(t *testing.T) {
 
-	respBody, err := HTTPGetFlag("testFlagID")
+	respBody, err := flagRequester.HTTPGetFlag("testFlagID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -19,7 +21,7 @@ func TestHTTPGetFlag(t *testing.T) {
 
 func TestHTTPListFlag(t *testing.T) {
 
-	respBody, err := HTTPListFlag()
+	respBody, err := flagRequester.HTTPListFlag()
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -35,7 +37,7 @@ func TestHTTPCreateFlag(t *testing.T) {
 
 	data := "{\"name\":\"testFlagName\", \"type\":\"string\", \"description\":\"testFlagDescription\", \"source\":\"cli\"}"
 
-	respBody, err := HTTPCreateFlag(data)
+	respBody, err := flagRequester.HTTPCreateFlag(data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -47,7 +49,7 @@ func TestHTTPEditFlag(t *testing.T) {
 
 	data := "{\"name\":\"testFlagName1\",\"type\":\"string\",\"description\":\"testFlagDescription1\",\"source\":\"cli\"}"
 
-	respBody, err := HTTPEditFlag("testFlagID", data)
+	respBody, err := flagRequester.HTTPEditFlag("testFlagID", data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -57,7 +59,7 @@ func TestHTTPEditFlag(t *testing.T) {
 
 func TestHTTPDeleteFlag(t *testing.T) {
 
-	err := HTTPDeleteFlag("testFlagID")
+	err := flagRequester.HTTPDeleteFlag("testFlagID")
 
 	assert.Nil(t, err)
 }

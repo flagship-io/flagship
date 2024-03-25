@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var createCmd = &cobra.Command{
 	Short: "Create a user with right",
 	Long:  `Create a user with right in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_, err := httprequest.HTTPBatchUpdateUsers(DataRaw)
+		_, err := httprequest.UserRequester.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

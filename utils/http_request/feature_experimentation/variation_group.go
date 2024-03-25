@@ -5,27 +5,30 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
-	"github.com/spf13/viper"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-func HTTPListVariationGroup(campaignID string) ([]models.VariationGroup, error) {
-	return httprequest.HTTPGetAllPages[models.VariationGroup](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + campaignID + "/variation_groups")
+type VariationGroupRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetVariationGroup(campaignID, id string) (models.VariationGroup, error) {
-	return httprequest.HTTPGetItem[models.VariationGroup](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + campaignID + "/variation_groups/" + id)
+func (vg *VariationGroupRequester) HTTPListVariationGroup(campaignID string) ([]models.VariationGroup, error) {
+	return common.HTTPGetAllPages[models.VariationGroup](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + vg.AccountID + "/account_environments/" + vg.AccountEnvID + "/campaigns/" + campaignID + "/variation_groups")
 }
 
-func HTTPCreateVariationGroup(campaignID, data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups", []byte(data))
+func (vg *VariationGroupRequester) HTTPGetVariationGroup(campaignID, id string) (models.VariationGroup, error) {
+	return common.HTTPGetItem[models.VariationGroup](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + vg.AccountID + "/account_environments/" + vg.AccountEnvID + "/campaigns/" + campaignID + "/variation_groups/" + id)
 }
 
-func HTTPEditVariationGroup(campaignID, id, data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+id, []byte(data))
+func (vg *VariationGroupRequester) HTTPCreateVariationGroup(campaignID, data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+vg.AccountID+"/account_environments/"+vg.AccountEnvID+"/campaigns/"+campaignID+"/variation_groups", []byte(data))
 }
 
-func HTTPDeleteVariationGroup(campaignID, id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+id, nil)
+func (vg *VariationGroupRequester) HTTPEditVariationGroup(campaignID, id, data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+vg.AccountID+"/account_environments/"+vg.AccountEnvID+"/campaigns/"+campaignID+"/variation_groups/"+id, []byte(data))
+}
+
+func (vg *VariationGroupRequester) HTTPDeleteVariationGroup(campaignID, id string) error {
+	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+vg.AccountID+"/account_environments/"+vg.AccountEnvID+"/campaigns/"+campaignID+"/variation_groups/"+id, nil)
 	return err
 }

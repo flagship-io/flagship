@@ -5,27 +5,30 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
-	"github.com/spf13/viper"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-func HTTPListFlag() ([]models.Flag, error) {
-	return httprequest.HTTPGetAllPages[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags")
+type FlagRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetFlag(id string) (models.Flag, error) {
-	return httprequest.HTTPGetItem[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/flags/" + id)
+func (f *FlagRequester) HTTPListFlag() ([]models.Flag, error) {
+	return common.HTTPGetAllPages[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + f.AccountID + "/flags")
 }
 
-func HTTPCreateFlag(data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags", []byte(data))
+func (f *FlagRequester) HTTPGetFlag(id string) (models.Flag, error) {
+	return common.HTTPGetItem[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + f.AccountID + "/flags/" + id)
 }
 
-func HTTPEditFlag(id, data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, []byte(data))
+func (f *FlagRequester) HTTPCreateFlag(data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags", []byte(data))
 }
 
-func HTTPDeleteFlag(id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/flags/"+id, nil)
+func (f *FlagRequester) HTTPEditFlag(id, data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, []byte(data))
+}
+
+func (f *FlagRequester) HTTPDeleteFlag(id string) error {
+	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, nil)
 	return err
 }

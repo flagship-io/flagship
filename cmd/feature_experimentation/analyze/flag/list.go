@@ -12,7 +12,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/kyokomi/emoji/v2"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
@@ -171,7 +171,7 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		listExistingFlags, errListFlag := httprequest.HTTPListFlag()
+		listExistingFlags, errListFlag := httprequest.FlagRequester.HTTPListFlag()
 		if errListFlag != nil {
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
 		}

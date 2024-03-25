@@ -15,3 +15,15 @@ type ConfigurationYaml struct {
 	AccountID            string `yaml:"account_id"`
 	AccountEnvironmentID string `yaml:"account_environment_id"`
 }
+
+type Configuration_new struct {
+	Username     string `json:"username"`
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
+
+type ConfigurationYaml_new struct {
+	Username     string `yaml:"username"`
+	ClientID     string `yaml:"client_id"`
+	ClientSecret string `yaml:"client_secret"`
+}

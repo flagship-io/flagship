@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package user
+package account
 
 import (
 	"log"
@@ -15,17 +15,20 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all users",
-	Long:  `List all users in your account`,
+	Short: "list all auth",
+	Long:  `list all auth from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.UserRequester.HTTPListUsers()
+
+		body, err := httprequest.CampaignRequester.HTTPListCampaign()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		utils.FormatItem([]string{"Email", "Role"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Id", "ProjectId", "Name", "Description", "Type", "Status"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+
 	},
 }
 
 func init() {
-	UserCmd.AddCommand(listCmd)
+
+	AccountCmd.AddCommand(listCmd)
 }

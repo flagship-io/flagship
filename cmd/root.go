@@ -6,7 +6,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/flagship-io/flagship/cmd/configuration"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation"
 	"github.com/flagship-io/flagship/cmd/info"
 	"github.com/flagship-io/flagship/cmd/token"
@@ -14,15 +13,13 @@ import (
 
 	"github.com/flagship-io/flagship/cmd/version"
 	"github.com/flagship-io/flagship/utils/config"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	cfgFile      string
-	cmdToken     string
 	outputFormat string
 )
 
@@ -51,7 +48,6 @@ func Execute() {
 }
 
 func addSubCommandPalettes() {
-	rootCmd.AddCommand(configuration.ConfigurationCmd)
 	rootCmd.AddCommand(version.VersionCmd)
 	rootCmd.AddCommand(token.TokenCmd)
 	rootCmd.AddCommand(info.InfoCmd)
@@ -62,14 +58,11 @@ func addSubCommandPalettes() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVarP(&cmdToken, "token", "t", "", "access token to manage flagship resources")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
-	rootCmd.PersistentFlags().StringVarP(&httprequest.UserAgent, "user-agent", "u", config.DefaultUserAgent, "custom user agent")
+	rootCmd.PersistentFlags().StringVarP(&common.UserAgent, "user-agent", "", config.DefaultUserAgent, "custom user agent")
 
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
-
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file that contains your credentials (default is $HOME/.flagship/credentials.yaml)")
 
 	addSubCommandPalettes()
 }
@@ -77,20 +70,7 @@ func init() {
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-		viper.MergeInConfig()
-		return
-	}
 	// Find home directory.
-	homeDir, err := os.UserHomeDir()
+	_, err := config.CheckFlagshipHomeDirectory()
 	cobra.CheckErr(err)
-	// Search config in home directory with name ".flagship" (without extension).
-	viper.SetConfigFile(homeDir + "/.flagship/configurations/.cli.yaml")
-	viper.MergeInConfig()
-	if viper.GetString("current_used_configuration") != "" {
-		config.ReadConfiguration(viper.GetString("current_used_configuration"))
-	}
-
 }

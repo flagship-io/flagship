@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -20,7 +20,7 @@ var infoCmd = &cobra.Command{
 	Long:  `Get the information related to your token`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if viper.GetString("token") != "" {
-			body, err := httprequest.HTTPCheckToken(viper.GetString("token"))
+			body, err := common.HTTPCheckToken(viper.GetString("token"))
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}

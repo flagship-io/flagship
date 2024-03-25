@@ -6,9 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var userRequester = UserRequester{}
+
 func TestHTTPListUsers(t *testing.T) {
 
-	respBody, err := HTTPListUsers()
+	respBody, err := userRequester.HTTPListUsers()
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -24,14 +26,14 @@ func TestHTTPBatchUpdateUsers(t *testing.T) {
 
 	data := "[{\"email\":\"example@abtasty.com\",\"role\":\"ADMIN\"},{\"email\":\"example1@abtasty.com\",\"role\":\"VIEWER\"}]"
 
-	_, err := HTTPBatchUpdateUsers(data)
+	_, err := userRequester.HTTPBatchUpdateUsers(data)
 
 	assert.Nil(t, err)
 }
 
 func TestHTTPDeleteUser(t *testing.T) {
 
-	err := HTTPDeleteUsers("example@abtasty.com")
+	err := userRequester.HTTPDeleteUsers("example@abtasty.com")
 
 	assert.Nil(t, err)
 }

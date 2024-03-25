@@ -7,10 +7,11 @@ import (
 )
 
 var variationGroupID = "variationGroupID"
+var variationRequester = VariationRequester{}
 
 func TestHTTPGetVariation(t *testing.T) {
 
-	respBody, err := HTTPGetVariation(CampaignID, variationGroupID, "testVariationID")
+	respBody, err := variationRequester.HTTPGetVariation(CampaignID, variationGroupID, "testVariationID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -21,7 +22,7 @@ func TestHTTPGetVariation(t *testing.T) {
 
 func TestHTTPListVariation(t *testing.T) {
 
-	respBody, err := HTTPListVariation(CampaignID, variationGroupID)
+	respBody, err := variationRequester.HTTPListVariation(CampaignID, variationGroupID)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -41,7 +42,7 @@ func TestHTTPCreateVariation(t *testing.T) {
 
 	data := "{\"name\":\"testVariationName\",\"reference\":true,\"allocation\":50,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP\"}}"
 
-	respBody, err := HTTPCreateVariation(CampaignID, variationGroupID, data)
+	respBody, err := variationRequester.HTTPCreateVariation(CampaignID, variationGroupID, data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -53,7 +54,7 @@ func TestHTTPEditVariation(t *testing.T) {
 
 	data := "{\"name\":\"testVariationName1\",\"reference\":false,\"allocation\":80,\"modifications\":{\"type\":\"string\",\"value\":\"isVIP1\"}}"
 
-	respBody, err := HTTPEditVariation(CampaignID, variationGroupID, "testVariationID", data)
+	respBody, err := variationRequester.HTTPEditVariation(CampaignID, variationGroupID, "testVariationID", data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -63,7 +64,7 @@ func TestHTTPEditVariation(t *testing.T) {
 
 func TestHTTPDeleteVariation(t *testing.T) {
 
-	err := HTTPDeleteVariation(CampaignID, variationGroupID, "testVariationID")
+	err := variationRequester.HTTPDeleteVariation(CampaignID, variationGroupID, "testVariationID")
 
 	assert.Nil(t, err)
 }

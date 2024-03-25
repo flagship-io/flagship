@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a flag",
 	Long:  `Delete a flag in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPDeleteFlag(FlagID)
+		err := httprequest.FlagRequester.HTTPDeleteFlag(FlagID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

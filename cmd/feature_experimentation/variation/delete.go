@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a variation",
 	Long:  `Delete a variation in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPDeleteVariation(CampaignID, VariationGroupID, VariationID)
+		err := httprequest.VariationRequester.HTTPDeleteVariation(CampaignID, VariationGroupID, VariationID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

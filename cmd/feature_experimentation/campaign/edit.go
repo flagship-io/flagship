@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var editCmd = &cobra.Command{
 	Short: "Edit a campaign",
 	Long:  `Edit a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPEditCampaign(CampaignID, DataRaw)
+		body, err := httprequest.CampaignRequester.HTTPEditCampaign(CampaignID, DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

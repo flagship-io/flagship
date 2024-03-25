@@ -18,7 +18,7 @@ import (
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
-	featureexp "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -36,7 +36,7 @@ type ResourceData struct {
 }
 
 func (f *ProjectData) Save(data string) ([]byte, error) {
-	return featureexp.HTTPCreateProject([]byte(data))
+	return httprequest.ProjectRequester.HTTPCreateProject([]byte(data))
 }
 
 type CampaignData struct {
@@ -49,7 +49,7 @@ type CampaignData struct {
 }
 
 func (f *CampaignData) Save(data string) ([]byte, error) {
-	return featureexp.HTTPCreateCampaign(data)
+	return httprequest.CampaignRequester.HTTPCreateCampaign(data)
 }
 
 type FlagData struct {
@@ -57,7 +57,7 @@ type FlagData struct {
 }
 
 func (f *FlagData) Save(data string) ([]byte, error) {
-	return featureexp.HTTPCreateFlag(data)
+	return httprequest.FlagRequester.HTTPCreateFlag(data)
 }
 
 type GoalData struct {
@@ -65,7 +65,7 @@ type GoalData struct {
 }
 
 func (f *GoalData) Save(data string) ([]byte, error) {
-	return featureexp.HTTPCreateGoal(data)
+	return httprequest.GoalRequester.HTTPCreateGoal(data)
 }
 
 type TargetingKeysData struct {
@@ -73,7 +73,7 @@ type TargetingKeysData struct {
 }
 
 func (f *TargetingKeysData) Save(data string) ([]byte, error) {
-	return featureexp.HTTPCreateTargetingKey(data)
+	return httprequest.TargetingKeyRequester.HTTPCreateTargetingKey(data)
 }
 
 type VariationGroupData struct {
@@ -289,11 +289,11 @@ func ScriptResource(resources []Resource) {
 		}
 
 		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
+			response, err = common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
 		}
 
 		if resource.Name == Goal || resource.Name == Campaign {
-			response, err = httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
+			response, err = common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
 		}
 
 		if err != nil {

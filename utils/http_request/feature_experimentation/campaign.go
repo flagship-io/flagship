@@ -6,27 +6,30 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
-	"github.com/spf13/viper"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-func HTTPListCampaign() ([]models.Campaign, error) {
-	return httprequest.HTTPGetAllPages[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns")
+type CampaignRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetCampaign(id string) (models.Campaign, error) {
-	return httprequest.HTTPGetItem[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/account_environments/" + viper.GetString("account_environment_id") + "/campaigns/" + id)
+func (c *CampaignRequester) HTTPListCampaign() ([]models.Campaign, error) {
+	return common.HTTPGetAllPages[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvID + "/campaigns")
 }
 
-func HTTPCreateCampaign(data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns", []byte(data))
+func (c *CampaignRequester) HTTPGetCampaign(id string) (models.Campaign, error) {
+	return common.HTTPGetItem[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvID + "/campaigns/" + id)
 }
 
-func HTTPEditCampaign(id, data string) ([]byte, error) {
-	return httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id, []byte(data))
+func (c *CampaignRequester) HTTPCreateCampaign(data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvID+"/campaigns", []byte(data))
 }
 
-func HTTPSwitchCampaign(id, state string) error {
+func (c *CampaignRequester) HTTPEditCampaign(id, data string) ([]byte, error) {
+	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvID+"/campaigns/"+id, []byte(data))
+}
+
+func (c *CampaignRequester) HTTPSwitchCampaign(id, state string) error {
 	campaignSwitchRequest := models.CampaignSwitchRequest{
 		State: state,
 	}
@@ -36,11 +39,11 @@ func HTTPSwitchCampaign(id, state string) error {
 		return err
 	}
 
-	_, err = httprequest.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id+"/toggle", campaignSwitchRequestJSON)
+	_, err = common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvID+"/campaigns/"+id+"/toggle", campaignSwitchRequestJSON)
 	return err
 }
 
-func HTTPDeleteCampaign(id string) error {
-	_, err := httprequest.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+id, nil)
+func (c *CampaignRequester) HTTPDeleteCampaign(id string) error {
+	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvID+"/campaigns/"+id, nil)
 	return err
 }

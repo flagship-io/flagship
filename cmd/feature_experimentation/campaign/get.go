@@ -7,7 +7,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 	Short: "Get a campaign",
 	Long:  `Get a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPGetCampaign(CampaignID)
+		body, err := httprequest.CampaignRequester.HTTPGetCampaign(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

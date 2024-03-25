@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a campaign",
 	Long:  `Delete a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.HTTPDeleteCampaign(CampaignID)
+		err := httprequest.CampaignRequester.HTTPDeleteCampaign(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

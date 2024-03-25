@@ -6,9 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var goalRequester = GoalRequester{}
+
 func TestHTTPGetGoal(t *testing.T) {
 
-	respBody, err := HTTPGetGoal("testGoalID")
+	respBody, err := goalRequester.HTTPGetGoal("testGoalID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -19,7 +21,7 @@ func TestHTTPGetGoal(t *testing.T) {
 
 func TestHTTPListGoal(t *testing.T) {
 
-	respBody, err := HTTPListGoal()
+	respBody, err := goalRequester.HTTPListGoal()
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -35,7 +37,7 @@ func TestHTTPCreateGoal(t *testing.T) {
 
 	data := "{\"label\":\"testGoalLabel\", \"type\":\"screenview\", \"operator\":\"contains\", \"value\":\"VIP\"}"
 
-	respBody, err := HTTPCreateGoal(data)
+	respBody, err := goalRequester.HTTPCreateGoal(data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -47,7 +49,7 @@ func TestHTTPEditGoal(t *testing.T) {
 
 	data := "{\"label\":\"testGoalLabel\", \"type\":\"screenview\", \"operator\":\"contains\", \"value\":\"VIP\"}"
 
-	respBody, err := HTTPEditGoal("testGoalID", data)
+	respBody, err := goalRequester.HTTPEditGoal("testGoalID", data)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -57,7 +59,7 @@ func TestHTTPEditGoal(t *testing.T) {
 
 func TestHTTPDeleteGoal(t *testing.T) {
 
-	err := HTTPDeleteGoal("testGoalID")
+	err := goalRequester.HTTPDeleteGoal("testGoalID")
 
 	assert.Nil(t, err)
 }

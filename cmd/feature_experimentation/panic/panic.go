@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +23,7 @@ var PanicCmd = &cobra.Command{
 			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 2 values: on or off ")
 			return
 		}
-		_, err := httprequest.HTTPUpdatePanic(panicStatus)
+		_, err := httprequest.PanicRequester.HTTPUpdatePanic(panicStatus)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

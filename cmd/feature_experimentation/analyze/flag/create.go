@@ -14,7 +14,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/flagship-io/codebase-analyzer/pkg/handler"
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 	"golang.org/x/exp/slices"
@@ -117,7 +117,7 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			return err_
 		}
 
-		createdFlags, errCreatedFlags := httprequest.HTTPCreateFlag(string(multipleflagRequestJSON))
+		createdFlags, errCreatedFlags := httprequest.FlagRequester.HTTPCreateFlag(string(multipleflagRequestJSON))
 
 		if errCreatedFlags != nil {
 			return errCreatedFlags
@@ -129,7 +129,7 @@ func flagCreatedTable(cmd *cobra.Command, listedFlags []models.Flag) error {
 			return err_json
 		}
 
-		listExistingFlags, errListFlag := httprequest.HTTPListFlag()
+		listExistingFlags, errListFlag := httprequest.FlagRequester.HTTPListFlag()
 		if errListFlag != nil {
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
 		}
@@ -180,7 +180,7 @@ var createCmd = &cobra.Command{
 		PreRunConfiguration()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		listedExistingFlags, errListFlag := httprequest.HTTPListFlag()
+		listedExistingFlags, errListFlag := httprequest.FlagRequester.HTTPListFlag()
 		if errListFlag != nil {
 			log.Fatalf("error occurred when listing existing flag: %s", errListFlag)
 		}

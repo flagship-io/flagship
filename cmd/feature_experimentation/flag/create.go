@@ -9,7 +9,7 @@ import (
 	"log"
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -47,7 +47,7 @@ var createCmd = &cobra.Command{
 
 			data = string(data_)
 		}
-		body, err := httprequest.HTTPCreateFlag(data)
+		body, err := httprequest.FlagRequester.HTTPCreateFlag(data)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

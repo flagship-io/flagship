@@ -7,7 +7,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Short: "List all projects",
 	Long:  `List all projects in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPListProject()
+		body, err := httprequest.ProjectRequester.HTTPListProject()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

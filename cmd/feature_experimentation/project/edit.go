@@ -9,7 +9,7 @@ import (
 	"log"
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ var editCmd = &cobra.Command{
 			log.Fatalf("error occurred: %s", err)
 		}
 
-		body, err := httprequest.HTTPEditProject(ProjectId, projectRequestJSON)
+		body, err := httprequest.ProjectRequester.HTTPEditProject(ProjectId, projectRequestJSON)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

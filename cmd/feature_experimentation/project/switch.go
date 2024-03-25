@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +22,7 @@ var switchCmd = &cobra.Command{
 			return
 		}
 
-		err := httprequest.HTTPSwitchProject(ProjectId, ProjectStatus)
+		err := httprequest.ProjectRequester.HTTPSwitchProject(ProjectId, ProjectStatus)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

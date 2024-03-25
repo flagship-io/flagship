@@ -6,9 +6,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var panicRequester = PanicRequester{}
+
 func TestHTTPUpdatePanic(t *testing.T) {
 
-	_, err := HTTPUpdatePanic("active")
+	_, err := panicRequester.HTTPUpdatePanic("active")
 
 	assert.Nil(t, err)
 }

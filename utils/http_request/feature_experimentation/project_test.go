@@ -9,9 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var projectRequester = ProjectRequester{}
+
 func TestHTTPGetProject(t *testing.T) {
 
-	respBody, err := HTTPGetProject("testProjectID")
+	respBody, err := projectRequester.HTTPGetProject("testProjectID")
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -22,7 +24,7 @@ func TestHTTPGetProject(t *testing.T) {
 
 func TestHTTPListProject(t *testing.T) {
 
-	respBody, err := HTTPListProject()
+	respBody, err := projectRequester.HTTPListProject()
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -42,7 +44,7 @@ func TestHTTPCreateProject(t *testing.T) {
 	if err != nil {
 		log.Fatalf("error occurred: %s", err)
 	}
-	respBody, err := HTTPCreateProject(projectRequestJSON)
+	respBody, err := projectRequester.HTTPCreateProject(projectRequestJSON)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -58,7 +60,7 @@ func TestHTTPEditProject(t *testing.T) {
 	if err != nil {
 		log.Fatalf("error occurred: %s", err)
 	}
-	respBody, err := HTTPEditProject("testProjectID", projectRequestJSON)
+	respBody, err := projectRequester.HTTPEditProject("testProjectID", projectRequestJSON)
 
 	assert.NotNil(t, respBody)
 	assert.Nil(t, err)
@@ -68,14 +70,14 @@ func TestHTTPEditProject(t *testing.T) {
 
 func TestHTTPDeleteProject(t *testing.T) {
 
-	err := HTTPDeleteProject("testProjectID")
+	err := projectRequester.HTTPDeleteProject("testProjectID")
 
 	assert.Nil(t, err)
 }
 
 func TestHTTPSwitchProject(t *testing.T) {
 
-	err := HTTPSwitchProject("testProjectID", "active")
+	err := projectRequester.HTTPSwitchProject("testProjectID", "active")
 
 	assert.Nil(t, err)
 }
