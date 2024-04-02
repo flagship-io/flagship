@@ -14,7 +14,7 @@ type UserRequester struct {
 }
 
 func (u *UserRequester) HTTPListUsers() ([]models.User, error) {
-	return common.HTTPGetAllPages[models.User](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + u.AccountID + "/account_environments/" + u.AccountEnvironmentID + "/users")
+	return common.HTTPGetAllPagesFE[models.User](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + u.AccountID + "/account_environments/" + u.AccountEnvironmentID + "/users")
 }
 
 func (u *UserRequester) HTTPBatchUpdateUsers(data string) ([]byte, error) {

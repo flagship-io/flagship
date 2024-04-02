@@ -13,7 +13,7 @@ type TargetingKeyRequester struct {
 }
 
 func (t *TargetingKeyRequester) HTTPListTargetingKey() ([]models.TargetingKey, error) {
-	return common.HTTPGetAllPages[models.TargetingKey](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + t.AccountID + "/targeting_keys")
+	return common.HTTPGetAllPagesFE[models.TargetingKey](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + t.AccountID + "/targeting_keys")
 }
 
 func (t *TargetingKeyRequester) HTTPGetTargetingKey(id string) (models.TargetingKey, error) {

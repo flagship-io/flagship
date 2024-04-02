@@ -2,6 +2,7 @@ package common
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/flagship-io/flagship/models"
@@ -59,7 +60,7 @@ func HTTPCreateTokenFE(clientId, clientSecret, accountId string) (models.TokenRe
 	return authenticationResponse, err
 }
 
-func HTTPCreateTokenWE(client_id, client_secret, code string) (models.TokenResponse, error) {
+func HTTPCreateTokenWEAuthorizationCode(client_id, client_secret, code string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
 	authRequest := models.AuthorizationCodeRequest{
 		ClientID:     client_id,
@@ -81,6 +82,85 @@ func HTTPCreateTokenWE(client_id, client_secret, code string) (models.TokenRespo
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
+
+	return authenticationResponse, err
+}
+
+func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfaCode string) (models.TokenResponse, error) {
+	var authenticationResponse models.TokenResponse
+	var mfaResponse models.MfaRequestWE
+	var mfmResponse models.MfaRequestWE
+
+	authRequest := models.PasswordRequest{
+		ClientID:     client_id,
+		ClientSecret: client_secret,
+		GrantType:    "password",
+		Username:     username,
+		Password:     password,
+	}
+	authRequestJSON, err := json.Marshal(authRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	mfaRespBody, err := HTTPRequest[models.MfaRequestWE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", authRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(mfaRespBody, &mfaResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	fmt.Println(string(mfaRespBody))
+
+	mfmRequest := models.MultiFactorMethodRequestWE{
+		GrantType: "multi_factor_methods",
+		MfaToken:  mfaResponse.MfaToken,
+		MfaMethod: "totp",
+	}
+
+	mfmRequestJSON, err := json.Marshal(mfmRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	mfmRespBody, err := HTTPRequest[models.MfaRequestWE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", mfmRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(mfmRespBody, &mfmResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	fmt.Println(string(mfmRespBody))
+
+	mfRequest := models.MultiFactorRequestWE{
+		GrantType: "multi_factor",
+		MfaToken:  mfmResponse.MfaToken,
+		MfaMethod: "totp",
+		Code:      mfaCode,
+	}
+
+	mfRequestJSON, err := json.Marshal(mfRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	respBody, err := HTTPRequest[models.MfaRequestWE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", mfRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(respBody, &authenticationResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	fmt.Println(authenticationResponse)
 
 	return authenticationResponse, err
 }

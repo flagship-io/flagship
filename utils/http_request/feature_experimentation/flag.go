@@ -13,7 +13,7 @@ type FlagRequester struct {
 }
 
 func (f *FlagRequester) HTTPListFlag() ([]models.Flag, error) {
-	return common.HTTPGetAllPages[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + f.AccountID + "/flags")
+	return common.HTTPGetAllPagesFE[models.Flag](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + f.AccountID + "/flags")
 }
 
 func (f *FlagRequester) HTTPGetFlag(id string) (models.Flag, error) {

@@ -1,4 +1,4 @@
-package models
+package web_experimentation
 
 type Test struct {
 	Id          int              `json:"id,omitempty"`

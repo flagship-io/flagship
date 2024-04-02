@@ -3,6 +3,7 @@ package http_request
 import (
 	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/flagship-io/flagship/utils/http_request/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request/web_experimentation"
 )
 
 type HTTPResource interface {
@@ -13,8 +14,9 @@ var ResourceRequester common.ResourceRequest
 
 var HTTPResources = []HTTPResource{&ResourceRequester}
 
+// feature experimentation
 var CampaignRequester feature_experimentation.CampaignRequester = feature_experimentation.CampaignRequester{ResourceRequest: &ResourceRequester}
-var AccountEnvironmentRequester feature_experimentation.AccountEnvironmentRequester = feature_experimentation.AccountEnvironmentRequester{ResourceRequest: &ResourceRequester}
+var AccountEnvironmentFERequester feature_experimentation.AccountEnvironmentFERequester = feature_experimentation.AccountEnvironmentFERequester{ResourceRequest: &ResourceRequester}
 var FlagRequester feature_experimentation.FlagRequester = feature_experimentation.FlagRequester{ResourceRequest: &ResourceRequester}
 var GoalRequester feature_experimentation.GoalRequester = feature_experimentation.GoalRequester{ResourceRequest: &ResourceRequester}
 var ProjectRequester feature_experimentation.ProjectRequester = feature_experimentation.ProjectRequester{ResourceRequest: &ResourceRequester}
@@ -23,3 +25,8 @@ var TargetingKeyRequester feature_experimentation.TargetingKeyRequester = featur
 var VariationGroupRequester feature_experimentation.VariationGroupRequester = feature_experimentation.VariationGroupRequester{ResourceRequest: &ResourceRequester}
 var VariationRequester feature_experimentation.VariationRequester = feature_experimentation.VariationRequester{ResourceRequest: &ResourceRequester}
 var PanicRequester feature_experimentation.PanicRequester = feature_experimentation.PanicRequester{ResourceRequest: &ResourceRequester}
+
+// web experimentation
+
+var TestRequester web_experimentation.TestRequester = web_experimentation.TestRequester{ResourceRequest: &ResourceRequester}
+var GlobalCodeRequester web_experimentation.GlobalRequester = web_experimentation.GlobalRequester{ResourceRequest: &ResourceRequester}

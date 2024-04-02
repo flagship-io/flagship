@@ -13,7 +13,7 @@ type GoalRequester struct {
 }
 
 func (g *GoalRequester) HTTPListGoal() ([]models.Goal, error) {
-	return common.HTTPGetAllPages[models.Goal](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + g.AccountID + "/account_environments/" + g.AccountEnvironmentID + "/goals")
+	return common.HTTPGetAllPagesFE[models.Goal](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + g.AccountID + "/account_environments/" + g.AccountEnvironmentID + "/goals")
 }
 
 func (g *GoalRequester) HTTPGetGoal(id string) (models.Goal, error) {

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/web_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 	Short: "Get a test",
 	Long:  `Get a test in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPGetTest(CampaignID)
+		body, err := httprequest.TestRequester.HTTPGetTest(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

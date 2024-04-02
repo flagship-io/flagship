@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/web_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Short: "List all global code",
 	Long:  `List all global code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPListGlobalCode()
+		body, err := httprequest.GlobalCodeRequester.HTTPListGlobalCode()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

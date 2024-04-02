@@ -4,13 +4,16 @@ import (
 	models "github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request/common"
-	"github.com/spf13/viper"
 )
 
-func HTTPListGlobalCode() ([]models.GlobalCode, error) {
-	return common.HTTPGetAllPagesWe[models.GlobalCode](utils.GetWebExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/global-codes")
+type GlobalRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetGlobalCode(id string) (models.GlobalCode, error) {
-	return common.HTTPGetItem[models.GlobalCode](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/global-codes/" + id)
+func (g *GlobalRequester) HTTPListGlobalCode() ([]models.GlobalCode, error) {
+	return common.HTTPGetAllPagesWE[models.GlobalCode](utils.GetWebExperimentationHost() + "/v1/accounts/" + g.AccountID + "/global-codes")
+}
+
+func (g *GlobalRequester) HTTPGetGlobalCode(id string) (models.GlobalCode, error) {
+	return common.HTTPGetItem[models.GlobalCode](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + g.AccountID + "/global-codes/" + id)
 }

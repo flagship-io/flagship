@@ -13,7 +13,7 @@ type VariationRequester struct {
 }
 
 func (v *VariationRequester) HTTPListVariation(campaignID, variationGroupID string) ([]models.Variation, error) {
-	return common.HTTPGetAllPages[models.Variation](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + v.AccountID + "/account_environments/" + v.AccountEnvironmentID + "/campaigns/" + campaignID + "/variation_groups/" + variationGroupID + "/variations")
+	return common.HTTPGetAllPagesFE[models.Variation](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + v.AccountID + "/account_environments/" + v.AccountEnvironmentID + "/campaigns/" + campaignID + "/variation_groups/" + variationGroupID + "/variations")
 }
 
 func (v *VariationRequester) HTTPGetVariation(campaignID, variationGroupID, id string) (models.Variation, error) {

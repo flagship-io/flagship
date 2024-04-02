@@ -1,4 +1,4 @@
-package models
+package web_experimentation
 
 type GlobalCode struct {
 	Id        int          `json:"id,omitempty"`

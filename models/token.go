@@ -7,6 +7,30 @@ type TokenWE struct {
 	Scope     string `json:"scope"`
 }
 
+type MfaRequestWE struct {
+	MfaToken   string   `json:"mfa_token"`
+	MfaMethods []string `json:"mfa_methods"`
+}
+
+type MultiFactorMethodRequestWE struct {
+	MfaToken  string `json:"token"`
+	MfaMethod string `json:"mfa_method"`
+	GrantType string `json:"grant_type"`
+}
+
+type MultiFactorRequestWE struct {
+	MfaToken  string `json:"token"`
+	MfaMethod string `json:"mfa_method"`
+	GrantType string `json:"grant_type"`
+	Code      string `json:"code"`
+}
+
+type MultiFactorMethodResponseWE struct {
+	MfaToken  string `json:"token"`
+	MfaMethod string `json:"mfa_method"`
+	GrantType string `json:"grant_type"`
+}
+
 type TokenFE struct {
 	ClientID  string `json:"client_id"`
 	AccountID string `json:"account"`
@@ -29,6 +53,14 @@ type ClientCredentialsRequest struct {
 type AuthorizationCodeRequest struct {
 	GrantType    string `json:"grant_type"`
 	Code         string `json:"code"`
+	ClientID     string `json:"client_id"`
+	ClientSecret string `json:"client_secret"`
+}
+
+type PasswordRequest struct {
+	GrantType    string `json:"grant_type"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 }

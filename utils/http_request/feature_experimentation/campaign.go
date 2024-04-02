@@ -14,7 +14,7 @@ type CampaignRequester struct {
 }
 
 func (c *CampaignRequester) HTTPListCampaign() ([]models.Campaign, error) {
-	return common.HTTPGetAllPages[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns")
+	return common.HTTPGetAllPagesFE[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns")
 }
 
 func (c *CampaignRequester) HTTPGetCampaign(id string) (models.Campaign, error) {

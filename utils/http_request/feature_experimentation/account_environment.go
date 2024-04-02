@@ -6,14 +6,14 @@ import (
 	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-type AccountEnvironmentRequester struct {
+type AccountEnvironmentFERequester struct {
 	*common.ResourceRequest
 }
 
-func (a *AccountEnvironmentRequester) HTTPListAccountEnvironment() ([]models.AccountEnvironment, error) {
-	return common.HTTPGetAllPages[models.AccountEnvironment](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + a.AccountID + "/account_environments")
+func (a *AccountEnvironmentFERequester) HTTPListAccountEnvironment() ([]models.AccountEnvironmentFE, error) {
+	return common.HTTPGetAllPagesFE[models.AccountEnvironmentFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + a.AccountID + "/account_environments")
 }
 
-func (a *AccountEnvironmentRequester) HTTPGetAccountEnvironment(id string) (models.AccountEnvironment, error) {
-	return common.HTTPGetItem[models.AccountEnvironment](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + a.AccountID + "/account_environments/" + id)
+func (a *AccountEnvironmentFERequester) HTTPGetAccountEnvironment(id string) (models.AccountEnvironmentFE, error) {
+	return common.HTTPGetItem[models.AccountEnvironmentFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + a.AccountID + "/account_environments/" + id)
 }

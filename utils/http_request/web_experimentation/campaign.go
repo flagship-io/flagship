@@ -6,23 +6,26 @@ import (
 	models "github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request/common"
-	"github.com/spf13/viper"
 )
 
-func HTTPListTest() ([]models.Test, error) {
-	return common.HTTPGetAllPagesWe[models.Test](utils.GetWebExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/tests")
+type TestRequester struct {
+	*common.ResourceRequest
 }
 
-func HTTPGetTest(id string) (models.Test, error) {
-	return common.HTTPGetItem[models.Test](utils.GetWebExperimentationHost() + "/v1/accounts/" + viper.GetString("account_id") + "/tests/" + id)
+func (t *TestRequester) HTTPListTest() ([]models.Test, error) {
+	return common.HTTPGetAllPagesWE[models.Test](utils.GetWebExperimentationHost() + "/v1/accounts/" + t.AccountID + "/tests")
 }
 
-func HTTPCreateTest(data string) ([]byte, error) {
-	return common.HTTPRequest[models.Test](http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests", []byte(data))
+func (t *TestRequester) HTTPGetTest(id string) (models.Test, error) {
+	return common.HTTPGetItem[models.Test](utils.GetWebExperimentationHost() + "/v1/accounts/" + t.AccountID + "/tests/" + id)
 }
 
-func HTTPEditTest(id, data string) ([]byte, error) {
-	return common.HTTPRequest[models.Test](http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, []byte(data))
+func (t *TestRequester) HTTPCreateTest(data string) ([]byte, error) {
+	return common.HTTPRequest[models.Test](http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests", []byte(data))
+}
+
+func (t *TestRequester) HTTPEditTest(id, data string) ([]byte, error) {
+	return common.HTTPRequest[models.Test](http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests/"+id, []byte(data))
 }
 
 /* func HTTPSwitchCampaign(id, state string) error {
@@ -39,7 +42,7 @@ func HTTPEditTest(id, data string) ([]byte, error) {
 	return err
 } */
 
-func HTTPDeleteTest(id string) error {
-	_, err := common.HTTPRequest[models.Test](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, nil)
+func (t *TestRequester) HTTPDeleteTest(id string) error {
+	_, err := common.HTTPRequest[models.Test](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests/"+id, nil)
 	return err
 }

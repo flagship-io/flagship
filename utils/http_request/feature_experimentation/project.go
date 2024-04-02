@@ -14,7 +14,7 @@ type ProjectRequester struct {
 }
 
 func (p *ProjectRequester) HTTPListProject() ([]models.Project, error) {
-	return common.HTTPGetAllPages[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + p.AccountID + "/projects")
+	return common.HTTPGetAllPagesFE[models.Project](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + p.AccountID + "/projects")
 }
 
 func (p *ProjectRequester) HTTPGetProject(id string) (models.Project, error) {

@@ -71,16 +71,16 @@ func initConfig() {
 
 		vL := config.ReadAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("current_used_credential"))
 		v.MergeConfigMap(vL.AllSettings())
-
-		v.Unmarshal(&requestConfig)
-		common.Init(requestConfig)
-		resource.Init(requestConfig)
-
-		r := &http_request.ResourceRequester
-
-		r.Init(&requestConfig)
-
-		return
 	}
+
+	v.Unmarshal(&requestConfig)
+	common.Init(requestConfig)
+	resource.Init(requestConfig)
+
+	r := &http_request.ResourceRequester
+
+	r.Init(&requestConfig)
+
+	return
 
 }

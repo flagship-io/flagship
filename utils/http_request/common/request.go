@@ -21,7 +21,7 @@ var UserAgent string
 var c = http.Client{Timeout: time.Duration(10) * time.Second}
 var counter = false
 
-type PageResult struct {
+type PageResultFE struct {
 	Items      json.RawMessage `json:"items"`
 	TotalCount int             `json:"total_count"`
 }
@@ -38,10 +38,10 @@ func (c *ResourceRequest) Init(cL *RequestConfig) {
 
 type PageResultWE struct {
 	Data       json.RawMessage `json:"_data"`
-	Pagination Pagination      `json:"_pagination"`
+	Pagination PaginationWE    `json:"_pagination"`
 }
 
-type Pagination struct {
+type PaginationWE struct {
 	Total      int `json:"_total"`
 	Pages      int `json:"_pages"`
 	Page       int `json:"_page"`
@@ -128,10 +128,6 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Set("User-Agent", UserAgent)
 
-	if body != nil {
-		req.Header.Add("Content-Type", `application/json`)
-	}
-
 	resp, err := c.Do(req)
 	if err != nil {
 		return nil, err
@@ -172,7 +168,7 @@ func HTTPGetItem[T any](resource string) (T, error) {
 	return result, err
 }
 
-func HTTPGetAllPages[T any](resource string) ([]T, error) {
+func HTTPGetAllPagesFE[T any](resource string) ([]T, error) {
 	currentPage := 1
 	results := []T{}
 	for {
@@ -180,7 +176,7 @@ func HTTPGetAllPages[T any](resource string) ([]T, error) {
 		if err != nil {
 			return nil, err
 		}
-		pageResult := &PageResult{}
+		pageResult := &PageResultFE{}
 		err = json.Unmarshal(respBody, pageResult)
 		if err != nil {
 			return nil, err
@@ -201,7 +197,7 @@ func HTTPGetAllPages[T any](resource string) ([]T, error) {
 	return results, nil
 }
 
-func HTTPGetAllPagesWe[T any](resource string) ([]T, error) {
+func HTTPGetAllPagesWE[T any](resource string) ([]T, error) {
 	currentPage := 1
 	results := []T{}
 	for {

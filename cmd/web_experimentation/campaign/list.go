@@ -7,7 +7,7 @@ import (
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request/web_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Short: "List all campaigns",
 	Long:  `List all campaigns`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPListTest()
+		body, err := httprequest.TestRequester.HTTPListTest()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

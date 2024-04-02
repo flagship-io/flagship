@@ -1,6 +1,6 @@
-package feature_experimentation
+package web_experimentation
 
-type AccountEnvironmentFE struct {
+type AccountEnvironmentWE struct {
 	Id               string `json:"id,omitempty"`
 	Environment      string `json:"environment"`
 	IsMain           bool   `json:"is_main"`
