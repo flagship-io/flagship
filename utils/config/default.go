@@ -3,7 +3,7 @@ package config
 import "github.com/flagship-io/flagship/cmd/version"
 
 const (
-	OutputFormat         = "table"
+	OutputFormat         = "json"
 	GrantType            = "client_credentials"
 	Expiration           = 86400
 	Scope                = "*"

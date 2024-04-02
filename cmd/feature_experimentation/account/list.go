@@ -19,12 +19,11 @@ var listCmd = &cobra.Command{
 	Long:  `list all auth from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		body, err := httprequest.CampaignRequester.HTTPListCampaign()
+		body, err := httprequest.AccountEnvironmentRequester.HTTPListAccountEnvironment()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		utils.FormatItem([]string{"Id", "ProjectId", "Name", "Description", "Type", "Status"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
-
+		utils.FormatItem([]string{"Id", "Environment", "IsMain", "Panic", "SingleAssignment"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 

@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,8 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APIFlag()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIFlag()
 	m.Run()
 }
 
@@ -44,7 +48,7 @@ func TestFlagGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestFlag, testFlag)
+	assert.Equal(t, mockfunction_fe.TestFlag, testFlag)
 }
 
 func TestFlagListCommand(t *testing.T) {
@@ -55,7 +59,7 @@ func TestFlagListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestFlagList, testFlagList)
+	assert.Equal(t, mockfunction_fe.TestFlagList, testFlagList)
 }
 
 func TestFlagCreateCommand(t *testing.T) {
@@ -66,7 +70,7 @@ func TestFlagCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestFlag, testFlag)
+	assert.Equal(t, mockfunction_fe.TestFlag, testFlag)
 }
 
 func TestFlagEditCommand(t *testing.T) {
@@ -80,7 +84,7 @@ func TestFlagEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestFlagEdit, testFlag)
+	assert.Equal(t, mockfunction_fe.TestFlagEdit, testFlag)
 }
 
 func TestFlagDeleteCommand(t *testing.T) {

@@ -6,9 +6,8 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	"github.com/flagship-io/flagship/utils/config"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/jarcoal/httpmock"
-	"github.com/spf13/viper"
 )
 
 var TestUserList = []models.User{
@@ -23,7 +22,6 @@ var TestUserList = []models.User{
 }
 
 func APIUser() {
-	config.SetViperMock()
 
 	email := "example@abtasty.com"
 
@@ -36,21 +34,21 @@ func APIUser() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users",
+	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/users",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("PUT", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users",
+	httpmock.RegisterResponder("PUT", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/users",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(204, "")
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/users?emails[]="+url.QueryEscape(email),
+	httpmock.RegisterResponder("DELETE", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/users?emails[]="+url.QueryEscape(email),
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(204, "")
 			return resp, nil

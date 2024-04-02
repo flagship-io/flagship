@@ -5,9 +5,8 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	"github.com/flagship-io/flagship/utils/config"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/jarcoal/httpmock"
-	"github.com/spf13/viper"
 )
 
 var targetingGroups = []models.TargetingGroup{
@@ -66,8 +65,6 @@ var TestVariationGroupList = []models.VariationGroup{
 
 func APIVariationGroup() {
 
-	config.SetViperMock()
-
 	campaignID := "campaignID"
 
 	resp := utils.HTTPListResponse[models.VariationGroup]{
@@ -79,35 +76,35 @@ func APIVariationGroup() {
 		LastPage:          1,
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
+	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
 		func(req *http.Request) (*http.Response, error) {
 			mockResp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
 			return mockResp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups",
+	httpmock.RegisterResponder("GET", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/campaigns/"+campaignID+"/variation_groups",
 		func(req *http.Request) (*http.Response, error) {
 			mockResp, _ := httpmock.NewJsonResponse(200, resp)
 			return mockResp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups",
+	httpmock.RegisterResponder("POST", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/campaigns/"+campaignID+"/variation_groups",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroup)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("PATCH", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
+	httpmock.RegisterResponder("PATCH", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestVariationGroupEdit)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("DELETE", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
+	httpmock.RegisterResponder("DELETE", utils.GetFeatureExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/account_environments/"+mockfunction.Auth.AccountEnvironmentID+"/campaigns/"+campaignID+"/variation_groups/"+TestVariationGroup.Id,
 		func(req *http.Request) (*http.Response, error) {
 			return httpmock.NewStringResponse(204, ""), nil
 		},

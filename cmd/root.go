@@ -7,8 +7,6 @@ import (
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/feature_experimentation"
-	"github.com/flagship-io/flagship/cmd/info"
-	"github.com/flagship-io/flagship/cmd/token"
 	"github.com/flagship-io/flagship/cmd/web_experimentation"
 
 	"github.com/flagship-io/flagship/cmd/version"
@@ -19,9 +17,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	outputFormat string
-)
+var outputFormat string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -49,8 +45,6 @@ func Execute() {
 
 func addSubCommandPalettes() {
 	rootCmd.AddCommand(version.VersionCmd)
-	rootCmd.AddCommand(token.TokenCmd)
-	rootCmd.AddCommand(info.InfoCmd)
 	rootCmd.AddCommand(feature_experimentation.FeatureExperimentationCmd)
 	rootCmd.AddCommand(web_experimentation.WebExperimentationCmd)
 }
@@ -61,7 +55,6 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output-format", "f", config.OutputFormat, "output format for the get and list subcommands for flagship resources. Only 3 format are possible: table, json, json-pretty")
 	rootCmd.PersistentFlags().StringVarP(&common.UserAgent, "user-agent", "", config.DefaultUserAgent, "custom user agent")
 
-	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindPFlag("output_format", rootCmd.PersistentFlags().Lookup("output-format"))
 
 	addSubCommandPalettes()
@@ -71,6 +64,6 @@ func init() {
 func initConfig() {
 
 	// Find home directory.
-	_, err := config.CheckFlagshipHomeDirectory()
+	_, err := config.CheckABTastyHomeDirectory()
 	cobra.CheckErr(err)
 }

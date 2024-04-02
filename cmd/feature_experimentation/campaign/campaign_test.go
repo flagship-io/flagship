@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,9 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APICampaign()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APICampaign()
+
 	m.Run()
 }
 
@@ -44,7 +49,7 @@ func TestCampaignGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestCampaign, testCampaign)
+	assert.Equal(t, mockfunction_fe.TestCampaign, testCampaign)
 }
 
 func TestCampaignListCommand(t *testing.T) {
@@ -55,7 +60,7 @@ func TestCampaignListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestCampaignlist, testCampaignList)
+	assert.Equal(t, mockfunction_fe.TestCampaignlist, testCampaignList)
 }
 
 func TestCampaignCreateCommand(t *testing.T) {
@@ -69,7 +74,7 @@ func TestCampaignCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestCampaign, testCampaign)
+	assert.Equal(t, mockfunction_fe.TestCampaign, testCampaign)
 }
 
 func TestCampaignEditCommand(t *testing.T) {
@@ -83,7 +88,7 @@ func TestCampaignEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestCampaignEdit, testCampaign)
+	assert.Equal(t, mockfunction_fe.TestCampaignEdit, testCampaign)
 }
 
 func TestCampaignDeleteCommand(t *testing.T) {

@@ -4,16 +4,33 @@ import (
 	"net/http"
 
 	"github.com/flagship-io/flagship/utils"
-	"github.com/flagship-io/flagship/utils/config"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/jarcoal/httpmock"
+	"github.com/spf13/viper"
 )
 
 type TestRequest struct {
 	Name string `json:"name"`
 }
 
+var Auth = common.RequestConfig{
+	Username:             "test_configuration",
+	ClientID:             "client_id",
+	ClientSecret:         "client_secret",
+	AccountID:            "account_id",
+	AccountEnvironmentID: "account_environment_id",
+	Token:                "access_token",
+}
+
+func SetMock(c *common.ResourceRequest) {
+	viper.GetViper().Set("output_format", "json")
+	common.Init(Auth)
+
+	r := c
+	r.Init(&Auth)
+}
+
 func Request() {
-	config.SetViperMock()
 
 	testRequest := TestRequest{
 		Name: "TestName",

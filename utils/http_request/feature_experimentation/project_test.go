@@ -6,10 +6,11 @@ import (
 	"testing"
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/stretchr/testify/assert"
 )
 
-var projectRequester = ProjectRequester{}
+var projectRequester = ProjectRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetProject(t *testing.T) {
 

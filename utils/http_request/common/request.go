@@ -8,9 +8,11 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"reflect"
 	"strings"
 	"time"
 
+	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 )
 
@@ -25,12 +27,12 @@ type PageResult struct {
 }
 
 type ResourceRequest struct {
-	AccountID    string `mapstructure:"account_id"`
-	AccountEnvID string `mapstructure:"account_environment_id"`
+	AccountID            string `mapstructure:"account_id"`
+	AccountEnvironmentID string `mapstructure:"account_environment_id"`
 }
 
 func (c *ResourceRequest) Init(cL *RequestConfig) {
-	c.AccountEnvID = cL.AccountEnvID
+	c.AccountEnvironmentID = cL.AccountEnvironmentID
 	c.AccountID = cL.AccountID
 }
 
@@ -47,15 +49,15 @@ type Pagination struct {
 }
 
 type RequestConfig struct {
-	Product                string
-	Username               string `mapstructure:"username"`
-	ClientID               string `mapstructure:"client_id"`
-	ClientSecret           string `mapstructure:"client_secret"`
-	AccountID              string `mapstructure:"account_id"`
-	AccountEnvID           string `mapstructure:"account_environment_id"`
-	Token                  string `mapstructure:"token"`
-	RefreshToken           string `mapstructure:"refresh_token"`
-	CurrentUsedCredentials string `mapstructure:"current_used_credentials"`
+	Product               string
+	Username              string `mapstructure:"username"`
+	ClientID              string `mapstructure:"client_id"`
+	ClientSecret          string `mapstructure:"client_secret"`
+	AccountID             string `mapstructure:"account_id"`
+	AccountEnvironmentID  string `mapstructure:"account_environment_id"`
+	Token                 string `mapstructure:"token"`
+	RefreshToken          string `mapstructure:"refresh_token"`
+	CurrentUsedCredential string `mapstructure:"current_used_credential"`
 }
 
 var cred RequestConfig
@@ -64,7 +66,7 @@ func Init(credL RequestConfig) {
 	cred = credL
 }
 
-func regenerateToken(configName string) {
+func regenerateToken(product, configName string) {
 	authenticationResponse, err := HTTPRefreshToken(cred.ClientID, cred.RefreshToken)
 
 	if err != nil {
@@ -76,31 +78,48 @@ func regenerateToken(configName string) {
 	} else {
 		cred.RefreshToken = authenticationResponse.RefreshToken
 		cred.Token = authenticationResponse.AccessToken
-		config.WriteToken(configName, authenticationResponse)
+		config.WriteToken(product, configName, authenticationResponse)
 	}
 }
 
-func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
+func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) {
 	var bodyIO io.Reader = nil
 	if body != nil {
 		bodyIO = bytes.NewBuffer(body)
 	}
 
-	req, err := http.NewRequest(method, resource, bodyIO)
+	//fmt.Println(method, url)
+	var resource T
+
+	resourceType := reflect.TypeOf(resource).String()
+
+	if resourceType == "feature_experimentation.Campaign" || resourceType == "feature_experimentation.Goal" {
+		if cred.AccountID == "" || cred.AccountEnvironmentID == "" {
+			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+		}
+	}
+
+	req, err := http.NewRequest(method, url, bodyIO)
 	if err != nil {
 		log.Panicf("error occurred on request creation: %v", err)
 	}
 
-	if cred.Product == "FE" && !strings.Contains(resource, "token") && (cred.AccountID == "" || cred.AccountEnvID == "") {
-		log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+	if cred.Product == utils.FEATURE_EXPERIMENTATION {
+		if cred.AccountID == "" {
+			log.Fatalf("account_id required, Please configure your CLI")
+		}
+		// for resource loader
+		if resourceType == "resource.ResourceData" && !strings.Contains(url, "token") && (cred.AccountID == "" || cred.AccountEnvironmentID == "") {
+			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+		}
+
+		if strings.Contains(url, "token") && cred.ClientID == "" && cred.ClientSecret == "" {
+			log.Fatalf("client_id or client_secret required, Please configure your CLI")
+		}
 	}
 
-	if cred.Product == "FE" && strings.Contains(resource, "token") && cred.ClientID == "" && cred.ClientSecret == "" {
-		log.Fatalf("client_id or client_secret required, Please configure your CLI")
-	}
-
-	if !strings.Contains(resource, "token") && cred.Token == "" {
-		regenerateToken(cred.CurrentUsedCredentials)
+	if !strings.Contains(url, "token") && cred.Token == "" {
+		regenerateToken(cred.Product, cred.CurrentUsedCredential)
 	}
 
 	req.Header.Add("Accept", `*/*`)
@@ -135,20 +154,17 @@ func HTTPRequest(method string, resource string, body []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	fmt.Println(cred.AccountID)
-	fmt.Println(string(respBody))
-
-	if (resp.StatusCode == 403 || resp.StatusCode == 401) && !counter {
+	if (resp.StatusCode == 401) && !counter {
 		counter = true
-		regenerateToken(cred.CurrentUsedCredentials)
-		return HTTPRequest(method, resource, body)
+		regenerateToken(cred.Product, cred.CurrentUsedCredential)
+		return HTTPRequest[T](method, url, body)
 	}
 	return respBody, err
 }
 
 func HTTPGetItem[T any](resource string) (T, error) {
 	var result T
-	respBody, err := HTTPRequest(http.MethodGet, resource, nil)
+	respBody, err := HTTPRequest[T](http.MethodGet, resource, nil)
 	if err != nil {
 		return result, err
 	}
@@ -160,7 +176,7 @@ func HTTPGetAllPages[T any](resource string) ([]T, error) {
 	currentPage := 1
 	results := []T{}
 	for {
-		respBody, err := HTTPRequest(http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
+		respBody, err := HTTPRequest[T](http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
 		if err != nil {
 			return nil, err
 		}
@@ -189,7 +205,7 @@ func HTTPGetAllPagesWe[T any](resource string) ([]T, error) {
 	currentPage := 1
 	results := []T{}
 	for {
-		respBody, err := HTTPRequest(http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
+		respBody, err := HTTPRequest[T](http.MethodGet, fmt.Sprintf("%s?_page=%d&_max_per_page=100", resource, currentPage), nil)
 		if err != nil {
 			return nil, err
 		}

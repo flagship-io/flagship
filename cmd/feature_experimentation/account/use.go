@@ -25,6 +25,7 @@ var useCmd = &cobra.Command{
 		if AccountID != "" {
 			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
 		}
+
 		if AccountEnvironmentID != "" {
 			config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, AccountEnvironmentID)
 		}
@@ -33,7 +34,7 @@ var useCmd = &cobra.Command{
 
 func init() {
 	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to display")
-	useCmd.Flags().StringVarP(&AccountEnvironmentID, "account-env-id", "e", "", "account env id of the credentials you want to display")
+	useCmd.Flags().StringVarP(&AccountEnvironmentID, "account-environment-id", "e", "", "account env id of the credentials you want to display")
 
 	AccountCmd.AddCommand(useCmd)
 }

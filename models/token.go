@@ -1,6 +1,13 @@
 package models
 
-type Token struct {
+type TokenWE struct {
+	ClientID  string `json:"client_id"`
+	AccountID string `json:"account"`
+	ExpiresIn int    `json:"expires_in"`
+	Scope     string `json:"scope"`
+}
+
+type TokenFE struct {
 	ClientID  string `json:"client_id"`
 	AccountID string `json:"account"`
 	ExpiresIn int    `json:"expires_in"`

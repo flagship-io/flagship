@@ -3,12 +3,11 @@ module github.com/flagship-io/flagship
 go 1.18
 
 require (
+	github.com/d5/tengo/v2 v2.13.0
 	github.com/flagship-io/codebase-analyzer v0.8.0
 	github.com/kyokomi/emoji/v2 v2.2.12
-	github.com/d5/tengo/v2 v2.13.0
 	github.com/rodaine/table v1.1.0
 	github.com/sirupsen/logrus v1.9.0
-
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.8.1
@@ -43,6 +42,6 @@ require (
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

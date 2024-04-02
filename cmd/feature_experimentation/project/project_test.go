@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,8 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APIProject()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIProject()
 
 	m.Run()
 }
@@ -45,7 +49,7 @@ func TestProjectGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestProject, testProject)
+	assert.Equal(t, mockfunction_fe.TestProject, testProject)
 }
 
 func TestProjectListCommand(t *testing.T) {
@@ -56,7 +60,7 @@ func TestProjectListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestProjectList, testProjectList)
+	assert.Equal(t, mockfunction_fe.TestProjectList, testProjectList)
 }
 
 func TestProjectCreateCommand(t *testing.T) {
@@ -70,7 +74,7 @@ func TestProjectCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestProject, testProject)
+	assert.Equal(t, mockfunction_fe.TestProject, testProject)
 }
 
 func TestProjectEditCommand(t *testing.T) {
@@ -84,7 +88,7 @@ func TestProjectEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestProjectEdit, testProject)
+	assert.Equal(t, mockfunction_fe.TestProjectEdit, testProject)
 }
 
 func TestProjectDeleteCommand(t *testing.T) {

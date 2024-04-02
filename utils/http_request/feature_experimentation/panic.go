@@ -18,6 +18,6 @@ func (p *PanicRequester) HTTPUpdatePanic(panicStatus string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/account_environments/"+p.AccountEnvID+"/panic", panicRequestJSON)
+	resp, err := common.HTTPRequest[models.PanicRequest](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/account_environments/"+p.AccountEnvironmentID+"/panic", panicRequestJSON)
 	return resp, err
 }

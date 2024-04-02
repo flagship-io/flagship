@@ -14,9 +14,10 @@ var (
 
 // ConfigurationCmd represents the configuration command
 var AuthCmd = &cobra.Command{
-	Use:   "auth [create|edit|get|list|delete|use]",
-	Short: "Manage your CLI authentication",
-	Long:  `Manage your CLI authentication`,
+	Use:     "authentication [login|get|list]",
+	Aliases: []string{"auth"},
+	Short:   "Manage your CLI authentication for feature experimentation",
+	Long:    `Manage your CLI authentication for feature experimentation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

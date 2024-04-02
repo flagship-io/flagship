@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,9 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APIUser()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIUser()
+
 	m.Run()
 }
 
@@ -40,7 +45,7 @@ func TestUserListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestUserList, testUserList)
+	assert.Equal(t, mockfunction_fe.TestUserList, testUserList)
 }
 
 func TestUserCreateCommand(t *testing.T) {

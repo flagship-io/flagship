@@ -3,11 +3,12 @@ package feature_experimentation
 import (
 	"testing"
 
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/stretchr/testify/assert"
 )
 
 var CampaignID = "campaignID"
-var variationGroupRequester = VariationGroupRequester{}
+var variationGroupRequester = VariationGroupRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetVariationGroup(t *testing.T) {
 

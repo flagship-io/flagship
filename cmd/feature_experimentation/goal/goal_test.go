@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,9 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APIGoal()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIGoal()
+
 	m.Run()
 }
 
@@ -44,7 +49,7 @@ func TestGoalGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestGoal, testGoal)
+	assert.Equal(t, mockfunction_fe.TestGoal, testGoal)
 }
 
 func TestGoalListCommand(t *testing.T) {
@@ -55,7 +60,7 @@ func TestGoalListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestGoalList, testGoalList)
+	assert.Equal(t, mockfunction_fe.TestGoalList, testGoalList)
 }
 
 func TestGoalCreateCommand(t *testing.T) {
@@ -70,7 +75,7 @@ func TestGoalCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestGoal, testGoal)
+	assert.Equal(t, mockfunction_fe.TestGoal, testGoal)
 }
 
 func TestGoalEditCommand(t *testing.T) {
@@ -84,7 +89,7 @@ func TestGoalEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestGoalEdit, testGoal)
+	assert.Equal(t, mockfunction_fe.TestGoalEdit, testGoal)
 }
 
 func TestGoalDeleteCommand(t *testing.T) {

@@ -13,7 +13,6 @@ import (
 	"slices"
 	"time"
 
-	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/flagship-io/flagship/utils/http_request/common"
@@ -50,12 +49,12 @@ func openLink(url string) error {
 
 // createCmd represents the create command
 var loginCmd = &cobra.Command{
-	Use:   "login [--browser] | [--credential-file] | [--inputs] [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>]",
+	Use:   "login [--browser] | [--credential-file] | [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>]",
 	Short: "login",
 	Long:  `login`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !checkSingleFlag(browser, credentialsFile != "", Username != "") {
-			log.Fatalf("error occurred: %s", "1 flag is required. (browser, inputs, credential-file)")
+			log.Fatalf("error occurred: %s", "1 flag is required. (browser, username, credential-file)")
 		}
 
 		if browser {
@@ -79,7 +78,6 @@ var loginCmd = &cobra.Command{
 			if err := http.ListenAndServe("127.0.0.1:8010", nil); err != nil {
 				log.Fatalf("Error starting callback server: %s", err)
 			}
-			fmt.Println(code)
 
 			authenticationResponse, err := common.HTTPCreateTokenWE(clientID, clientSecret, code)
 			if err != nil {
@@ -96,10 +94,14 @@ var loginCmd = &cobra.Command{
 		}
 
 		if credentialsFile != "" {
-			authenticationResponse := models.TokenResponse{}
-			config.ReadCredentialsFromFile(credentialsFile)
-			config.CreateCredentialsFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
-			config.SelectCredentials(utils.FEATURE_EXPERIMENTATION, Username)
+			v := config.ReadCredentialsFromFile(credentialsFile)
+			authenticationResponse, err := common.HTTPCreateTokenFE(v.GetString("client_id"), v.GetString("client_secret"), v.GetString("account_id"))
+			if err != nil {
+				log.Fatalf("%s", err)
+				return
+			}
+			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, v.GetString("username"), v.GetString("client_id"), v.GetString("client_secret"), authenticationResponse)
+			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("username"))
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 			return
 		}
@@ -110,7 +112,7 @@ var loginCmd = &cobra.Command{
 				log.Fatalf("error occurred: %s", err)
 			}
 			if slices.Contains(existingCredentials, Username) {
-				config.SelectCredentials(utils.FEATURE_EXPERIMENTATION, Username)
+				config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
 				config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
 
 				fmt.Fprintln(cmd.OutOrStdout(), "Auth changed successfully to "+Username)
@@ -130,8 +132,8 @@ var loginCmd = &cobra.Command{
 			if authenticationResponse.AccessToken == "" {
 				log.Fatal("client_id or client_secret not valid")
 			}
-			config.CreateCredentialsFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
-			config.SelectCredentials(utils.FEATURE_EXPERIMENTATION, Username)
+			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
+			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
 			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")

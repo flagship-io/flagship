@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,8 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APITargetingKey()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APITargetingKey()
 
 	m.Run()
 }
@@ -45,7 +49,7 @@ func TestTargetingKeyGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestTargetingKey, testTargetingKey)
+	assert.Equal(t, mockfunction_fe.TestTargetingKey, testTargetingKey)
 }
 
 func TestTargetingKeyListCommand(t *testing.T) {
@@ -56,7 +60,7 @@ func TestTargetingKeyListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestTargetingKeyList, testTargetingKeyList)
+	assert.Equal(t, mockfunction_fe.TestTargetingKeyList, testTargetingKeyList)
 }
 
 func TestTargetingKeyCreateCommand(t *testing.T) {
@@ -70,7 +74,7 @@ func TestTargetingKeyCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestTargetingKey, testTargetingKey)
+	assert.Equal(t, mockfunction_fe.TestTargetingKey, testTargetingKey)
 }
 
 func TestTargetingKeyEditCommand(t *testing.T) {
@@ -84,7 +88,7 @@ func TestTargetingKeyEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestTargetingKeyEdit, testTargetingKey)
+	assert.Equal(t, mockfunction_fe.TestTargetingKeyEdit, testTargetingKey)
 }
 
 func TestTargetingKeyDeleteCommand(t *testing.T) {

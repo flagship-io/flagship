@@ -18,29 +18,29 @@ import (
 // getCmd represents the list command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get an auth credential",
-	Long:  `list an auth credential from your system`,
+	Short: "get an auth credential for feature experimentation",
+	Long:  `get an auth credential for feature experimentation from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var configurationYaml models.ConfigurationYaml_new
-		var configuration models.Configuration_new
+		var authYaml models.AuthYaml
+		var auth models.Auth
 
-		yamlFile, err := os.ReadFile(config.SetPathForCredentials(utils.FEATURE_EXPERIMENTATION, Username))
+		yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, Username))
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
 
 		// Unmarshal the YAML data into the struct
-		err = yaml.Unmarshal(yamlFile, &configurationYaml)
+		err = yaml.Unmarshal(yamlFile, &authYaml)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
 
-		configuration.Username = configurationYaml.Username
-		configuration.ClientID = configurationYaml.ClientID
-		configuration.ClientSecret = configurationYaml.ClientSecret
+		auth.Username = authYaml.Username
+		auth.ClientID = authYaml.ClientID
+		auth.ClientSecret = authYaml.ClientSecret
 
-		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, auth, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

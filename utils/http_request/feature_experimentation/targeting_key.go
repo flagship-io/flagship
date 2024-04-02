@@ -21,14 +21,14 @@ func (t *TargetingKeyRequester) HTTPGetTargetingKey(id string) (models.Targeting
 }
 
 func (t *TargetingKeyRequester) HTTPCreateTargetingKey(data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys", []byte(data))
+	return common.HTTPRequest[models.TargetingKey](http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys", []byte(data))
 }
 
 func (t *TargetingKeyRequester) HTTPEditTargetingKey(id, data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys/"+id, []byte(data))
+	return common.HTTPRequest[models.TargetingKey](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys/"+id, []byte(data))
 }
 
 func (t *TargetingKeyRequester) HTTPDeleteTargetingKey(id string) error {
-	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys/"+id, nil)
+	_, err := common.HTTPRequest[models.TargetingKey](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/targeting_keys/"+id, nil)
 	return err
 }

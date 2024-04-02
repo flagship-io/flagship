@@ -21,14 +21,14 @@ func (f *FlagRequester) HTTPGetFlag(id string) (models.Flag, error) {
 }
 
 func (f *FlagRequester) HTTPCreateFlag(data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags", []byte(data))
+	return common.HTTPRequest[models.Flag](http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags", []byte(data))
 }
 
 func (f *FlagRequester) HTTPEditFlag(id, data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, []byte(data))
+	return common.HTTPRequest[models.Flag](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, []byte(data))
 }
 
 func (f *FlagRequester) HTTPDeleteFlag(id string) error {
-	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, nil)
+	_, err := common.HTTPRequest[models.Flag](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+f.AccountID+"/flags/"+id, nil)
 	return err
 }

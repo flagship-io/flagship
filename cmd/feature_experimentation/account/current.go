@@ -17,15 +17,15 @@ import (
 
 // getCmd represents the list command
 var currentCmd = &cobra.Command{
-	Use:   "get",
-	Short: "get an auth credential",
-	Long:  `list an auth credential from your system`,
+	Use:   "current",
+	Short: "current an auth credential",
+	Long:  `current an auth credential from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var configurationYaml models.ConfigurationYaml_new
-		var configuration models.Configuration_new
+		var configurationYaml models.AccountYaml
+		var configuration models.AccountJSON
 
-		yamlFile, err := os.ReadFile(config.SetPathForCredentials(utils.FEATURE_EXPERIMENTATION, Username))
+		yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, utils.HOME_CLI))
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
@@ -36,21 +36,15 @@ var currentCmd = &cobra.Command{
 			log.Fatalf("error occurred: %s", err)
 		}
 
-		configuration.Username = configurationYaml.Username
-		configuration.ClientID = configurationYaml.ClientID
-		configuration.ClientSecret = configurationYaml.ClientSecret
+		configuration.CurrentUsedCredential = configurationYaml.CurrentUsedCredential
+		configuration.AccountID = configurationYaml.AccountID
+		configuration.AccountEnvironmentID = configurationYaml.AccountEnvironmentID
 
-		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID", "AccountEnvironmentID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }
 
 func init() {
-	currentCmd.Flags().StringVarP(&Username, "username", "u", "", "username of the credentials you want to display")
-
-	if err := currentCmd.MarkFlagRequired("username"); err != nil {
-		log.Fatalf("error occurred: %v", err)
-	}
-
 	AccountCmd.AddCommand(currentCmd)
 }

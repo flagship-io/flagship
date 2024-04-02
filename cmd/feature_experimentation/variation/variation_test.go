@@ -6,7 +6,10 @@ import (
 
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/http_request"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +19,8 @@ func TestMain(m *testing.M) {
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
 
-	mockfunction.APIVariation()
+	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIVariation()
 
 	m.Run()
 }
@@ -48,7 +52,7 @@ func TestVariationGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestVariation, testVariation)
+	assert.Equal(t, mockfunction_fe.TestVariation, testVariation)
 }
 
 func TestVariationListCommand(t *testing.T) {
@@ -59,7 +63,7 @@ func TestVariationListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestVariationList, testVariationList)
+	assert.Equal(t, mockfunction_fe.TestVariationList, testVariationList)
 }
 
 func TestVariationCreateCommand(t *testing.T) {
@@ -73,7 +77,7 @@ func TestVariationCreateCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestVariation, testVariation)
+	assert.Equal(t, mockfunction_fe.TestVariation, testVariation)
 }
 
 func TestVariationEditCommand(t *testing.T) {
@@ -87,7 +91,7 @@ func TestVariationEditCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction.TestVariationEdit, testVariation)
+	assert.Equal(t, mockfunction_fe.TestVariationEdit, testVariation)
 }
 
 func TestVariationDeleteCommand(t *testing.T) {

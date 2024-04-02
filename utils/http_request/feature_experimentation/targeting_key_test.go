@@ -3,10 +3,11 @@ package feature_experimentation
 import (
 	"testing"
 
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/stretchr/testify/assert"
 )
 
-var targetingKeyRequester = TargetingKeyRequester{}
+var targetingKeyRequester = TargetingKeyRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetTargetingKey(t *testing.T) {
 

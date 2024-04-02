@@ -9,10 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	resourceFile string
-)
-
 // ResourceCmd represents the resource command
 var ResourceCmd = &cobra.Command{
 	Use:   "resource [load]",

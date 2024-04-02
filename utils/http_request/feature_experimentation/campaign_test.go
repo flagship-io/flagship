@@ -3,13 +3,13 @@ package feature_experimentation
 import (
 	"testing"
 
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/stretchr/testify/assert"
 )
 
-var campaignRequester = CampaignRequester{}
+var campaignRequester = CampaignRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetCampaign(t *testing.T) {
-
 	respBody, err := campaignRequester.HTTPGetCampaign("testCampaignID")
 
 	assert.NotNil(t, respBody)
@@ -23,7 +23,6 @@ func TestHTTPGetCampaign(t *testing.T) {
 }
 
 func TestHTTPListCampaign(t *testing.T) {
-
 	respBody, err := campaignRequester.HTTPListCampaign()
 
 	assert.NotNil(t, respBody)

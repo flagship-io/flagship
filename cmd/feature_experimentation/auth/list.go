@@ -22,17 +22,17 @@ var listCmd = &cobra.Command{
 	Long:  `list all auth from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var configurations []models.Configuration_new
-		existingCredentials, err := config.GetUsernames(utils.FEATURE_EXPERIMENTATION)
+		var auths []models.Auth
+		existingAuths, err := config.GetUsernames(utils.FEATURE_EXPERIMENTATION)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
 
-		for _, fileName := range existingCredentials {
+		for _, fileName := range existingAuths {
 			if fileName != "" {
-				var configurationYaml models.ConfigurationYaml_new
-				var configuration models.Configuration_new
-				yamlFile, err := os.ReadFile(config.SetPathForCredentials(utils.FEATURE_EXPERIMENTATION, fileName))
+				var configurationYaml models.AuthYaml
+				var configuration models.Auth
+				yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, fileName))
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
@@ -46,12 +46,12 @@ var listCmd = &cobra.Command{
 					configuration.Username = configurationYaml.Username
 					configuration.ClientID = configurationYaml.ClientID
 					configuration.ClientSecret = configurationYaml.ClientSecret
-					configurations = append(configurations, configuration)
+					auths = append(auths, configuration)
 				}
 			}
 		}
 
-		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, configurations, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, auths, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

@@ -3,37 +3,10 @@ package common
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 )
-
-func HTTPCreateToken(client_id, client_secret, grant_type, scope string, expiration int) (models.TokenResponse, error) {
-	var authenticationResponse models.TokenResponse
-	authRequest := models.ClientCredentialsRequest{
-		ClientID:     client_id,
-		ClientSecret: client_secret,
-		Scope:        scope,
-		GrantType:    "client_credentials",
-	}
-	authRequestJSON, err := json.Marshal(authRequest)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token?expires_in="+strconv.Itoa(expiration), authRequestJSON)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	err = json.Unmarshal(respBody, &authenticationResponse)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	return authenticationResponse, err
-}
 
 func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
@@ -47,7 +20,7 @@ func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, er
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
+	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -73,7 +46,7 @@ func HTTPCreateTokenFE(clientId, clientSecret, accountId string) (models.TokenRe
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+accountId+"/token?expires_in=86400", authRequestJSON)
+	respBody, err := HTTPRequest[models.TokenFE](http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+accountId+"/token?expires_in=86400", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -99,7 +72,7 @@ func HTTPCreateTokenWE(client_id, client_secret, code string) (models.TokenRespo
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", authRequestJSON)
+	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -124,7 +97,7 @@ func HTTPRefreshToken_(product, client_id, refresh_token string) (models.TokenRe
 		return models.TokenResponse{}, err
 	}
 
-	respBody, err := HTTPRequest(http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
+	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -137,6 +110,6 @@ func HTTPRefreshToken_(product, client_id, refresh_token string) (models.TokenRe
 	return authenticationResponse, err
 }
 
-func HTTPCheckToken(token string) (models.Token, error) {
-	return HTTPGetItem[models.Token](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + token)
+func HTTPCheckToken(token string) (models.TokenFE, error) {
+	return HTTPGetItem[models.TokenFE](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + token)
 }

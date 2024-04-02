@@ -22,11 +22,11 @@ func (p *ProjectRequester) HTTPGetProject(id string) (models.Project, error) {
 }
 
 func (p *ProjectRequester) HTTPCreateProject(data []byte) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects", data)
+	return common.HTTPRequest[models.Project](http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects", data)
 }
 
 func (p *ProjectRequester) HTTPEditProject(id string, data []byte) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, data)
+	return common.HTTPRequest[models.Project](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, data)
 }
 
 func (p *ProjectRequester) HTTPSwitchProject(id, state string) error {
@@ -39,11 +39,11 @@ func (p *ProjectRequester) HTTPSwitchProject(id, state string) error {
 		return err
 	}
 
-	_, err = common.HTTPRequest(http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id+"/toggle", projectRequestJSON)
+	_, err = common.HTTPRequest[models.Project](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id+"/toggle", projectRequestJSON)
 	return err
 }
 
 func (p *ProjectRequester) HTTPDeleteProject(id string) error {
-	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, nil)
+	_, err := common.HTTPRequest[models.Project](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+p.AccountID+"/projects/"+id, nil)
 	return err
 }

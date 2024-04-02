@@ -1,17 +1,15 @@
-package mockfunction
+package feature_experimentation
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
-	"github.com/flagship-io/flagship/utils/config"
+	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/jarcoal/httpmock"
-	"github.com/spf13/viper"
 )
 
-var TestToken = models.Token{
+var TestToken = models.TokenFE{
 	ClientID:  "client_id",
 	AccountID: "account_id",
 	ExpiresIn: 0,
@@ -19,10 +17,8 @@ var TestToken = models.Token{
 }
 
 func APIToken() {
-	config.SetViperMock()
 
 	token := "token"
-	tokenExpiration := 86400
 
 	testAuthenticationResponse := models.TokenResponse{
 		AccessToken:  "access_token",
@@ -36,7 +32,7 @@ func APIToken() {
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+viper.GetString("account_id")+"/token?expires_in="+strconv.Itoa(tokenExpiration),
+	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+mockfunction.Auth.AccountID+"/token?expires_in=86400",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, testAuthenticationResponse)
 			return resp, nil

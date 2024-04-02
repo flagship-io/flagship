@@ -19,6 +19,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/user"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/variation"
 	variationgroup "github.com/flagship-io/flagship/cmd/feature_experimentation/variation_group"
+	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/flagship-io/flagship/utils/http_request"
 	"github.com/flagship-io/flagship/utils/http_request/common"
@@ -62,20 +63,23 @@ func init() {
 func initConfig() {
 	v := viper.New()
 	homeDir, _ := os.UserHomeDir()
-	var requestConfig = common.RequestConfig{Product: "FE"}
+	var requestConfig = common.RequestConfig{Product: utils.FEATURE_EXPERIMENTATION}
 
-	v.SetConfigFile(homeDir + "/.flagship/credentials/fe/.cli.yaml")
+	v.SetConfigFile(homeDir + "/.flagship/credentials/" + utils.FEATURE_EXPERIMENTATION + "/.cli.yaml")
 	v.MergeInConfig()
 	if v.GetString("current_used_credential") != "" {
 
-		vL := config.ReadConfiguration(v.GetString("current_used_credential"))
+		vL := config.ReadAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("current_used_credential"))
 		v.MergeConfigMap(vL.AllSettings())
 
 		v.Unmarshal(&requestConfig)
 		common.Init(requestConfig)
-		for _, r := range http_request.HTTPResources {
-			r.Init(&requestConfig)
-		}
+		resource.Init(requestConfig)
+
+		r := &http_request.ResourceRequester
+
+		r.Init(&requestConfig)
+
 		return
 	}
 

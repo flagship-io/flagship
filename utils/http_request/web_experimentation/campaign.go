@@ -18,11 +18,11 @@ func HTTPGetTest(id string) (models.Test, error) {
 }
 
 func HTTPCreateTest(data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests", []byte(data))
+	return common.HTTPRequest[models.Test](http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests", []byte(data))
 }
 
 func HTTPEditTest(id, data string) ([]byte, error) {
-	return common.HTTPRequest(http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, []byte(data))
+	return common.HTTPRequest[models.Test](http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, []byte(data))
 }
 
 /* func HTTPSwitchCampaign(id, state string) error {
@@ -40,6 +40,6 @@ func HTTPEditTest(id, data string) ([]byte, error) {
 } */
 
 func HTTPDeleteTest(id string) error {
-	_, err := common.HTTPRequest(http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, nil)
+	_, err := common.HTTPRequest[models.Test](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/tests/"+id, nil)
 	return err
 }

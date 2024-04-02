@@ -3,10 +3,11 @@ package feature_experimentation
 import (
 	"testing"
 
+	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/stretchr/testify/assert"
 )
 
-var userRequester = UserRequester{}
+var userRequester = UserRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPListUsers(t *testing.T) {
 

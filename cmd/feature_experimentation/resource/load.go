@@ -10,21 +10,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 
 	"github.com/d5/tengo/v2"
 	models "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
-	httprequest "github.com/flagship-io/flagship/utils/http_request"
+	"github.com/flagship-io/flagship/utils/http_request"
 	"github.com/flagship-io/flagship/utils/http_request/common"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
+var (
+	resourceFile string
+	outputFile   string
+)
+
 type Data interface {
 	Save(data string) ([]byte, error)
+	Delete(id string) error
 }
 
 type ProjectData struct {
@@ -36,7 +41,11 @@ type ResourceData struct {
 }
 
 func (f *ProjectData) Save(data string) ([]byte, error) {
-	return httprequest.ProjectRequester.HTTPCreateProject([]byte(data))
+	return http_request.ProjectRequester.HTTPCreateProject([]byte(data))
+}
+
+func (f *ProjectData) Delete(id string) error {
+	return http_request.ProjectRequester.HTTPDeleteProject(id)
 }
 
 type CampaignData struct {
@@ -44,12 +53,16 @@ type CampaignData struct {
 	ProjectId       string               `json:"project_id"`
 	Name            string               `json:"name"`
 	Description     string               `json:"description"`
-	Type            string               `json:"type"`
+	Type            string               `json:"type,omitempty"`
 	VariationGroups []VariationGroupData `json:"variation_groups"`
 }
 
 func (f *CampaignData) Save(data string) ([]byte, error) {
-	return httprequest.CampaignRequester.HTTPCreateCampaign(data)
+	return http_request.CampaignRequester.HTTPCreateCampaign(data)
+}
+
+func (f *CampaignData) Delete(id string) error {
+	return http_request.CampaignRequester.HTTPDeleteCampaign(id)
 }
 
 type FlagData struct {
@@ -57,7 +70,11 @@ type FlagData struct {
 }
 
 func (f *FlagData) Save(data string) ([]byte, error) {
-	return httprequest.FlagRequester.HTTPCreateFlag(data)
+	return http_request.FlagRequester.HTTPCreateFlag(data)
+}
+
+func (f *FlagData) Delete(id string) error {
+	return http_request.FlagRequester.HTTPDeleteFlag(id)
 }
 
 type GoalData struct {
@@ -65,7 +82,11 @@ type GoalData struct {
 }
 
 func (f *GoalData) Save(data string) ([]byte, error) {
-	return httprequest.GoalRequester.HTTPCreateGoal(data)
+	return http_request.GoalRequester.HTTPCreateGoal(data)
+}
+
+func (f *GoalData) Delete(id string) error {
+	return http_request.GoalRequester.HTTPDeleteGoal(id)
 }
 
 type TargetingKeysData struct {
@@ -73,7 +94,11 @@ type TargetingKeysData struct {
 }
 
 func (f *TargetingKeysData) Save(data string) ([]byte, error) {
-	return httprequest.TargetingKeyRequester.HTTPCreateTargetingKey(data)
+	return http_request.TargetingKeyRequester.HTTPCreateTargetingKey(data)
+}
+
+func (f *TargetingKeysData) Delete(id string) error {
+	return http_request.TargetingKeyRequester.HTTPDeleteTargetingKey(id)
 }
 
 type VariationGroupData struct {
@@ -110,6 +135,18 @@ type Resource struct {
 	Name             ResourceType
 	Data             Data
 	ResourceVariable string
+	Method           string
+}
+
+var cred common.RequestConfig
+
+func Init(credL common.RequestConfig) {
+	cred = credL
+}
+
+type ResourceCmdStruct struct {
+	Name string `json:"name,omitempty"`
+	Data string `json:"data,omitempty"`
 }
 
 func UnmarshalConfig(filePath string) ([]Resource, error) {
@@ -118,6 +155,7 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 			Name             string
 			Data             json.RawMessage
 			ResourceVariable string
+			Method           string
 		}
 	}
 
@@ -173,7 +211,7 @@ func UnmarshalConfig(filePath string) ([]Resource, error) {
 			return nil, err
 		}
 
-		resources = append(resources, Resource{Name: name, Data: data, ResourceVariable: r.ResourceVariable})
+		resources = append(resources, Resource{Name: name, Data: data, ResourceVariable: r.ResourceVariable, Method: r.Method})
 	}
 
 	return resources, nil
@@ -187,7 +225,14 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ScriptResource(gResources)
+		jsonBytes := ScriptResource(cmd, gResources)
+		if outputFile != "" {
+			os.WriteFile(outputFile, jsonBytes, os.ModePerm)
+			fmt.Fprintf(cmd.OutOrStdout(), "File created at %s\n", outputFile)
+			return
+		}
+
+		fmt.Fprintf(cmd.OutOrStdout(), "%s", string(jsonBytes))
 	},
 }
 
@@ -199,6 +244,8 @@ func init() {
 	if err := loadCmd.MarkFlagRequired("file"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
+
+	loadCmd.Flags().StringVarP(&outputFile, "output-file", "", "", "result of the command that contains all resource informations")
 
 	ResourceCmd.AddCommand(loadCmd)
 }
@@ -215,12 +262,15 @@ func initResource() {
 	}
 }
 
-func ScriptResource(resources []Resource) {
+func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 
 	resourceVariables := make(map[string]interface{})
+	var loadResultJSON []string
+	var loadResultOutputFile []ResourceCmdStruct
 
 	for _, resource := range resources {
 		var response []byte
+		var resultOutputFile ResourceCmdStruct
 		var resourceData map[string]interface{}
 		var responseData interface{}
 		var url = ""
@@ -231,6 +281,12 @@ func ScriptResource(resources []Resource) {
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
 			fmt.Printf("error occurred marshal data: %v\n", err)
+		}
+
+		var httpMethod string = "POST"
+
+		if resource.Method == "delete" {
+			httpMethod = "DELETE"
 		}
 
 		switch resource.Name {
@@ -278,9 +334,7 @@ func ScriptResource(resources []Resource) {
 						resourceData[k] = script.(string)
 					}
 				}
-
 			}
-
 		}
 
 		dataResource, err := json.Marshal(resourceData)
@@ -288,31 +342,77 @@ func ScriptResource(resources []Resource) {
 			log.Fatalf("error occurred http call: %v\n", err)
 		}
 
-		if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-			response, err = common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+url, dataResource)
+		if httpMethod == "POST" {
+			if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
+				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+url, dataResource)
+			}
+
+			if resource.Name == Goal || resource.Name == Campaign {
+				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+"/account_environments/"+cred.AccountEnvironmentID+url, dataResource)
+			}
+
+			resultOutputFile = ResourceCmdStruct{
+				Name: resourceName,
+				Data: string(response),
+			}
+			loadResultOutputFile = append(loadResultOutputFile, resultOutputFile)
+
 		}
 
-		if resource.Name == Goal || resource.Name == Campaign {
-			response, err = common.HTTPRequest(http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+viper.GetString("account_id")+"/account_environments/"+viper.GetString("account_environment_id")+url, dataResource)
+		if httpMethod == "DELETE" {
+			if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
+				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+url+"/"+fmt.Sprintf("%v", resourceData["id"]), nil)
+			}
+
+			if resource.Name == Goal || resource.Name == Campaign {
+				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+"/account_environments/"+cred.AccountEnvironmentID+url+"/"+fmt.Sprintf("%v", resourceData["id"]), nil)
+			}
+
+			if err == nil && viper.GetString("output_format") != "json" {
+				response = []byte("The id: " + fmt.Sprintf("%v", resourceData["id"]) + " deleted successfully")
+			}
 		}
 
 		if err != nil {
 			log.Fatalf("error occurred http call: %v\n", err)
 		}
 
-		fmt.Fprintf(os.Stdout, "%s - %s: %s %s\n", color, resourceName, colorNone, string(response))
-
-		err = json.Unmarshal(response, &responseData)
-
-		if err != nil {
-			fmt.Printf("error occurred unmarshal responseData: %v\n", err)
+		if viper.GetString("output_format") != "json" {
+			fmt.Fprintf(cmd.OutOrStdout(), "%s - %s: %s %s\n", color, resourceName, colorNone, string(response))
 		}
 
-		if responseData == nil {
-			fmt.Println("error occurred not response data: " + string(response))
-			continue
+		if httpMethod != "DELETE" {
+			err = json.Unmarshal(response, &responseData)
+
+			if err != nil {
+				fmt.Printf("error occurred unmarshal responseData: %v\n", err)
+			}
+
+			if responseData == nil {
+				fmt.Println("error occurred not response data: " + string(response))
+				continue
+			}
+
+			resourceVariables[resource.ResourceVariable] = responseData
 		}
 
-		resourceVariables[resource.ResourceVariable] = responseData
+		loadResultJSON = append(loadResultJSON, string(response))
 	}
+
+	var jsonBytes []byte
+	var jsonString any
+
+	if outputFile != "" {
+		jsonString = loadResultOutputFile
+	} else {
+		jsonString = loadResultJSON
+	}
+
+	jsonBytes, err := json.Marshal(jsonString)
+
+	if err != nil {
+		log.Fatalf("Error marshaling struct: %v", err)
+	}
+
+	return jsonBytes
 }
