@@ -6,6 +6,7 @@ package web_experimentation
 import (
 	"os"
 
+	"github.com/flagship-io/flagship/cmd/web_experimentation/account"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/campaign"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/global_code"
@@ -35,6 +36,7 @@ func addSubCommandPalettes() {
 	WebExperimentationCmd.AddCommand(global_code.GlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(variation.VariationCmd)
 	WebExperimentationCmd.AddCommand(auth.AuthCmd)
+	WebExperimentationCmd.AddCommand(account.AccountCmd)
 }
 
 func init() {

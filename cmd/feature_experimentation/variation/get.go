@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 	Short: "Get a variation",
 	Long:  `Get a variation in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.VariationRequester.HTTPGetVariation(CampaignID, VariationGroupID, VariationID)
+		body, err := httprequest.VariationFERequester.HTTPGetVariation(CampaignID, VariationGroupID, VariationID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

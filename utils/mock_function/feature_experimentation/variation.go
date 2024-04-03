@@ -9,7 +9,7 @@ import (
 	"github.com/jarcoal/httpmock"
 )
 
-var TestVariation = models.Variation{
+var TestVariation = models.VariationFE{
 	Id:         "testVariationID",
 	Name:       "testVariationName",
 	Reference:  true,
@@ -20,7 +20,7 @@ var TestVariation = models.Variation{
 	},
 }
 
-var TestVariation1 = models.Variation{
+var TestVariation1 = models.VariationFE{
 	Id:         "testVariationID1",
 	Name:       "testVariationName1",
 	Reference:  false,
@@ -31,7 +31,7 @@ var TestVariation1 = models.Variation{
 	},
 }
 
-var TestVariationEdit = models.Variation{
+var TestVariationEdit = models.VariationFE{
 	Id:         "testVariationID",
 	Name:       "testVariationName1",
 	Reference:  false,
@@ -42,7 +42,7 @@ var TestVariationEdit = models.Variation{
 	},
 }
 
-var TestVariationList = []models.Variation{
+var TestVariationList = []models.VariationFE{
 	TestVariation,
 	TestVariation1,
 }
@@ -52,7 +52,7 @@ func APIVariation() {
 	campaignID := "campaignID"
 	variationGroupID := "variationGroupID"
 
-	resp := utils.HTTPListResponse[models.Variation]{
+	resp := utils.HTTPListResponse[models.VariationFE]{
 		Items:             TestVariationList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

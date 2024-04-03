@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"log"
 
-	httprequest "github.com/flagship-io/flagship/utils/http_request/web_experimentation"
+	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 	Short: "Get a variation",
 	Long:  `Get a variation in your campaign`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.HTTPGetVariation(TestID, VariationID)
+		body, err := httprequest.VariationWERequester.HTTPGetVariation(TestID, VariationID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

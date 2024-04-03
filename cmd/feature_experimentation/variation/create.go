@@ -17,7 +17,7 @@ var createCmd = &cobra.Command{
 	Short: "Create a variation",
 	Long:  `Create a variation in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.VariationRequester.HTTPCreateVariation(CampaignID, VariationGroupID, DataRaw)
+		body, err := httprequest.VariationFERequester.HTTPCreateVariation(CampaignID, VariationGroupID, DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

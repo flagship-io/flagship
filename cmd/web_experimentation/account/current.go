@@ -38,9 +38,8 @@ var currentCmd = &cobra.Command{
 
 		configuration.CurrentUsedCredential = configurationYaml.CurrentUsedCredential
 		configuration.AccountID = configurationYaml.AccountID
-		configuration.AccountEnvironmentID = configurationYaml.AccountEnvironmentID
 
-		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID", "AccountEnvironmentID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

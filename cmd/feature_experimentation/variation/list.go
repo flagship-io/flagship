@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Short: "List all variations",
 	Long:  `List all variations in your variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.VariationRequester.HTTPListVariation(CampaignID, VariationGroupID)
+		body, err := httprequest.VariationFERequester.HTTPListVariation(CampaignID, VariationGroupID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

@@ -1,15 +1,15 @@
 package web_experimentation
 
-type Test struct {
-	Id          int              `json:"id,omitempty"`
-	Name        string           `json:"name"`
-	Url         string           `json:"url"`
-	Description string           `json:"description"`
-	Type        string           `json:"type"`
-	SubType     string           `json:"sub_type"`
-	State       string           `json:"state"`
-	Traffic     *Traffic         `json:"traffic"`
-	Variations  *[]TestVariation `json:"variations"`
+type CampaignWE struct {
+	Id          int            `json:"id,omitempty"`
+	Name        string         `json:"name"`
+	Url         string         `json:"url"`
+	Description string         `json:"description"`
+	Type        string         `json:"type"`
+	SubType     string         `json:"sub_type"`
+	State       string         `json:"state"`
+	Traffic     *Traffic       `json:"traffic"`
+	Variations  *[]VariationWE `json:"variations"`
 }
 
 type Traffic struct {

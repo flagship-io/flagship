@@ -17,8 +17,8 @@ var useCmd = &cobra.Command{
 	Short: "get an auth credential",
 	Long:  `list an auth credential from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if AccountID == "" && AccountEnvironmentID == "" {
-			fmt.Fprintln(cmd.OutOrStdout(), "required flag account-id or account-environment-id")
+		if AccountID == "" {
+			fmt.Fprintln(cmd.OutOrStdout(), "required flag account-id")
 			return
 		}
 
@@ -26,15 +26,11 @@ var useCmd = &cobra.Command{
 			config.SetAccountID(utils.WEB_EXPERIMENTATION, AccountID)
 		}
 
-		if AccountEnvironmentID != "" {
-			config.SetAccountEnvID(utils.WEB_EXPERIMENTATION, AccountEnvironmentID)
-		}
 	},
 }
 
 func init() {
 	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to display")
-	useCmd.Flags().StringVarP(&AccountEnvironmentID, "account-environment-id", "e", "", "account env id of the credentials you want to display")
 
 	AccountCmd.AddCommand(useCmd)
 }

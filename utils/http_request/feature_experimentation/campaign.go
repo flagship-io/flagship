@@ -13,24 +13,24 @@ type CampaignRequester struct {
 	*common.ResourceRequest
 }
 
-func (c *CampaignRequester) HTTPListCampaign() ([]models.Campaign, error) {
-	return common.HTTPGetAllPagesFE[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns")
+func (c *CampaignRequester) HTTPListCampaign() ([]models.CampaignFE, error) {
+	return common.HTTPGetAllPagesFE[models.CampaignFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns")
 }
 
-func (c *CampaignRequester) HTTPGetCampaign(id string) (models.Campaign, error) {
-	return common.HTTPGetItem[models.Campaign](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns/" + id)
+func (c *CampaignRequester) HTTPGetCampaign(id string) (models.CampaignFE, error) {
+	return common.HTTPGetItem[models.CampaignFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + c.AccountID + "/account_environments/" + c.AccountEnvironmentID + "/campaigns/" + id)
 }
 
 func (c *CampaignRequester) HTTPCreateCampaign(data string) ([]byte, error) {
-	return common.HTTPRequest[models.Campaign](http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns", []byte(data))
+	return common.HTTPRequest[models.CampaignFE](http.MethodPost, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns", []byte(data))
 }
 
 func (c *CampaignRequester) HTTPEditCampaign(id, data string) ([]byte, error) {
-	return common.HTTPRequest[models.Campaign](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id, []byte(data))
+	return common.HTTPRequest[models.CampaignFE](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id, []byte(data))
 }
 
 func (c *CampaignRequester) HTTPSwitchCampaign(id, state string) error {
-	campaignSwitchRequest := models.CampaignSwitchRequest{
+	campaignSwitchRequest := models.CampaignFESwitchRequest{
 		State: state,
 	}
 
@@ -39,11 +39,11 @@ func (c *CampaignRequester) HTTPSwitchCampaign(id, state string) error {
 		return err
 	}
 
-	_, err = common.HTTPRequest[models.Campaign](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id+"/toggle", campaignSwitchRequestJSON)
+	_, err = common.HTTPRequest[models.CampaignFE](http.MethodPatch, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id+"/toggle", campaignSwitchRequestJSON)
 	return err
 }
 
 func (c *CampaignRequester) HTTPDeleteCampaign(id string) error {
-	_, err := common.HTTPRequest[models.Campaign](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id, nil)
+	_, err := common.HTTPRequest[models.CampaignFE](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+c.AccountID+"/account_environments/"+c.AccountEnvironmentID+"/campaigns/"+id, nil)
 	return err
 }

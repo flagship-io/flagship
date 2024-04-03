@@ -21,7 +21,7 @@ var targetingGroups = []models.TargetingGroup{
 	},
 }
 
-var variations = []models.Variation{
+var variations = []models.VariationFE{
 	{
 		Name:       "My variation 1",
 		Reference:  true,

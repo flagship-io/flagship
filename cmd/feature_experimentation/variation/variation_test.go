@@ -25,8 +25,8 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-var testVariation models.Variation
-var testVariationList []models.Variation
+var testVariation models.VariationFE
+var testVariationList []models.VariationFE
 
 func TestVariationCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(VariationCmd)

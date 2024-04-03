@@ -106,7 +106,7 @@ type VariationGroupData struct {
 }
 
 type VariationData struct {
-	*models.Variation
+	*models.VariationFE
 }
 
 type ResourceType int

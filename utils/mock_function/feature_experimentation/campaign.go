@@ -31,7 +31,7 @@ var targetingTest = models.Targeting{
 	TargetingGroups: targetingGroupsTest,
 }
 
-var variationTest = []models.Variation{
+var variationTest = []models.VariationFE{
 	{
 		Name:       "My variation 1",
 		Reference:  true,
@@ -60,7 +60,7 @@ var variationGroupsTest = []models.VariationGroup{
 	},
 }
 
-var TestCampaign = models.Campaign{
+var TestCampaign = models.CampaignFE{
 	Id:              "testCampaignID",
 	Name:            "testCampaignName",
 	ProjectId:       "testProjectID",
@@ -70,7 +70,7 @@ var TestCampaign = models.Campaign{
 	Scheduler:       scheduler,
 }
 
-var TestCampaign1 = models.Campaign{
+var TestCampaign1 = models.CampaignFE{
 	Id:              "testCampaignID1",
 	Name:            "testCampaignName1",
 	ProjectId:       "testProjectID1",
@@ -80,7 +80,7 @@ var TestCampaign1 = models.Campaign{
 	Scheduler:       scheduler,
 }
 
-var TestCampaignEdit = models.Campaign{
+var TestCampaignEdit = models.CampaignFE{
 	Id:              "testCampaignID",
 	Name:            "testCampaignName1",
 	ProjectId:       "testProjectID1",
@@ -90,14 +90,14 @@ var TestCampaignEdit = models.Campaign{
 	Scheduler:       scheduler,
 }
 
-var TestCampaignlist = []models.Campaign{
+var TestCampaignlist = []models.CampaignFE{
 	TestCampaign,
 	TestCampaign1,
 }
 
 func APICampaign() {
 
-	resp := utils.HTTPListResponse[models.Campaign]{
+	resp := utils.HTTPListResponse[models.CampaignFE]{
 		Items:             TestCampaignlist,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

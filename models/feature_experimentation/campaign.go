@@ -1,6 +1,6 @@
 package feature_experimentation
 
-type Campaign struct {
+type CampaignFE struct {
 	Id              string            `json:"id,omitempty"`
 	ProjectId       string            `json:"project_id"`
 	Name            string            `json:"name"`
@@ -17,6 +17,6 @@ type Scheduler struct {
 	TimeZone  string `json:"timezone"`
 }
 
-type CampaignSwitchRequest struct {
+type CampaignFESwitchRequest struct {
 	State string `json:"state"`
 }

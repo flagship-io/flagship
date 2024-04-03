@@ -6,9 +6,8 @@ package account
 import "github.com/spf13/cobra"
 
 var (
-	Username             string
-	AccountID            string
-	AccountEnvironmentID string
+	Username  string
+	AccountID string
 )
 
 // ConfigurationCmd represents the configuration command

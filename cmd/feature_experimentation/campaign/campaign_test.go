@@ -25,8 +25,8 @@ func TestMain(m *testing.M) {
 	m.Run()
 }
 
-var testCampaign models.Campaign
-var testCampaignList []models.Campaign
+var testCampaign models.CampaignFE
+var testCampaignList []models.CampaignFE
 
 func TestCampaignCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(CampaignCmd)

@@ -8,7 +8,7 @@ import (
 )
 
 var variationGroupID = "variationGroupID"
-var variationRequester = VariationRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
+var variationRequester = VariationFERequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetVariation(t *testing.T) {
 
