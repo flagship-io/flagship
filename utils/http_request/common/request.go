@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"reflect"
+	"regexp"
 	"strings"
 	"time"
 
@@ -158,6 +161,13 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 		counter = true
 		regenerateToken(cred.Product, cred.CurrentUsedCredential)
 		return HTTPRequest[T](method, url, body)
+	}
+
+	match, _ := regexp.MatchString("4..|5..", resp.Status)
+	if match {
+		err := errors.New(string(respBody))
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	return respBody, err

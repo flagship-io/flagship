@@ -29,6 +29,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	useCmd.Flags().StringVarP(&accountID, "account-id", "a", "", "account id of the credentials you want to list")
+	listCmd.Flags().StringVarP(&accountID, "account-id", "a", "", "account id of the credentials you want to list")
 	AccountEnvironmentCmd.AddCommand(listCmd)
 }
