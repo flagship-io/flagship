@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package account
+package accountenvironment
 
 import (
 	"log"
@@ -15,8 +15,8 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list all auth",
-	Long:  `list all auth from your system`,
+	Short: "list all account environment id associated to your account",
+	Long:  `list all account environment id associated to your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		body, err := httprequest.AccountEnvironmentFERequester.HTTPListAccountEnvironment()
@@ -28,6 +28,5 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-
-	//AccountCmd.AddCommand(listCmd)
+	AccountEnvironmentCmd.AddCommand(listCmd)
 }

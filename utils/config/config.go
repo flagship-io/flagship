@@ -174,6 +174,7 @@ func WriteToken(product, configurationName string, authenticationResponse models
 
 	v.SetConfigFile(configFilepath)
 
+	v.MergeInConfig()
 	v.Set("token", authenticationResponse.AccessToken)
 	v.Set("refresh_token", authenticationResponse.RefreshToken)
 

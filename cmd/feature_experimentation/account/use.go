@@ -5,6 +5,7 @@ package account
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
@@ -17,24 +18,21 @@ var useCmd = &cobra.Command{
 	Short: "get an auth credential",
 	Long:  `list an auth credential from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if AccountID == "" && AccountEnvironmentID == "" {
-			fmt.Fprintln(cmd.OutOrStdout(), "required flag account-id or account-environment-id")
+		if AccountID == "" {
+			fmt.Fprintln(cmd.OutOrStderr(), "required flag account-id")
 			return
 		}
 
-		if AccountID != "" {
-			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
-		}
+		config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
 
-		if AccountEnvironmentID != "" {
-			config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, AccountEnvironmentID)
-		}
 	},
 }
 
 func init() {
-	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to display")
-	useCmd.Flags().StringVarP(&AccountEnvironmentID, "account-environment-id", "e", "", "account env id of the credentials you want to display")
+	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to manage")
 
+	if err := useCmd.MarkFlagRequired("account-id"); err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
 	AccountCmd.AddCommand(useCmd)
 }

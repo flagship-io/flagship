@@ -37,7 +37,7 @@ var loginCmd = &cobra.Command{
 	Long:  `login`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !checkSingleFlag(credentialsFile != "", Username != "") {
-			log.Fatalf("error occurred: %s", "1 flag is required. (browser, username, credential-file, email)")
+			log.Fatalf("error occurred: %s", "1 flag is required. (username, credential-file)")
 		}
 
 		if credentialsFile != "" {
@@ -66,7 +66,7 @@ var loginCmd = &cobra.Command{
 				return
 			}
 
-			if ClientID == "" && ClientSecret == "" && AccountId == "" {
+			if ClientID == "" || ClientSecret == "" || AccountId == "" {
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
 				return
 			}
@@ -79,6 +79,7 @@ var loginCmd = &cobra.Command{
 			if authenticationResponse.AccessToken == "" {
 				log.Fatal("client_id or client_secret not valid")
 			}
+
 			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
 			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
 			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)

@@ -58,11 +58,11 @@ type CampaignData struct {
 }
 
 func (f *CampaignData) Save(data string) ([]byte, error) {
-	return http_request.CampaignRequester.HTTPCreateCampaign(data)
+	return http_request.CampaignFERequester.HTTPCreateCampaign(data)
 }
 
 func (f *CampaignData) Delete(id string) error {
-	return http_request.CampaignRequester.HTTPDeleteCampaign(id)
+	return http_request.CampaignFERequester.HTTPDeleteCampaign(id)
 }
 
 type FlagData struct {

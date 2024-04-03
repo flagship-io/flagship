@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 	Short: "Get a campaign",
 	Long:  `Get a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.CampaignRequester.HTTPGetCampaign(CampaignID)
+		body, err := httprequest.CampaignFERequester.HTTPGetCampaign(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

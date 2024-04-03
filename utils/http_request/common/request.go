@@ -12,6 +12,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/flagship-io/flagship/models"
+	"github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 )
@@ -58,6 +60,7 @@ type RequestConfig struct {
 	Token                 string `mapstructure:"token"`
 	RefreshToken          string `mapstructure:"refresh_token"`
 	CurrentUsedCredential string `mapstructure:"current_used_credential"`
+	OutputFormat          string `mapstructure:"output_format"`
 }
 
 var cred RequestConfig
@@ -67,19 +70,21 @@ func Init(credL RequestConfig) {
 }
 
 func regenerateToken(product, configName string) {
-	authenticationResponse, err := HTTPRefreshToken(cred.ClientID, cred.RefreshToken)
+	var authenticationResponse models.TokenResponse
 
-	if err != nil {
-		log.Fatalf("%s", err)
+	if product == utils.FEATURE_EXPERIMENTATION {
+		authenticationResponse, _ = HTTPRefreshTokenFE(cred.ClientID, cred.RefreshToken)
+	} else {
+		authenticationResponse, _ = HTTPRefreshTokenWE(utils.CLIENT_ID, utils.CLIENT_SECRET, cred.RefreshToken)
 	}
 
 	if authenticationResponse.AccessToken == "" {
 		log.Fatal("client_id or client_secret not valid")
-	} else {
-		cred.RefreshToken = authenticationResponse.RefreshToken
-		cred.Token = authenticationResponse.AccessToken
-		config.WriteToken(product, configName, authenticationResponse)
 	}
+	cred.RefreshToken = authenticationResponse.RefreshToken
+	cred.Token = authenticationResponse.AccessToken
+	config.WriteToken(product, configName, authenticationResponse)
+
 }
 
 func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) {
@@ -88,12 +93,11 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 		bodyIO = bytes.NewBuffer(body)
 	}
 
-	//fmt.Println(method, url)
 	var resource T
 
-	resourceType := reflect.TypeOf(resource).String()
+	resourceType := reflect.TypeOf(resource)
 
-	if resourceType == "feature_experimentation.Campaign" || resourceType == "feature_experimentation.Goal" {
+	if resourceType == reflect.TypeOf(feature_experimentation.Goal{}) || resourceType == reflect.TypeOf(feature_experimentation.CampaignFE{}) {
 		if cred.AccountID == "" || cred.AccountEnvironmentID == "" {
 			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
 		}
@@ -109,7 +113,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 			log.Fatalf("account_id required, Please configure your CLI")
 		}
 		// for resource loader
-		if resourceType == "resource.ResourceData" && !strings.Contains(url, "token") && (cred.AccountID == "" || cred.AccountEnvironmentID == "") {
+		if resourceType.String() == "resource.ResourceData" && !strings.Contains(url, "token") && (cred.AccountID == "" || cred.AccountEnvironmentID == "") {
 			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
 		}
 

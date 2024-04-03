@@ -65,8 +65,14 @@ type PasswordRequest struct {
 	ClientSecret string `json:"client_secret"`
 }
 
-type RefreshTokenRequest struct {
+type RefreshTokenRequestFE struct {
 	GrantType    string `json:"grant_type"`
 	ClientID     string `json:"client_id"`
 	RefreshToken string `json:"refresh_token"`
+}
+type RefreshTokenRequestWE struct {
+	GrantType    string `json:"grant_type"`
+	ClientID     string `json:"client_id"`
+	RefreshToken string `json:"refresh_token"`
+	ClientSecret string `json:"client_secret"`
 }

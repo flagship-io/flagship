@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var campaignRequester = CampaignRequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
+var campaignRequester = CampaignFERequester{&common.ResourceRequest{AccountID: "account_id", AccountEnvironmentID: "account_environment_id"}}
 
 func TestHTTPGetCampaign(t *testing.T) {
 	respBody, err := campaignRequester.HTTPGetCampaign("testCampaignID")

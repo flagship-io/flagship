@@ -22,7 +22,6 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		fmt.Println(body)
 		jsonBody, err := json.Marshal(body)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)

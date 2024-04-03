@@ -5,6 +5,7 @@ package account
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
@@ -22,15 +23,16 @@ var useCmd = &cobra.Command{
 			return
 		}
 
-		if AccountID != "" {
-			config.SetAccountID(utils.WEB_EXPERIMENTATION, AccountID)
-		}
+		config.SetAccountID(utils.WEB_EXPERIMENTATION, AccountID)
 
 	},
 }
 
 func init() {
-	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to display")
+	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to manage")
 
+	if err := useCmd.MarkFlagRequired("account-id"); err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
 	AccountCmd.AddCommand(useCmd)
 }

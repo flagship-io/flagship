@@ -112,7 +112,7 @@ var loginCmd = &cobra.Command{
 				return
 			}
 
-			if password == "" && totp == "" {
+			if password == "" || totp == "" {
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (password, totp)")
 				return
 			}

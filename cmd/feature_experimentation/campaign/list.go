@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Short: "List all campaigns",
 	Long:  `List all campaigns`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.CampaignRequester.HTTPListCampaign()
+		body, err := httprequest.CampaignFERequester.HTTPListCampaign()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

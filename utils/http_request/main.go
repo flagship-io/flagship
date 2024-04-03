@@ -15,7 +15,7 @@ var ResourceRequester common.ResourceRequest
 var HTTPResources = []HTTPResource{&ResourceRequester}
 
 // feature experimentation
-var CampaignRequester feature_experimentation.CampaignRequester = feature_experimentation.CampaignRequester{ResourceRequest: &ResourceRequester}
+var CampaignFERequester feature_experimentation.CampaignFERequester = feature_experimentation.CampaignFERequester{ResourceRequest: &ResourceRequester}
 var AccountEnvironmentFERequester feature_experimentation.AccountEnvironmentFERequester = feature_experimentation.AccountEnvironmentFERequester{ResourceRequest: &ResourceRequester}
 var FlagRequester feature_experimentation.FlagRequester = feature_experimentation.FlagRequester{ResourceRequest: &ResourceRequester}
 var GoalRequester feature_experimentation.GoalRequester = feature_experimentation.GoalRequester{ResourceRequest: &ResourceRequester}
@@ -28,7 +28,7 @@ var PanicRequester feature_experimentation.PanicRequester = feature_experimentat
 
 // web experimentation
 
-var TestRequester web_experimentation.TestRequester = web_experimentation.TestRequester{ResourceRequest: &ResourceRequester}
+var CampaignWERequester web_experimentation.CampaignWERequester = web_experimentation.CampaignWERequester{ResourceRequest: &ResourceRequester}
 var GlobalCodeRequester web_experimentation.GlobalCodeRequester = web_experimentation.GlobalCodeRequester{ResourceRequest: &ResourceRequester}
 var AccountWERequester web_experimentation.AccountWERequester = web_experimentation.AccountWERequester{ResourceRequest: &ResourceRequester}
 var VariationWERequester web_experimentation.VariationWERequester = web_experimentation.VariationWERequester{ResourceRequest: &ResourceRequester}

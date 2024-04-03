@@ -8,23 +8,23 @@ import (
 	"github.com/flagship-io/flagship/utils/http_request/common"
 )
 
-type TestRequester struct {
+type CampaignWERequester struct {
 	*common.ResourceRequest
 }
 
-func (t *TestRequester) HTTPListTest() ([]models.CampaignWE, error) {
+func (t *CampaignWERequester) HTTPListCampaign() ([]models.CampaignWE, error) {
 	return common.HTTPGetAllPagesWE[models.CampaignWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + t.AccountID + "/tests")
 }
 
-func (t *TestRequester) HTTPGetTest(id string) (models.CampaignWE, error) {
+func (t *CampaignWERequester) HTTPGetCampaign(id string) (models.CampaignWE, error) {
 	return common.HTTPGetItem[models.CampaignWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + t.AccountID + "/tests/" + id)
 }
 
-func (t *TestRequester) HTTPCreateTest(data string) ([]byte, error) {
+func (t *CampaignWERequester) HTTPCreateCampaign(data string) ([]byte, error) {
 	return common.HTTPRequest[models.CampaignWE](http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests", []byte(data))
 }
 
-func (t *TestRequester) HTTPEditTest(id, data string) ([]byte, error) {
+func (t *CampaignWERequester) HTTPEditCampaign(id, data string) ([]byte, error) {
 	return common.HTTPRequest[models.CampaignWE](http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests/"+id, []byte(data))
 }
 
@@ -42,7 +42,7 @@ func (t *TestRequester) HTTPEditTest(id, data string) ([]byte, error) {
 	return err
 } */
 
-func (t *TestRequester) HTTPDeleteTest(id string) error {
+func (t *CampaignWERequester) HTTPDeleteCampaign(id string) error {
 	_, err := common.HTTPRequest[models.CampaignWE](http.MethodDelete, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+t.AccountID+"/tests/"+id, nil)
 	return err
 }

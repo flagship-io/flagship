@@ -17,7 +17,7 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a campaign",
 	Long:  `Delete a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := httprequest.CampaignRequester.HTTPDeleteCampaign(CampaignID)
+		err := httprequest.CampaignFERequester.HTTPDeleteCampaign(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

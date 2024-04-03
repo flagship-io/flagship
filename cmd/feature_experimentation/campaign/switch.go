@@ -20,7 +20,7 @@ var SwitchCmd = &cobra.Command{
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 3 values: active or paused or interrupted")
 		} else {
-			err := httprequest.CampaignRequester.HTTPSwitchCampaign(CampaignID, Status)
+			err := httprequest.CampaignFERequester.HTTPSwitchCampaign(CampaignID, Status)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}

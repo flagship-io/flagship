@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package account
+package accountenvironment
 
 import (
 	"log"
@@ -37,14 +37,13 @@ var currentCmd = &cobra.Command{
 		}
 
 		configuration.CurrentUsedCredential = configurationYaml.CurrentUsedCredential
-		configuration.AccountID = configurationYaml.AccountID
 		configuration.AccountEnvironmentID = configurationYaml.AccountEnvironmentID
 
-		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"CurrentUsedCredential", "AccountEnvironmentID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }
 
 func init() {
-	AccountCmd.AddCommand(currentCmd)
+	AccountEnvironmentCmd.AddCommand(currentCmd)
 }

@@ -26,6 +26,9 @@ var WebExperimentationCmd = &cobra.Command{
 	Aliases: []string{"web-experimentation", "web-exp", "we"},
 	Short:   "Manage resources related to the feature experimentation product",
 	Long:    `Manage resources related to the feature experimentation product in your account`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		initConfig()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -40,7 +43,6 @@ func addSubCommandPalettes() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
 	addSubCommandPalettes()
 }
 
@@ -62,7 +64,5 @@ func initConfig() {
 	r := &http_request.ResourceRequester
 
 	r.Init(&requestConfig)
-
 	return
-
 }

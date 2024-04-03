@@ -2,16 +2,15 @@ package common
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 )
 
-func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, error) {
+func HTTPRefreshTokenFE(client_id, refresh_token string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
-	authRequest := models.RefreshTokenRequest{
+	authRequest := models.RefreshTokenRequestFE{
 		ClientID:     client_id,
 		GrantType:    "refresh_token",
 		RefreshToken: refresh_token,
@@ -22,6 +21,32 @@ func HTTPRefreshToken(client_id, refresh_token string) (models.TokenResponse, er
 	}
 
 	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(respBody, &authenticationResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	return authenticationResponse, err
+}
+
+func HTTPRefreshTokenWE(client_id, client_secret, refresh_token string) (models.TokenResponse, error) {
+	var authenticationResponse models.TokenResponse
+	authRequest := models.RefreshTokenRequestWE{
+		ClientID:     client_id,
+		GrantType:    "refresh_token",
+		RefreshToken: refresh_token,
+		ClientSecret: client_secret,
+	}
+	authRequestJSON, err := json.Marshal(authRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1"+"/token", authRequestJSON)
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
@@ -113,8 +138,6 @@ func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfa
 		return models.TokenResponse{}, err
 	}
 
-	fmt.Println(string(mfaRespBody))
-
 	mfmRequest := models.MultiFactorMethodRequestWE{
 		GrantType: "multi_factor_methods",
 		MfaToken:  mfaResponse.MfaToken,
@@ -135,8 +158,6 @@ func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfa
 	if err != nil {
 		return models.TokenResponse{}, err
 	}
-
-	fmt.Println(string(mfmRespBody))
 
 	mfRequest := models.MultiFactorRequestWE{
 		GrantType: "multi_factor",
@@ -160,14 +181,12 @@ func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfa
 		return models.TokenResponse{}, err
 	}
 
-	fmt.Println(authenticationResponse)
-
 	return authenticationResponse, err
 }
 
 func HTTPRefreshToken_(product, client_id, refresh_token string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
-	authRequest := models.RefreshTokenRequest{
+	authRequest := models.RefreshTokenRequestFE{
 		ClientID:     client_id,
 		GrantType:    "refresh_token",
 		RefreshToken: refresh_token,

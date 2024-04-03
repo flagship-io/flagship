@@ -17,7 +17,7 @@ var createCmd = &cobra.Command{
 	Short: "Create a campaign",
 	Long:  `Create a campaign in your project`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.CampaignRequester.HTTPCreateCampaign(DataRaw)
+		body, err := httprequest.CampaignFERequester.HTTPCreateCampaign(DataRaw)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

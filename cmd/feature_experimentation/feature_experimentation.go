@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/account"
+	accountenvironment "github.com/flagship-io/flagship/cmd/feature_experimentation/account_environment"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/analyze"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/campaign"
@@ -34,6 +35,9 @@ var FeatureExperimentationCmd = &cobra.Command{
 	Aliases: []string{"feature-experimentation", "feature-exp", "fe", "feat-exp"},
 	Short:   "Manage resources related to the feature experimentation product",
 	Long:    `Manage resources related to the feature experimentation product in your account`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		initConfig()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -53,10 +57,10 @@ func addSubCommandPalettes() {
 	FeatureExperimentationCmd.AddCommand(resource.ResourceCmd)
 	FeatureExperimentationCmd.AddCommand(auth.AuthCmd)
 	FeatureExperimentationCmd.AddCommand(account.AccountCmd)
+	FeatureExperimentationCmd.AddCommand(accountenvironment.AccountEnvironmentCmd)
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
 	addSubCommandPalettes()
 }
 
@@ -80,7 +84,6 @@ func initConfig() {
 	r := &http_request.ResourceRequester
 
 	r.Init(&requestConfig)
-
 	return
 
 }
