@@ -10,8 +10,12 @@ type AccountEnvironmentFERequester struct {
 	*common.ResourceRequest
 }
 
-func (a *AccountEnvironmentFERequester) HTTPListAccountEnvironment() ([]models.AccountEnvironmentFE, error) {
-	return common.HTTPGetAllPagesFE[models.AccountEnvironmentFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + a.AccountID + "/account_environments")
+func (a *AccountEnvironmentFERequester) HTTPListAccountEnvironment(accountID string) ([]models.AccountEnvironmentFE, error) {
+	if accountID == "" {
+		accountID = a.AccountID
+	}
+
+	return common.HTTPGetAllPagesFE[models.AccountEnvironmentFE](utils.GetFeatureExperimentationHost() + "/v1/accounts/" + accountID + "/account_environments")
 }
 
 func (a *AccountEnvironmentFERequester) HTTPGetAccountEnvironment(id string) (models.AccountEnvironmentFE, error) {

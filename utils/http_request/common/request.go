@@ -159,6 +159,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 		regenerateToken(cred.Product, cred.CurrentUsedCredential)
 		return HTTPRequest[T](method, url, body)
 	}
+
 	return respBody, err
 }
 
