@@ -4,12 +4,16 @@ type Auth struct {
 	Username     string `json:"username"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
+	Token        string `json:"token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 type AuthYaml struct {
 	Username     string `yaml:"username"`
 	ClientID     string `yaml:"client_id"`
 	ClientSecret string `yaml:"client_secret"`
+	Token        string `yaml:"token"`
+	RefreshToken string `yaml:"refresh_token"`
 }
 
 type AccountYaml struct {

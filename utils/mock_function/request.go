@@ -14,7 +14,7 @@ type TestRequest struct {
 }
 
 var Auth = common.RequestConfig{
-	Username:             "test_configuration",
+	Username:             "test_auth",
 	ClientID:             "client_id",
 	ClientSecret:         "client_secret",
 	AccountID:            "account_id",

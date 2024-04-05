@@ -30,28 +30,30 @@ var listCmd = &cobra.Command{
 
 		for _, fileName := range existingAuths {
 			if fileName != "" {
-				var configurationYaml models.AuthYaml
-				var configuration models.Auth
+				var authYaml models.AuthYaml
+				var auth models.Auth
 				yamlFile, err := os.ReadFile(config.CredentialPath(utils.WEB_EXPERIMENTATION, fileName))
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
 
 				// Unmarshal the YAML data into the struct
-				err = yaml.Unmarshal(yamlFile, &configurationYaml)
+				err = yaml.Unmarshal(yamlFile, &authYaml)
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
-				if configurationYaml.Username != "" {
-					configuration.Username = configurationYaml.Username
-					configuration.ClientID = configurationYaml.ClientID
-					configuration.ClientSecret = configurationYaml.ClientSecret
-					auths = append(auths, configuration)
+				if authYaml.Username != "" {
+					auth.Username = authYaml.Username
+					auth.ClientID = authYaml.ClientID
+					auth.ClientSecret = authYaml.ClientSecret
+					auth.Token = authYaml.Token
+					auth.RefreshToken = authYaml.RefreshToken
+					auths = append(auths, auth)
 				}
 			}
 		}
 
-		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, auths, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Username", "Token"}, auths, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

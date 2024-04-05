@@ -1,4 +1,4 @@
-package feature_experimentation
+package web_experimentation
 
 import (
 	"os"
@@ -10,12 +10,12 @@ import (
 
 var TestAuth = models.Auth{
 	Username:     "test_auth",
-	ClientID:     "testAuthClientID",
-	ClientSecret: "testAuthClientSecret",
+	ClientID:     "",
+	ClientSecret: "",
 	Token:        "testAccessToken",
 	RefreshToken: "testRefreshToken",
 }
 
 func InitMockAuth() {
-	os.Remove(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, "test_auth"))
+	os.Remove(config.CredentialPath(utils.WEB_EXPERIMENTATION, "test_auth"))
 }

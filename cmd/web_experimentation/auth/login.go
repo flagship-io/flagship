@@ -23,7 +23,6 @@ var (
 	browser  bool
 	password string
 	totp     string
-	code     string
 )
 
 func checkSingleFlag(bool1, bool2 bool) bool {
@@ -65,6 +64,7 @@ var loginCmd = &cobra.Command{
 		}
 
 		if browser {
+			codeChan := make(chan string)
 			clientID := utils.CLIENT_ID
 			clientSecret := utils.CLIENT_SECRET
 
@@ -81,23 +81,37 @@ var loginCmd = &cobra.Command{
 			if err := openLink(url); err != nil {
 				log.Fatalf("Error opening link: %s", err)
 			}
-			http.HandleFunc("/auth/callback", handleCallback)
-			if err := http.ListenAndServe("127.0.0.1:8010", nil); err != nil {
-				log.Fatalf("Error starting callback server: %s", err)
-			}
 
-			authenticationResponse, err := common.HTTPCreateTokenWEAuthorizationCode(clientID, clientSecret, code)
-			if err != nil {
-				log.Fatalf("%s", err)
+			go func() {
+				http.HandleFunc("/auth/callback", func(w http.ResponseWriter, r *http.Request) {
+					handleCallback(w, r, codeChan)
+				})
+
+				if err := http.ListenAndServe("127.0.0.1:8010", nil); err != nil {
+					log.Fatalf("Error starting callback server: %s", err)
+				}
+			}()
+
+			code := <-codeChan
+
+			if code != "" {
+				authenticationResponse, err := common.HTTPCreateTokenWEAuthorizationCode(clientID, clientSecret, code)
+				if err != nil {
+					log.Fatalf("error occurred: %s", err)
+					return
+				}
+				fmt.Println(authenticationResponse)
+
+				if authenticationResponse.AccessToken == "" {
+					log.Fatal("Credentials not valid.")
+				}
+				// Waiting for fix to implemente route to get username "/users/me"
+
+				fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 				return
 			}
 
-			if authenticationResponse.AccessToken == "" {
-				log.Fatal("Credentials not valid.")
-			}
-
-			fmt.Fprintln(cmd.OutOrStdout(), "Token generated successfully")
-
+			fmt.Fprintln(cmd.OutOrStderr(), "Error occurred.")
 		}
 
 		if Username != "" {
@@ -118,7 +132,7 @@ var loginCmd = &cobra.Command{
 			}
 			authenticationResponse, err := common.HTTPCreateTokenWEPassword(utils.CLIENT_ID, utils.CLIENT_SECRET, Username, password, totp)
 			if err != nil {
-				log.Fatalf("%s", err)
+				log.Fatalf("error occurred: %s", err)
 				return
 			}
 
@@ -140,28 +154,27 @@ func init() {
 	loginCmd.Flags().StringVarP(&ClientSecret, "client-secret", "s", "", "client secret of an auth")
 
 	loginCmd.Flags().BoolVarP(&browser, "browser", "", false, "Generate link for browser")
-	loginCmd.Flags().StringVarP(&Username, "username", "u", "", "configuration name")
-	loginCmd.Flags().StringVarP(&password, "password", "", "", "configuration name")
-	loginCmd.Flags().StringVarP(&totp, "totp", "", "", "configuration name")
+	loginCmd.Flags().StringVarP(&Username, "username", "u", "", "username")
+	loginCmd.Flags().StringVarP(&password, "password", "", "", "password")
+	loginCmd.Flags().StringVarP(&totp, "totp", "", "", "totp")
 
 	AuthCmd.AddCommand(loginCmd)
 }
 
-func handleCallback(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Query().Get("code"))
-	code = r.URL.Query().Get("code")
+func handleCallback(w http.ResponseWriter, r *http.Request, codeChan chan<- string) {
+	code := r.URL.Query().Get("code")
 	if code == "" {
 		http.Error(w, "No token found in URL", http.StatusBadRequest)
 		os.Exit(0)
 		return
 	}
 
-	http.Redirect(w, r, "http://abtasty.com", http.StatusSeeOther)
+	codeChan <- code
 
-	fmt.Println("code received:", code)
+	http.Redirect(w, r, "http://abtasty.com", http.StatusSeeOther)
 
 	go func() {
 		time.Sleep(5 * time.Second)
-		os.Exit(0)
+		close(codeChan)
 	}()
 }

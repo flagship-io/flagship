@@ -10,7 +10,7 @@ var (
 	AccountEnvironmentID string
 )
 
-// ConfigurationCmd represents the configuration command
+// AccountEnvironmentCmd represents the account environment command
 var AccountEnvironmentCmd = &cobra.Command{
 	Use:   "account-environment [use|list|current]",
 	Short: "Manage your CLI authentication",

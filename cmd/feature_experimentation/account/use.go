@@ -25,6 +25,8 @@ var useCmd = &cobra.Command{
 
 		config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
 
+		fmt.Fprintln(cmd.OutOrStdout(), "Account ID set to : "+AccountID)
+
 	},
 }
 

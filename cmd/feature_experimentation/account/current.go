@@ -22,8 +22,8 @@ var currentCmd = &cobra.Command{
 	Long:  `current an auth credential from your system`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var configurationYaml models.AccountYaml
-		var configuration models.AccountJSON
+		var accountYaml models.AccountYaml
+		var account models.AccountJSON
 
 		yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, utils.HOME_CLI))
 		if err != nil {
@@ -31,16 +31,16 @@ var currentCmd = &cobra.Command{
 		}
 
 		// Unmarshal the YAML data into the struct
-		err = yaml.Unmarshal(yamlFile, &configurationYaml)
+		err = yaml.Unmarshal(yamlFile, &accountYaml)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
 
-		configuration.CurrentUsedCredential = configurationYaml.CurrentUsedCredential
-		configuration.AccountID = configurationYaml.AccountID
-		configuration.AccountEnvironmentID = configurationYaml.AccountEnvironmentID
+		account.CurrentUsedCredential = accountYaml.CurrentUsedCredential
+		account.AccountID = accountYaml.AccountID
+		account.AccountEnvironmentID = accountYaml.AccountEnvironmentID
 
-		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID"}, configuration, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID"}, account, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

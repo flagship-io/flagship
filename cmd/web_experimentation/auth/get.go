@@ -39,8 +39,9 @@ var getCmd = &cobra.Command{
 		auth.Username = authYaml.Username
 		auth.ClientID = authYaml.ClientID
 		auth.ClientSecret = authYaml.ClientSecret
+		auth.Token = authYaml.Token
 
-		utils.FormatItem([]string{"Username", "ClientID", "ClientSecret"}, auth, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"Username", "Token"}, auth, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }

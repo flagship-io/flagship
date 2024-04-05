@@ -17,6 +17,7 @@ import (
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/models/feature_experimentation"
+	"github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 )
@@ -102,7 +103,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 
 	if resourceType == reflect.TypeOf(feature_experimentation.Goal{}) || resourceType == reflect.TypeOf(feature_experimentation.CampaignFE{}) {
 		if cred.AccountID == "" || cred.AccountEnvironmentID == "" {
-			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+			log.Fatalf("account_id or account_environment_id required, Please authenticate your CLI")
 		}
 	}
 
@@ -112,16 +113,22 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	}
 
 	if cred.Product == utils.FEATURE_EXPERIMENTATION {
-		if cred.AccountID == "" {
-			log.Fatalf("account_id required, Please configure your CLI")
+		if (cred.Username == "" || cred.AccountID == "") && resourceType != reflect.TypeOf(models.TokenFE{}) {
+			log.Fatalf("username and account_id required, Please authenticate your CLI")
 		}
 		// for resource loader
 		if resourceType.String() == "resource.ResourceData" && !strings.Contains(url, "token") && (cred.AccountID == "" || cred.AccountEnvironmentID == "") {
-			log.Fatalf("account_id or account_environment_id required, Please configure your CLI")
+			log.Fatalf("account_id or account_environment_id required, Please authenticate your CLI")
 		}
 
-		if strings.Contains(url, "token") && cred.ClientID == "" && cred.ClientSecret == "" {
-			log.Fatalf("client_id or client_secret required, Please configure your CLI")
+		/* 		if strings.Contains(url, "token") && cred.ClientID == "" && cred.ClientSecret == "" {
+			log.Fatalf("client_id or client_secret required, Please authenticate your CLI")
+		} */
+	}
+
+	if cred.Product == utils.WEB_EXPERIMENTATION {
+		if resourceType != reflect.TypeOf(web_experimentation.AccountWE{}) && !strings.Contains(url, "token") && cred.AccountID == "" {
+			log.Fatalf("username, account_id required, Please authenticate your CLI")
 		}
 	}
 
@@ -166,7 +173,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	match, _ := regexp.MatchString("4..|5..", resp.Status)
 	if match {
 		err := errors.New(string(respBody))
-		fmt.Fprintln(os.Stderr, err)
+		fmt.Fprintf(os.Stderr, "error occurred: %v", err)
 		os.Exit(1)
 	}
 

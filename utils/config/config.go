@@ -39,14 +39,14 @@ func CheckABTastyHomeDirectory() (string, error) {
 	if _, err := os.Stat(homeDir + "/.flagship/credentials/" + utils.FEATURE_EXPERIMENTATION); errors.Is(err, os.ErrNotExist) {
 		err := os.MkdirAll(homeDir+"/.flagship/credentials/"+utils.FEATURE_EXPERIMENTATION, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("error occurred: %s", err)
 		}
 	}
 
 	if _, err := os.Stat(homeDir + "/.flagship/credentials/" + utils.WEB_EXPERIMENTATION); errors.Is(err, os.ErrNotExist) {
 		err := os.MkdirAll(homeDir+"/.flagship/credentials/"+utils.WEB_EXPERIMENTATION, os.ModePerm)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("error occurred: %s", err)
 		}
 	}
 
@@ -57,9 +57,8 @@ func CredentialPath(product, username string) string {
 	homeDir, _ := CheckABTastyHomeDirectory()
 	filepath, err := filepath.Abs(homeDir + "/.flagship/credentials/" + product + "/" + username + ".yaml")
 	if err != nil {
-		log.Fatalf("error occured: %v", err)
+		log.Fatalf("error occured: %s", err)
 	}
-
 	return filepath
 }
 
@@ -108,19 +107,22 @@ func CreateAuthFile(product, username, clientId, clientSecret string, authentica
 	}
 }
 
-func ReadAuth(product, configurationName string) *viper.Viper {
+func ReadAuth(product, AuthName string) *viper.Viper {
 	v := viper.New()
-	configFilepath := CredentialPath(product, configurationName)
+	configFilepath := CredentialPath(product, AuthName)
+	if _, err := os.Stat(configFilepath); errors.Is(err, os.ErrNotExist) {
+		log.Fatalf("error occurred: %v", err)
+	}
 	v.SetConfigFile(configFilepath)
 	v.MergeInConfig()
 	return v
 }
 
-func SelectAuth(product, configurationName string) {
+func SelectAuth(product, AuthName string) {
 	var v = viper.New()
 
 	filepath := CredentialPath(product, utils.HOME_CLI)
-	v.Set("current_used_credential", configurationName)
+	v.Set("current_used_credential", AuthName)
 
 	err := v.WriteConfigAs(filepath)
 	if err != nil {
@@ -157,9 +159,9 @@ func SetAccountEnvID(product, accountEnvID string) {
 	}
 }
 
-func ReadCredentialsFromFile(configurationFile string) *viper.Viper {
+func ReadCredentialsFromFile(AuthFile string) *viper.Viper {
 	var v = viper.New()
-	v.SetConfigFile(configurationFile)
+	v.SetConfigFile(AuthFile)
 	err := v.MergeInConfig()
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
@@ -168,9 +170,9 @@ func ReadCredentialsFromFile(configurationFile string) *viper.Viper {
 	return v
 }
 
-func WriteToken(product, configurationName string, authenticationResponse models.TokenResponse) {
+func WriteToken(product, AuthName string, authenticationResponse models.TokenResponse) {
 	v := viper.New()
-	configFilepath := CredentialPath(product, configurationName)
+	configFilepath := CredentialPath(product, AuthName)
 
 	v.SetConfigFile(configFilepath)
 

@@ -11,9 +11,9 @@ var (
 	Username     string
 )
 
-// ConfigurationCmd represents the configuration command
+// AuthCmd represents the auth command
 var AuthCmd = &cobra.Command{
-	Use:     "authentication [login|get|list]",
+	Use:     "authentication [login|get|list|delete]",
 	Aliases: []string{"auth"},
 	Short:   "Manage your CLI authentication for web experimentation",
 	Long:    `Manage your CLI authentication for web experimentation`,

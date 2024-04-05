@@ -1,15 +1,14 @@
-package feature_experimentation
+package web_experimentation
 
 import (
 	"net/http"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
-	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/jarcoal/httpmock"
 )
 
-var TestToken = models.TokenFE{
+var TestToken = models.TokenWE{
 	ClientID:  "client_id",
 	AccountID: "account_id",
 	ExpiresIn: 0,
@@ -25,14 +24,14 @@ func APIToken() {
 		RefreshToken: "testRefreshToken",
 	}
 
-	httpmock.RegisterResponder("GET", utils.GetHostFeatureExperimentationAuth()+"/token?access_token="+token,
+	httpmock.RegisterResponder("GET", utils.GetHostWebExperimentationAuth()+"/v1/token?access_token="+token,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestToken)
 			return resp, nil
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+mockfunction.Auth.AccountID+"/token?expires_in=86400",
+	httpmock.RegisterResponder("POST", utils.GetHostWebExperimentationAuth()+"/v1/token",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, testAuthenticationResponse)
 			return resp, nil

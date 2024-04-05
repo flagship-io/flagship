@@ -10,7 +10,7 @@ var (
 	AccountID string
 )
 
-// ConfigurationCmd represents the configuration command
+// AccountCmd represents the account command
 var AccountCmd = &cobra.Command{
 	Use:   "account [use|list|current]",
 	Short: "Manage your CLI authentication",
