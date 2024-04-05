@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -24,7 +25,8 @@ func ExecuteCommand(cmd *cobra.Command, args ...string) (output string, err erro
 
 	err = cmd.Execute()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "error occurred: %s", err)
+
 	}
 
 	return buf.String(), err

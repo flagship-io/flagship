@@ -2,7 +2,6 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
@@ -51,7 +50,6 @@ func TestAuthListCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(AuthCmd, "list")
 
 	err := json.Unmarshal([]byte(output), &testAuthList)
-	fmt.Println(testAuth)
 
 	assert.Nil(t, err)
 

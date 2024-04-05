@@ -69,13 +69,13 @@ func GetUsernames(product string) ([]string, error) {
 
 	f, err := os.Open(homeDir + "/.flagship/credentials/" + product)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "error occurred: %s", err)
 		return nil, err
 	}
 
 	files, err := f.Readdir(0)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "error occurred: %s", err)
 		return nil, err
 	}
 

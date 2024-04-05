@@ -280,7 +280,7 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 
 		data, err := json.Marshal(resource.Data)
 		if err != nil {
-			fmt.Printf("error occurred marshal data: %v\n", err)
+			fmt.Fprintf(os.Stderr, "error occurred marshal data: %v\n", err)
 		}
 
 		var httpMethod string = "POST"
@@ -316,7 +316,7 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 		err = json.Unmarshal(data, &resourceData)
 
 		if err != nil {
-			fmt.Printf("error occurred unmarshall resourceData: %v\n", err)
+			fmt.Fprintf(os.Stderr, "error occurred unmarshall resourceData: %v\n", err)
 		}
 
 		for k, vInterface := range resourceData {
@@ -385,11 +385,11 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 			err = json.Unmarshal(response, &responseData)
 
 			if err != nil {
-				fmt.Printf("error occurred unmarshal responseData: %v\n", err)
+				fmt.Fprintf(os.Stderr, "error occurred unmarshal responseData: %v\n", err)
 			}
 
 			if responseData == nil {
-				fmt.Println("error occurred not response data: " + string(response))
+				fmt.Fprintln(os.Stderr, "error occurred not response data: "+string(response))
 				continue
 			}
 

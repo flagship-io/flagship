@@ -30,7 +30,7 @@ func init() {
 	deleteCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the variation you want to delete")
 
 	if err := deleteCmd.MarkFlagRequired("id"); err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(deleteCmd.OutOrStderr(), "error occurred: %s", err)
 	}
 	VariationCmd.AddCommand(deleteCmd)
 }

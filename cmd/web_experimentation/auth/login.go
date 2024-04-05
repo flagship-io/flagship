@@ -100,7 +100,6 @@ var loginCmd = &cobra.Command{
 					log.Fatalf("error occurred: %s", err)
 					return
 				}
-				fmt.Println(authenticationResponse)
 
 				if authenticationResponse.AccessToken == "" {
 					log.Fatal("Credentials not valid.")
