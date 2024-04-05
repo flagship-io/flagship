@@ -1,17 +1,20 @@
 package token
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
+	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
 
-var testToken models.TokenWE
+var _testToken models.TokenFE
 
 func TestMain(m *testing.M) {
 
@@ -19,8 +22,11 @@ func TestMain(m *testing.M) {
 	defer httpmock.DeactivateAndReset()
 
 	mockfunction.SetMock(&http_request.ResourceRequester)
+	mockfunction_fe.APIToken()
 	m.Run()
 }
+
+var testToken models.TokenFE
 
 func TestTokenCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TokenCmd)
@@ -30,4 +36,14 @@ func TestTokenCommand(t *testing.T) {
 func TestTokenHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TokenCmd, "--help")
 	assert.Contains(t, output, "Manage your token\n")
+}
+
+func TestTokenInfoCommand(t *testing.T) {
+	successOutput, _ := utils.ExecuteCommand(TokenCmd, "info")
+	err := json.Unmarshal([]byte(successOutput), &_testToken)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction_fe.TestToken, _testToken)
+
 }

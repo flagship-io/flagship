@@ -209,6 +209,6 @@ func HTTPRefreshToken_(product, client_id, refresh_token string) (models.TokenRe
 	return authenticationResponse, err
 }
 
-func HTTPCheckToken(token string) (models.TokenFE, error) {
-	return HTTPGetItem[models.TokenFE](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + token)
+func HTTPCheckToken() (models.TokenFE, error) {
+	return HTTPGetItem[models.TokenFE](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + cred.Token)
 }

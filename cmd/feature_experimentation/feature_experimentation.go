@@ -17,6 +17,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/project"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/resource"
 	targetingkey "github.com/flagship-io/flagship/cmd/feature_experimentation/targeting_key"
+	"github.com/flagship-io/flagship/cmd/feature_experimentation/token"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/user"
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/variation"
 	variationgroup "github.com/flagship-io/flagship/cmd/feature_experimentation/variation_group"
@@ -57,6 +58,7 @@ func addSubCommandPalettes() {
 	FeatureExperimentationCmd.AddCommand(resource.ResourceCmd)
 	FeatureExperimentationCmd.AddCommand(auth.AuthCmd)
 	FeatureExperimentationCmd.AddCommand(account.AccountCmd)
+	FeatureExperimentationCmd.AddCommand(token.TokenCmd)
 	FeatureExperimentationCmd.AddCommand(accountenvironment.AccountEnvironmentCmd)
 }
 
@@ -72,7 +74,6 @@ func initConfig() {
 	v.SetConfigFile(homeDir + "/.flagship/credentials/" + utils.FEATURE_EXPERIMENTATION + "/.cli.yaml")
 	v.MergeInConfig()
 	if v.GetString("current_used_credential") != "" {
-
 		vL := config.ReadAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("current_used_credential"))
 		v.MergeConfigMap(vL.AllSettings())
 	}
@@ -80,6 +81,7 @@ func initConfig() {
 	v.Unmarshal(&requestConfig)
 	common.Init(requestConfig)
 	resource.Init(requestConfig)
+	viper.MergeConfigMap(v.AllSettings())
 
 	r := &http_request.ResourceRequester
 

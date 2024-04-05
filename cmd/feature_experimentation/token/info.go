@@ -4,7 +4,6 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package token
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/flagship-io/flagship/utils"
@@ -19,15 +18,12 @@ var infoCmd = &cobra.Command{
 	Short: "Get the information related to your token",
 	Long:  `Get the information related to your token`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if viper.GetString("token") != "" {
-			body, err := common.HTTPCheckToken(viper.GetString("token"))
-			if err != nil {
-				log.Fatalf("error occurred: %v", err)
-			}
-			utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
-		} else {
-			fmt.Fprintln(cmd.OutOrStdout(), "Token required")
+		body, err := common.HTTPCheckToken()
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
 		}
+		utils.FormatItem([]string{"ClientID", "AccountID", "ExpiresIn", "Scope"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+
 	},
 }
 

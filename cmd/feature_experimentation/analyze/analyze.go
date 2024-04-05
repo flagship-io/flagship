@@ -5,7 +5,7 @@ package analyze
 
 import (
 	"github.com/flagship-io/codebase-analyzer/pkg/config"
-	"github.com/flagship-io/flagship/cmd/feature_experimentation/flag"
+	"github.com/flagship-io/flagship/cmd/feature_experimentation/analyze/flag"
 	"github.com/spf13/cobra"
 )
 
