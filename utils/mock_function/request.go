@@ -42,7 +42,7 @@ func Request() {
 
 	testRequestList := []TestRequest{testRequest, testRequest1}
 
-	resp := utils.HTTPListResponse[TestRequest]{
+	resp := utils.HTTPListResponseFE[TestRequest]{
 		Items:             testRequestList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

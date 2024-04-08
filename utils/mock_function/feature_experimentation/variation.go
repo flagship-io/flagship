@@ -52,7 +52,7 @@ func APIVariation() {
 	campaignID := "campaignID"
 	variationGroupID := "variationGroupID"
 
-	resp := utils.HTTPListResponse[models.VariationFE]{
+	resp := utils.HTTPListResponseFE[models.VariationFE]{
 		Items:             TestVariationList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

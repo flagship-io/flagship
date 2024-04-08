@@ -97,7 +97,7 @@ var TestCampaignlist = []models.CampaignFE{
 
 func APICampaign() {
 
-	resp := utils.HTTPListResponse[models.CampaignFE]{
+	resp := utils.HTTPListResponseFE[models.CampaignFE]{
 		Items:             TestCampaignlist,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

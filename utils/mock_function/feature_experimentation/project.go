@@ -30,7 +30,7 @@ var TestProjectList = []models.Project{
 }
 
 func APIProject() {
-	resp := utils.HTTPListResponse[models.Project]{
+	resp := utils.HTTPListResponseFE[models.Project]{
 		Items:             TestProjectList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

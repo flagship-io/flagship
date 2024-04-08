@@ -5,6 +5,8 @@ import (
 
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	"github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	"github.com/flagship-io/flagship/utils/mock_function/web_experimentation"
+
 	"github.com/jarcoal/httpmock"
 )
 
@@ -14,6 +16,7 @@ func TestMain(m *testing.M) {
 	defer httpmock.DeactivateAndReset()
 
 	feature_experimentation.APIToken()
+	web_experimentation.APIToken()
 	mockfunction.Request()
 	m.Run()
 }

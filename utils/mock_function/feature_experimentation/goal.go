@@ -40,7 +40,7 @@ var TestGoalList = []models.Goal{
 
 func APIGoal() {
 
-	resp := utils.HTTPListResponse[models.Goal]{
+	resp := utils.HTTPListResponseFE[models.Goal]{
 		Items:             TestGoalList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

@@ -40,7 +40,7 @@ var TestFlagList = []models.Flag{
 
 func APIFlag() {
 
-	resp := utils.HTTPListResponse[models.Flag]{
+	resp := utils.HTTPListResponseFE[models.Flag]{
 		Items:             TestFlagList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

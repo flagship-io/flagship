@@ -37,7 +37,7 @@ var TestTargetingKeyList = []models.TargetingKey{
 
 func APITargetingKey() {
 
-	resp := utils.HTTPListResponse[models.TargetingKey]{
+	resp := utils.HTTPListResponseFE[models.TargetingKey]{
 		Items:             TestTargetingKeyList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,

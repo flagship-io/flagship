@@ -4,12 +4,12 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package campaign
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 
+	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // getCmd represents get command
@@ -22,12 +22,8 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		jsonBody, err := json.Marshal(body)
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
+		utils.FormatItem([]string{"Id", "Name", "Description", "Type", "State", "Url"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
 
-		fmt.Printf("%s", string(jsonBody))
 	},
 }
 

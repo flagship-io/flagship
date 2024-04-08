@@ -25,7 +25,7 @@ func APIUser() {
 
 	email := "example@abtasty.com"
 
-	resp := utils.HTTPListResponse[models.User]{
+	resp := utils.HTTPListResponseFE[models.User]{
 		Items:             TestUserList,
 		CurrentItemsCount: 2,
 		CurrentPage:       1,
