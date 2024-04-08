@@ -121,7 +121,7 @@ var loginCmd = &cobra.Command{
 			if slices.Contains(existingCredentials, Username) {
 				config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
 
-				fmt.Fprintln(cmd.OutOrStdout(), "Auth changed successfully to "+Username)
+				fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
 				return
 			}
 

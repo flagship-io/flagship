@@ -53,6 +53,10 @@ var loginCmd = &cobra.Command{
 			}
 			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, v.GetString("username"), v.GetString("client_id"), v.GetString("client_secret"), authenticationResponse)
 			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("username"))
+			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_id"))
+			if v.GetString("account_environment_id") != "" {
+				config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_environment_id"))
+			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 			return
 		}
@@ -68,7 +72,7 @@ var loginCmd = &cobra.Command{
 					config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
 					config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
 
-					fmt.Fprintln(cmd.OutOrStdout(), "Auth changed successfully to "+Username)
+					fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
 					return
 				}
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (account id)")
