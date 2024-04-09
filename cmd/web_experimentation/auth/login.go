@@ -20,9 +20,10 @@ import (
 )
 
 var (
-	browser  bool
-	password string
-	totp     string
+	browser     bool
+	password    string
+	redirectUri string
+	totp        string
 )
 
 func checkSingleFlag(bool1, bool2 bool) bool {
@@ -105,6 +106,7 @@ var loginCmd = &cobra.Command{
 					log.Fatal("Credentials not valid.")
 				}
 				// Waiting for fix to implemente route to get username "/users/me"
+				// add flag for redirect uri (for vscode etc...)
 
 				fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 				return
@@ -152,8 +154,9 @@ func init() {
 	loginCmd.Flags().StringVarP(&ClientID, "client-id", "i", "", "client ID of an auth")
 	loginCmd.Flags().StringVarP(&ClientSecret, "client-secret", "s", "", "client secret of an auth")
 
-	loginCmd.Flags().BoolVarP(&browser, "browser", "", false, "Generate link for browser")
+	loginCmd.Flags().BoolVarP(&browser, "browser", "", false, "generate link for browser")
 	loginCmd.Flags().StringVarP(&Username, "username", "u", "", "username")
+	loginCmd.Flags().StringVarP(&redirectUri, "redirect-uri", "", "http://abtasty.com", "redirect uri")
 	loginCmd.Flags().StringVarP(&password, "password", "", "", "password")
 	loginCmd.Flags().StringVarP(&totp, "totp", "", "", "totp")
 
@@ -170,7 +173,7 @@ func handleCallback(w http.ResponseWriter, r *http.Request, codeChan chan<- stri
 
 	codeChan <- code
 
-	http.Redirect(w, r, "http://abtasty.com", http.StatusSeeOther)
+	http.Redirect(w, r, redirectUri, http.StatusSeeOther)
 
 	go func() {
 		time.Sleep(5 * time.Second)
