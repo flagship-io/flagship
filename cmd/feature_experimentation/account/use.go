@@ -31,9 +31,9 @@ var useCmd = &cobra.Command{
 }
 
 func init() {
-	useCmd.Flags().StringVarP(&AccountID, "account-id", "a", "", "account id of the credentials you want to manage")
+	useCmd.Flags().StringVarP(&AccountID, "id", "i", "", "account id of the credentials you want to manage")
 
-	if err := useCmd.MarkFlagRequired("account-id"); err != nil {
+	if err := useCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 	AccountCmd.AddCommand(useCmd)

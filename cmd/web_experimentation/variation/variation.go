@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	TestID      int
+	CampaignID  int
 	VariationID int
 )
 
@@ -27,9 +27,9 @@ var VariationCmd = &cobra.Command{
 }
 
 func init() {
-	VariationCmd.PersistentFlags().IntVarP(&TestID, "test-id", "", 0, "id of the campaign where you want to manage your variation group")
+	VariationCmd.PersistentFlags().IntVarP(&CampaignID, "campaign-id", "", 0, "id of the campaign where you want to manage your variation")
 
-	if err := VariationCmd.MarkPersistentFlagRequired("test-id"); err != nil {
+	if err := VariationCmd.MarkPersistentFlagRequired("campaign-id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 }

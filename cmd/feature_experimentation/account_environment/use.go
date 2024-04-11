@@ -31,9 +31,9 @@ var useCmd = &cobra.Command{
 }
 
 func init() {
-	useCmd.Flags().StringVarP(&AccountEnvironmentID, "account-environment-id", "e", "", "account env id of the credentials you want to manage")
+	useCmd.Flags().StringVarP(&AccountEnvironmentID, "id", "i", "", "account env id of the credentials you want to manage")
 
-	if err := useCmd.MarkFlagRequired("account-environment-id"); err != nil {
+	if err := useCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 	AccountEnvironmentCmd.AddCommand(useCmd)
