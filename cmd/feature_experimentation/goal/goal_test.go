@@ -30,12 +30,12 @@ var testGoalList []models.Goal
 
 func TestGoalCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(GoalCmd)
-	assert.Contains(t, output, "Manage your goals in your account")
+	assert.Contains(t, output, "Manage your goals")
 }
 
 func TestGoalHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(GoalCmd, "--help")
-	assert.Contains(t, output, "Manage your goals in your account")
+	assert.Contains(t, output, "Manage your goals")
 }
 
 func TestGoalGetCommand(t *testing.T) {

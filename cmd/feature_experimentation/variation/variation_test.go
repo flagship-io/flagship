@@ -33,12 +33,12 @@ func TestVariationCommand(t *testing.T) {
 	assert.Contains(t, output, "Error: required flag(s) \"campaign-id\", \"variation-group-id\" not set")
 
 	output1, _ := utils.ExecuteCommand(VariationCmd, "--campaign-id=campaignID", "--variation-group-id=variationGroupID")
-	assert.Contains(t, output1, "Manage your variations in your variation group")
+	assert.Contains(t, output1, "Manage your variations")
 }
 
 func TestVariationHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(VariationCmd, "--help")
-	assert.Contains(t, output, "Manage your variations in your variation group")
+	assert.Contains(t, output, "Manage your variations")
 }
 
 func TestVariationGetCommand(t *testing.T) {

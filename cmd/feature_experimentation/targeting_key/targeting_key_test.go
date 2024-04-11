@@ -30,12 +30,12 @@ var testTargetingKeyList []models.TargetingKey
 
 func TestTargetingKeyCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TargetingKeyCmd)
-	assert.Contains(t, output, "Manage your targeting keys in your account")
+	assert.Contains(t, output, "Manage your targeting keys")
 }
 
 func TestTargetingKeyHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TargetingKeyCmd, "--help")
-	assert.Contains(t, output, "Manage your targeting keys in your account")
+	assert.Contains(t, output, "Manage your targeting keys")
 }
 
 func TestTargetingKeyGetCommand(t *testing.T) {

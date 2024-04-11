@@ -29,12 +29,12 @@ var testFlagList []models.Flag
 
 func TestFlagCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(FlagCmd)
-	assert.Contains(t, output, "Manage your flags in your account")
+	assert.Contains(t, output, "Manage your flags")
 }
 
 func TestFlagHelpCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(FlagCmd, "--help")
-	assert.Contains(t, output, "Manage your flags in your account")
+	assert.Contains(t, output, "Manage your flags")
 }
 
 func TestFlagGetCommand(t *testing.T) {

@@ -42,9 +42,9 @@ func TestAccountEnvironmentHelpCommand(t *testing.T) {
 func TestAccountEnvironmentUseCommand(t *testing.T) {
 
 	failOutput, _ := utils.ExecuteCommand(AccountEnvironmentCmd, "use")
-	assert.Contains(t, failOutput, "Error: required flag(s) \"account-environment-id\" not set")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
 
-	successOutput, _ := utils.ExecuteCommand(AccountEnvironmentCmd, "use", "--account-environment-id=account_environment_id")
+	successOutput, _ := utils.ExecuteCommand(AccountEnvironmentCmd, "use", "--id=account_environment_id")
 	assert.Equal(t, "Account Environment ID set to : account_environment_id\n", successOutput)
 }
 
