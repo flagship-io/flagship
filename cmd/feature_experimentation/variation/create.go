@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [--campaign-id=<campaign-id>] [--variation-group-id=<variation-group-id>] [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Create a variation",
-	Long:  `Create a variation in your variation group`,
+	Long:  `Create a variation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationFERequester.HTTPCreateVariation(CampaignID, VariationGroupID, DataRaw)
 		if err != nil {

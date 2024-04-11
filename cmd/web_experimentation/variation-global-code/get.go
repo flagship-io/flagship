@@ -21,7 +21,7 @@ type ModificationGlobalCode struct {
 var getCmd = &cobra.Command{
 	Use:   "get [-i <variation-id> | --id <variation-id>] [--test-id <test-id>]",
 	Short: "Get variation global code",
-	Long:  `Get variation global code in your account`,
+	Long:  `Get variation global code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var modificationResp ModificationGlobalCode
 		body, err := httprequest.ModificationRequester.HTTPGetModification(CampaignID)

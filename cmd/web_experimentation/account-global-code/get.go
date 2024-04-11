@@ -17,7 +17,7 @@ var accountID string
 var getCmd = &cobra.Command{
 	Use:   "get [-i <account-id> | --id <account-id>]",
 	Short: "Get global account code",
-	Long:  `Get global account code from your account`,
+	Long:  `Get global account code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.AccountGlobalCodeRequester.HTTPGetAccountGlobalCode(accountID)
 		if err != nil {

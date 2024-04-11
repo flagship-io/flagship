@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [-i <targeting-key-id> | --id=<targeting-key-id>]",
 	Short: "Get a targeting key",
-	Long:  `Get a targeting key in your account`,
+	Long:  `Get a targeting key`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.TargetingKeyRequester.HTTPGetTargetingKey(TargetingKeyID)
 		if err != nil {

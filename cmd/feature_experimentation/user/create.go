@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [-d <data-raw> | --data <data-raw>]",
 	Short: "Create a user with right",
-	Long:  `Create a user with right in your account`,
+	Long:  `Create a user with right`,
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := httprequest.UserRequester.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {

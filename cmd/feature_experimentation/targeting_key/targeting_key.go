@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package targetingkey
 
@@ -16,7 +15,7 @@ var TargetingKeyCmd = &cobra.Command{
 	Use:     "targeting-key [create|edit|get|list|delete]",
 	Aliases: []string{"tk"},
 	Short:   "Manage your targeting keys",
-	Long:    `Manage your targeting keys in your account`,
+	Long:    `Manage your targeting keys`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

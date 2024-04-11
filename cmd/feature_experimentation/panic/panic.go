@@ -17,7 +17,7 @@ var panicStatus string
 var PanicCmd = &cobra.Command{
 	Use:   "panic",
 	Short: "Manage panic mode",
-	Long:  `Manage panic mode in your account`,
+	Long:  `Manage panic mode`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(panicStatus == "on" || panicStatus == "off") {
 			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 2 values: on or off ")

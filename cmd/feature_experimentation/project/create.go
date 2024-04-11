@@ -17,7 +17,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [-n <name> | --name=<name>]",
 	Short: "Create a project",
-	Long:  `Create a project in your account`,
+	Long:  `Create a project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectRequest := models.Project{
 			Name: ProjectName,

@@ -1,37 +1,39 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package campaign
+package campaign_global_code
 
 import (
+	"fmt"
 	"log"
 
-	"github.com/flagship-io/flagship/utils"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
+
+var campaignID string
 
 // getCmd represents get command
 var getCmd = &cobra.Command{
 	Use:   "get [-i <campaign-id> | --id <campaign-id>]",
-	Short: "Get a campaign",
-	Long:  `Get a campaign`,
+	Short: "Get campaign global code",
+	Long:  `Get campaign global code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.CampaignWERequester.HTTPGetCampaign(CampaignID)
+		body, err := httprequest.CampaignGlobalCodeRequester.HTTPGetCampaignGlobalCode(campaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
-		utils.FormatItem([]string{"Id", "Name", "Description", "Type", "State", "Url"}, body, viper.GetString("output_format"), cmd.OutOrStdout())
+
+		fmt.Fprintln(cmd.OutOrStdout(), body)
 
 	},
 }
 
 func init() {
-	getCmd.Flags().StringVarP(&CampaignID, "id", "i", "", "id of the campaign you want to display")
+	getCmd.Flags().StringVarP(&campaignID, "id", "i", "", "id of the global code campaign you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
-	CampaignCmd.AddCommand(getCmd)
+	CampaignGlobalCodeCmd.AddCommand(getCmd)
 }

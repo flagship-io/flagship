@@ -16,7 +16,7 @@ import (
 var useCmd = &cobra.Command{
 	Use:   "use",
 	Short: "get an auth credential",
-	Long:  `list an auth credential from your system`,
+	Long:  `list an auth credential`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if AccountID == "" {
 			fmt.Fprintln(cmd.OutOrStderr(), "required flag account-id")

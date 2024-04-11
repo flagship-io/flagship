@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-d <data-raw> | --data-raw=<data-raw>]",
 	Short: "Edit a user with right",
-	Long:  `Edit a user with right in your account`,
+	Long:  `Edit a user with right`,
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := httprequest.UserRequester.HTTPBatchUpdateUsers(DataRaw)
 		if err != nil {

@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "list all auth",
-	Long:  `list all auth from your system`,
+	Long:  `list all auth`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		body, err := httprequest.AccountWERequester.HTTPListAccount()

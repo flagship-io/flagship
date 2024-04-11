@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all goals",
-	Long:  `List all goals in your account`,
+	Long:  `List all goals`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.GoalRequester.HTTPListGoal()
 		if err != nil {

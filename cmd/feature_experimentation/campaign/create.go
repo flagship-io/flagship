@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [-d <data-raw> | --data-raw=<data-raw>]",
 	Short: "Create a campaign",
-	Long:  `Create a campaign in your project`,
+	Long:  `Create a campaign`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.CampaignFERequester.HTTPCreateCampaign(DataRaw)
 		if err != nil {

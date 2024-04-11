@@ -15,7 +15,7 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:   "delete [--campaign-id=<campaign-id>] [-i <variation-group-id> | --id <variation-group-id>]",
 	Short: "Delete a variation group",
-	Long:  `Delete a variation group in your campaign`,
+	Long:  `Delete a variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.VariationGroupRequester.HTTPDeleteVariationGroup(CampaignID, VariationGroupID)
 		if err != nil {

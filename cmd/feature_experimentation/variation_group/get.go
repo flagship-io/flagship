@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [--campaign-id=<campaign-id>] [-i <variation-group-id> | --id <variation-group-id>]",
 	Short: "Get a variation group",
-	Long:  `Get a variation group in your campaign`,
+	Long:  `Get a variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationGroupRequester.HTTPGetVariationGroup(CampaignID, VariationGroupID)
 		if err != nil {

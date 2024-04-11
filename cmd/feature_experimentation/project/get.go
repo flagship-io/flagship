@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [-i <project-id> | --id=<project-id>]",
 	Short: "Get a project",
-	Long:  `Get a project in your account`,
+	Long:  `Get a project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.ProjectRequester.HTTPGetProject(ProjectId)
 		if err != nil {

@@ -17,7 +17,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [--name <flag-name> --type <flag-type> --default-value <default-value> --description <description> --predefined-values <predefined-values> | -d <data-raw> | --data-raw <data-raw>]",
 	Short: "Create a flag",
-	Long:  `Create a flag in your account`,
+	Long:  `Create a flag`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var data string
 		var predefinedValues_ []string

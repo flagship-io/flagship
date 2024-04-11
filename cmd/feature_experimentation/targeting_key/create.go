@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Create a targeting key",
-	Long:  `Create a targeting key in your account`,
+	Long:  `Create a targeting key`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.TargetingKeyRequester.HTTPCreateTargetingKey(DataRaw)
 		if err != nil {

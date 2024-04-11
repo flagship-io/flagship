@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [--campaign-id=<campaign-id>] [-i <variation-group-id> | --id <variation-group-id>] [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Edit a variation group",
-	Long:  `Edit a variation group in your campaign`,
+	Long:  `Edit a variation group`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationGroupRequester.HTTPEditVariationGroup(CampaignID, VariationGroupID, DataRaw)
 		if err != nil {

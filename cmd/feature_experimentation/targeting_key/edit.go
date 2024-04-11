@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-i <targeting-key-id> | --id=<targeting-key-id>] [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Edit a targeting key",
-	Long:  `Edit a targeting key in your account`,
+	Long:  `Edit a targeting key`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.TargetingKeyRequester.HTTPEditTargetingKey(TargetingKeyID, DataRaw)
 		if err != nil {

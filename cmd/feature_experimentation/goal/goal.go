@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package goal
 
@@ -17,7 +16,7 @@ var (
 var GoalCmd = &cobra.Command{
 	Use:   "goal [create|edit|get|list|delete]",
 	Short: "Manage your goals",
-	Long:  `Manage your goals in your account`,
+	Long:  `Manage your goals`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

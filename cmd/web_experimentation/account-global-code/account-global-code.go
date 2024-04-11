@@ -12,7 +12,7 @@ var AccountGlobalCodeCmd = &cobra.Command{
 	Use:     "account-global-code [get]",
 	Short:   "Get account global code",
 	Aliases: []string{"agc"},
-	Long:    `Get account global code of your account`,
+	Long:    `Get account global code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

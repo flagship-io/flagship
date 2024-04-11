@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all users",
-	Long:  `List all users in your account`,
+	Long:  `List all users`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.UserRequester.HTTPListUsers()
 		if err != nil {

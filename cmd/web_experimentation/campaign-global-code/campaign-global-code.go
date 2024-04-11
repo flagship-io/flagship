@@ -12,7 +12,7 @@ var CampaignGlobalCodeCmd = &cobra.Command{
 	Use:     "campaign-global-code [get]",
 	Short:   "Get campaign global code",
 	Aliases: []string{"cgc"},
-	Long:    `Get campaign global code from your account`,
+	Long:    `Get campaign global code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

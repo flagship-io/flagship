@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [-i <flag-id> | --id=<flag-id>]",
 	Short: "Get a flag",
-	Long:  `Get a flag in your account`,
+	Long:  `Get a flag`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.FlagRequester.HTTPGetFlag(FlagID)
 		if err != nil {

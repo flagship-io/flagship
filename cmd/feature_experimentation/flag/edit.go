@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-i <flag-id> | --id=<flag-id>] [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Edit a flag",
-	Long:  `Edit a flag in your account`,
+	Long:  `Edit a flag`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.FlagRequester.HTTPEditFlag(FlagID, DataRaw)
 		if err != nil {

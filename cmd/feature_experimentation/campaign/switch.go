@@ -15,7 +15,7 @@ import (
 var SwitchCmd = &cobra.Command{
 	Use:   "switch [-i <campaign-id> | --id=<campaign-id>] [-s <status> | --status=<status>]",
 	Short: "Switch a campaign state",
-	Long:  `Switch a campaign state in your project`,
+	Long:  `Switch a campaign state`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if !(Status == "active" || Status == "paused" || Status == "interrupted") {
 			fmt.Fprintln(cmd.OutOrStdout(), "Status can only have 3 values: active or paused or interrupted")

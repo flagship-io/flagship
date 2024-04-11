@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list [--campaign-id=<campaign-id>] [--variation-group-id=<variation-group-id>]",
 	Short: "List all variations",
-	Long:  `List all variations in your variation group`,
+	Long:  `List all variations`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationFERequester.HTTPListVariation(CampaignID, VariationGroupID)
 		if err != nil {

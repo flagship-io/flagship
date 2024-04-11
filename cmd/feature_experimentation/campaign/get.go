@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [-i <campaign-id> | --id=<campaign-id>]",
 	Short: "Get a campaign",
-	Long:  `Get a campaign in your project`,
+	Long:  `Get a campaign`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.CampaignFERequester.HTTPGetCampaign(CampaignID)
 		if err != nil {

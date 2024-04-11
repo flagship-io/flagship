@@ -19,7 +19,7 @@ import (
 var currentCmd = &cobra.Command{
 	Use:   "current",
 	Short: "current an auth credential",
-	Long:  `current an auth credential from your system`,
+	Long:  `current an auth credential`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var accountYaml models.AccountYaml

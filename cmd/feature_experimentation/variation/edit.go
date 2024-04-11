@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [--campaign-id=<campaign-id>] [--variation-group-id=<variation-group-id>] [-i <variation-id> | --id=<variation-id>] [-d <data-raw> | --data-raw=<data-raw>]",
 	Short: "Edit a variation",
-	Long:  `Edit a variation in your variation group`,
+	Long:  `Edit a variation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationFERequester.HTTPEditVariation(CampaignID, VariationGroupID, VariationID, DataRaw)
 		if err != nil {

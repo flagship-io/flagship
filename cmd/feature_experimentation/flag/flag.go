@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
-
 */
 package flag
 
@@ -22,7 +21,7 @@ var (
 var FlagCmd = &cobra.Command{
 	Use:   "flag [create|edit|get|list|delete|usage]",
 	Short: "Manage your flags",
-	Long:  `Manage your flags in your account`,
+	Long:  `Manage your flags`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

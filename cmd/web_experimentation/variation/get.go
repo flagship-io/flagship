@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [--test-id=<test-id>] [-i=<variation-id> | --id=<variation-id>]",
 	Short: "Get a variation",
-	Long:  `Get a variation in your campaign`,
+	Long:  `Get a variation`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.VariationWERequester.HTTPGetVariation(CampaignID, VariationID)
 		if err != nil {

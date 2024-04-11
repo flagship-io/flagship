@@ -32,7 +32,7 @@ import (
 
 // FeatureExperimentationCmd represents the feature experimentation command
 var FeatureExperimentationCmd = &cobra.Command{
-	Use:     "feature-experimentation [project|campaign|flag|goal|targeting-key|variation-group|variation]",
+	Use:     "feature-experimentation [auth|account|account-environment|project|campaign|flag|goal|targeting-key|variation-group|variation]",
 	Aliases: []string{"feature-experimentation", "feature-exp", "fe", "feat-exp"},
 	Short:   "Manage resources related to the feature experimentation product",
 	Long:    `Manage resources related to the feature experimentation product in your account`,

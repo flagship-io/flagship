@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all flags",
-	Long:  `List all flags in your account`,
+	Long:  `List all flags`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.FlagRequester.HTTPListFlag()
 		if err != nil {

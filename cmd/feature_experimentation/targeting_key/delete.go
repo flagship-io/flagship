@@ -15,7 +15,7 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:   "delete [-i <targeting-key-id> | --id=<targeting-key-id>]",
 	Short: "Delete a targeting key",
-	Long:  `Delete a targeting key in your account`,
+	Long:  `Delete a targeting key`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.TargetingKeyRequester.HTTPDeleteTargetingKey(TargetingKeyID)
 		if err != nil {

@@ -15,7 +15,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-i <goal-id> | --id=<goal-id>] [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Edit a goal",
-	Long:  `Edit a goal in your account`,
+	Long:  `Edit a goal`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.GoalRequester.HTTPEditGoal(GoalID, DataRaw)
 		if err != nil {

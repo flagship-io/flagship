@@ -17,7 +17,7 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [-i <project-id> | --id=<project-id>] [-n <name> | --name=<name>]",
 	Short: "Edit a project",
-	Long:  `Edit a project in your account`,
+	Long:  `Edit a project`,
 	Run: func(cmd *cobra.Command, args []string) {
 		projectRequest := models.Project{
 			Name: ProjectName,

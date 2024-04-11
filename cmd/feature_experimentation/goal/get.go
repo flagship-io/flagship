@@ -16,7 +16,7 @@ import (
 var getCmd = &cobra.Command{
 	Use:   "get [-i <goal-id> | --id=<goal-id>]",
 	Short: "Get a goal",
-	Long:  `Get a goal in your account`,
+	Long:  `Get a goal`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.GoalRequester.HTTPGetGoal(GoalID)
 		if err != nil {

@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all targeting keys",
-	Long:  `List all targeting keys in your account`,
+	Long:  `List all targeting keys`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.TargetingKeyRequester.HTTPListTargetingKey()
 		if err != nil {

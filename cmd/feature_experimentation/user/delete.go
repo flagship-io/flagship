@@ -15,7 +15,7 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:   "delete [-e <email> | --email <email>]",
 	Short: "Delete a user",
-	Long:  `Delete a user in your account`,
+	Long:  `Delete a user`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.UserRequester.HTTPDeleteUsers(UserEmail)
 		if err != nil {

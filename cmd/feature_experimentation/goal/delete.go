@@ -15,7 +15,7 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:   "delete [-i <goal-id> | --id=<goal-id>]",
 	Short: "Delete a flag",
-	Long:  `Delete a flag in your account`,
+	Long:  `Delete a flag`,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := httprequest.GoalRequester.HTTPDeleteGoal(GoalID)
 		if err != nil {

@@ -16,7 +16,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
-	Long:  `List all projects in your account`,
+	Long:  `List all projects`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.ProjectRequester.HTTPListProject()
 		if err != nil {

@@ -17,7 +17,7 @@ var VariationGlobalCodeCmd = &cobra.Command{
 	Use:     "variation-global-code [get]",
 	Short:   "Get variable global code",
 	Aliases: []string{"vgc"},
-	Long:    `Get variable global code from your account`,
+	Long:    `Get variable global code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

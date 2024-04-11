@@ -15,7 +15,7 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create [-d <data-raw> | --data-raw <data-raw>]",
 	Short: "Create a goal",
-	Long:  `Create a goal in your account`,
+	Long:  `Create a goal`,
 	Run: func(cmd *cobra.Command, args []string) {
 		body, err := httprequest.GoalRequester.HTTPCreateGoal(DataRaw)
 		if err != nil {
