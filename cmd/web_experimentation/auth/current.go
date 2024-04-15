@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package account
+package auth
 
 import (
 	"log"
@@ -15,17 +15,16 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// getCmd represents the list command
+// currentCmd represents the current command
 var currentCmd = &cobra.Command{
 	Use:   "current",
-	Short: "Get current running auth credential",
-	Long:  `Get current running auth credential`,
+	Short: "Get current running auth credential for web experimentation",
+	Long:  `Get current running auth credential for web experimentation`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		var accountYaml models.AccountYaml
 		var account models.AccountJSON
 
-		yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, utils.HOME_CLI))
+		yamlFile, err := os.ReadFile(config.CredentialPath(utils.WEB_EXPERIMENTATION, utils.HOME_CLI))
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
@@ -37,13 +36,12 @@ var currentCmd = &cobra.Command{
 		}
 
 		account.CurrentUsedCredential = accountYaml.CurrentUsedCredential
-		account.AccountID = accountYaml.AccountID
 
-		utils.FormatItem([]string{"CurrentUsedCredential", "AccountID"}, account, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"CurrentUsedCredential"}, account, viper.GetString("output_format"), cmd.OutOrStdout())
 
 	},
 }
 
 func init() {
-	AccountCmd.AddCommand(currentCmd)
+	AuthCmd.AddCommand(currentCmd)
 }

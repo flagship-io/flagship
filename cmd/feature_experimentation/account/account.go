@@ -12,7 +12,7 @@ var (
 
 // AccountCmd represents the account command
 var AccountCmd = &cobra.Command{
-	Use:   "account [use|list|current]",
+	Use:   "account [use|current]",
 	Short: "Manage your CLI authentication",
 	Long:  `Manage your CLI authentication`,
 	Run: func(cmd *cobra.Command, args []string) {

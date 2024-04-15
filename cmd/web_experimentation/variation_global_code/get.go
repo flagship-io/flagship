@@ -18,30 +18,47 @@ type ModificationGlobalCode struct {
 }
 
 // getCmd represents get command
-var getCmd = &cobra.Command{
+var GetCmd = &cobra.Command{
 	Use:   "get [-i <variation-id> | --id <variation-id>] [--campaign-id <campaign-id>]",
 	Short: "Get variation global code",
 	Long:  `Get variation global code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var modificationResp ModificationGlobalCode
-		body, err := httprequest.ModificationRequester.HTTPGetModification(CampaignID)
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
+		resp := GetCodeFiles(VariationID, CampaignID)
 
-		for _, modification := range body {
-			if modification.VariationID == VariationID && modification.Type == "customScriptNew" {
-				modificationResp.JS = modification.Value
-			}
-			if modification.VariationID == VariationID && modification.Type == "addCSS" {
-				modificationResp.CSS = modification.Value
-			}
-		}
-
-		utils.FormatItem([]string{"JS", "CSS"}, modificationResp, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"JS", "CSS"}, resp, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 
 func init() {
-	VariationGlobalCodeCmd.AddCommand(getCmd)
+	GetCmd.Flags().IntVarP(&CampaignID, "campaign-id", "", 0, "id of the global code campaign you want to display")
+
+	if err := GetCmd.MarkFlagRequired("campaign-id"); err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
+
+	GetCmd.Flags().IntVarP(&VariationID, "id", "i", 0, "id of the global code vairation you want to display")
+
+	if err := GetCmd.MarkFlagRequired("id"); err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
+	VariationGlobalCodeCmd.AddCommand(GetCmd)
+}
+
+func GetCodeFiles(variationID, campaignID int) ModificationGlobalCode {
+	var modificationResp ModificationGlobalCode
+	body, err := httprequest.ModificationRequester.HTTPGetModification(campaignID)
+	if err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
+
+	for _, modification := range body {
+		if modification.VariationID == variationID && modification.Type == "customScriptNew" {
+			modificationResp.JS = modification.Value
+		}
+		if modification.VariationID == variationID && modification.Type == "addCSS" {
+			modificationResp.CSS = modification.Value
+		}
+	}
+
+	return modificationResp
 }
