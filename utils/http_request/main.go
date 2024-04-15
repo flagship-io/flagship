@@ -28,7 +28,6 @@ var PanicRequester feature_experimentation.PanicRequester = feature_experimentat
 
 // web experimentation
 var CampaignWERequester web_experimentation.CampaignWERequester = web_experimentation.CampaignWERequester{ResourceRequest: &ResourceRequester}
-var GlobalCodeRequester web_experimentation.GlobalCodeRequester = web_experimentation.GlobalCodeRequester{ResourceRequest: &ResourceRequester}
 var AccountWERequester web_experimentation.AccountWERequester = web_experimentation.AccountWERequester{ResourceRequest: &ResourceRequester}
 var VariationWERequester web_experimentation.VariationWERequester = web_experimentation.VariationWERequester{ResourceRequest: &ResourceRequester}
 var CampaignGlobalCodeRequester web_experimentation.CampaignGlobalCodeRequester = web_experimentation.CampaignGlobalCodeRequester{ResourceRequest: &ResourceRequester}

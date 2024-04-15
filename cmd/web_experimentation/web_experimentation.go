@@ -7,13 +7,12 @@ import (
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/web_experimentation/account"
-	account_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/account-global-code"
+	account_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/account_global_code"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/campaign"
-	campaign_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/campaign-global-code"
-	"github.com/flagship-io/flagship/cmd/web_experimentation/global_code"
+	campaign_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/campaign_global_code"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/variation"
-	variation_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/variation-global-code"
+	variation_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/variation_global_code"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
 	"github.com/flagship-io/flagship/utils/http_request"
@@ -39,7 +38,6 @@ var WebExperimentationCmd = &cobra.Command{
 
 func addSubCommandPalettes() {
 	WebExperimentationCmd.AddCommand(campaign.CampaignCmd)
-	WebExperimentationCmd.AddCommand(global_code.GlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(variation.VariationCmd)
 	WebExperimentationCmd.AddCommand(auth.AuthCmd)
 	WebExperimentationCmd.AddCommand(account.AccountCmd)

@@ -111,7 +111,7 @@ func ReadAuth(product, AuthName string) *viper.Viper {
 	v := viper.New()
 	configFilepath := CredentialPath(product, AuthName)
 	if _, err := os.Stat(configFilepath); errors.Is(err, os.ErrNotExist) {
-		fmt.Fprintf(os.Stdout, "error occurred: %v \n", err)
+		fmt.Fprintf(os.Stderr, "error occurred: %v \n", err)
 	}
 	v.SetConfigFile(configFilepath)
 	v.MergeInConfig()

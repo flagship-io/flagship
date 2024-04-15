@@ -19,7 +19,7 @@ type ModificationGlobalCode struct {
 
 // getCmd represents get command
 var getCmd = &cobra.Command{
-	Use:   "get [-i <variation-id> | --id <variation-id>] [--test-id <test-id>]",
+	Use:   "get [-i <variation-id> | --id <variation-id>] [--campaign-id <campaign-id>]",
 	Short: "Get variation global code",
 	Long:  `Get variation global code`,
 	Run: func(cmd *cobra.Command, args []string) {
