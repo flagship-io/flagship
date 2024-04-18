@@ -13,8 +13,10 @@ import (
 )
 
 type ModificationGlobalCode struct {
-	JS  string `json:"js,omitempty"`
-	CSS string `json:"css,omitempty"`
+	JS          string `json:"js,omitempty"`
+	CSS         string `json:"css,omitempty"`
+	VariationID int    `json:"variation_id,omitempty"`
+	CampaignID  int    `json:"campaign_id,omitempty"`
 }
 
 // getCmd represents get command
@@ -25,7 +27,7 @@ var GetCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		resp := GetCodeFiles(VariationID, CampaignID)
 
-		utils.FormatItem([]string{"JS", "CSS"}, resp, viper.GetString("output_format"), cmd.OutOrStdout())
+		utils.FormatItem([]string{"VariationID", "CampaignID", "JS", "CSS"}, resp, viper.GetString("output_format"), cmd.OutOrStdout())
 	},
 }
 
@@ -59,6 +61,9 @@ func GetCodeFiles(variationID, campaignID int) ModificationGlobalCode {
 			modificationResp.CSS = modification.Value
 		}
 	}
+
+	modificationResp.CampaignID = campaignID
+	modificationResp.VariationID = variationID
 
 	return modificationResp
 }

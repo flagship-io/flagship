@@ -15,12 +15,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Config struct {
-	*viper.Viper
-}
-
-var v = viper.New()
-
 func Unset(key string) error {
 	configMap := viper.AllSettings()
 	delete(configMap, key)

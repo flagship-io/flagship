@@ -1,6 +1,9 @@
 package utils
 
-import "os"
+import (
+	"log"
+	"os"
+)
 
 func GetFeatureExperimentationHost() string {
 	if os.Getenv("FS_STAGING") == "true" {
@@ -32,6 +35,15 @@ func GetHostWebExperimentationAuth() string {
 	}
 
 	return "https://api-auth.abtasty.com"
+}
+
+func DefaultGlobalCodeWorkingDir() string {
+	wdDir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
+
+	return wdDir
 }
 
 const FEATURE_EXPERIMENTATION = "fe"

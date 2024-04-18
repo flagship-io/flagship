@@ -7,11 +7,14 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/flagship-io/flagship/utils/config"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var campaignID string
+var createFile bool
 
 // getCmd represents get command
 var getCmd = &cobra.Command{
@@ -22,6 +25,12 @@ var getCmd = &cobra.Command{
 		body, err := httprequest.CampaignGlobalCodeRequester.HTTPGetCampaignGlobalCode(campaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
+		}
+
+		if createFile {
+			accountCodeDir := config.CampaignGlobalCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, campaignID, body)
+			fmt.Fprintln(cmd.OutOrStdout(), "Campaign code file generated successfully: ", accountCodeDir)
+			return
 		}
 
 		fmt.Fprintln(cmd.OutOrStdout(), body)
@@ -35,5 +44,7 @@ func init() {
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
+	getCmd.Flags().BoolVarP(&createFile, "create-file", "", false, "create a file that contains campaign global code")
+
 	CampaignGlobalCodeCmd.AddCommand(getCmd)
 }
