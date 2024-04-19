@@ -170,7 +170,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 		return HTTPRequest[T](method, url, body)
 	}
 
-	match, _ := regexp.MatchString("4..|5..", resp.Status)
+	match, _ := regexp.MatchString("4\\d\\d|5\\d\\d", resp.Status)
 	if match {
 		err := errors.New(string(respBody))
 		fmt.Fprintf(os.Stderr, "error occurred: %v", err)
