@@ -25,7 +25,10 @@ import (
 var (
 	resourceFile string
 	outputFile   string
+	inputParams  string
 )
+
+var inputParamsMap map[string]interface{}
 
 type Data interface {
 	Save(data string) ([]byte, error)
@@ -225,14 +228,23 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
-		jsonBytes := ScriptResource(cmd, gResources)
+		if inputParams != "" {
+			err := json.Unmarshal([]byte(inputParams), &inputParamsMap)
+			if err != nil {
+				fmt.Fprintf(cmd.OutOrStderr(), "Error: %s", err)
+				return
+			}
+		}
+		jsonBytes := ScriptResource(cmd, gResources, inputParamsMap)
 		if outputFile != "" {
 			os.WriteFile(outputFile, jsonBytes, os.ModePerm)
 			fmt.Fprintf(cmd.OutOrStdout(), "File created at %s\n", outputFile)
 			return
 		}
+		if viper.GetString("output_format") == "json" {
+			fmt.Fprintf(cmd.OutOrStdout(), "%s", string(jsonBytes))
+		}
 
-		fmt.Fprintf(cmd.OutOrStdout(), "%s", string(jsonBytes))
 	},
 }
 
@@ -246,6 +258,8 @@ func init() {
 	}
 
 	loadCmd.Flags().StringVarP(&outputFile, "output-file", "", "", "result of the command that contains all resource informations")
+
+	loadCmd.Flags().StringVarP(&inputParams, "input-params", "", "", "params to replace resource loader file")
 
 	ResourceCmd.AddCommand(loadCmd)
 }
@@ -262,7 +276,7 @@ func initResource() {
 	}
 }
 
-func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
+func ScriptResource(cmd *cobra.Command, resources []Resource, inputParamsMap map[string]interface{}) []byte {
 
 	resourceVariables := make(map[string]interface{})
 	var loadResultJSON []string
@@ -324,6 +338,16 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 			if ok {
 				if strings.Contains(v, "$") {
 					vTrim := strings.Trim(v, "$")
+					if inputParamsMap != nil {
+						vTrimL := strings.Split(vTrim, ".")
+						value, err := getNestedValue(inputParamsMap, vTrimL)
+						if err != nil {
+							fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+						}
+						if value != nil {
+							resourceData[k] = value
+						}
+					}
 					for k_, variable := range resourceVariables {
 						script, _ := tengo.Eval(context.Background(), vTrim, map[string]interface{}{
 							k_: variable,
@@ -361,13 +385,12 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 
 		if httpMethod == "DELETE" {
 			if resource.Name == Project || resource.Name == TargetingKey || resource.Name == Flag {
-				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+url+"/"+fmt.Sprintf("%v", resourceData["id"]), nil)
+				_, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+url+"/"+fmt.Sprintf("%s", resourceData["id"]), nil)
 			}
 
 			if resource.Name == Goal || resource.Name == Campaign {
-				response, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+"/account_environments/"+cred.AccountEnvironmentID+url+"/"+fmt.Sprintf("%v", resourceData["id"]), nil)
+				_, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+"/account_environments/"+cred.AccountEnvironmentID+url+"/"+fmt.Sprintf("%s", resourceData["id"]), nil)
 			}
-
 			if err == nil && viper.GetString("output_format") != "json" {
 				response = []byte("The id: " + fmt.Sprintf("%v", resourceData["id"]) + " deleted successfully")
 			}
@@ -389,7 +412,7 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 			}
 
 			if responseData == nil {
-				fmt.Fprintln(os.Stderr, "error occurred not response data: "+string(response))
+				fmt.Fprintf(os.Stderr, "error occurred not response data: %s\n", string(response))
 				continue
 			}
 
@@ -415,4 +438,28 @@ func ScriptResource(cmd *cobra.Command, resources []Resource) []byte {
 	}
 
 	return jsonBytes
+}
+
+func getNestedValue(data map[string]interface{}, path []string) (interface{}, error) {
+	if len(path) == 0 {
+		return nil, fmt.Errorf("empty path")
+	}
+
+	current := data
+	for i, key := range path {
+		value, ok := current[key]
+		if !ok {
+			continue
+		}
+		if i == len(path)-1 {
+			return value, nil
+		}
+		next, ok := value.(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("value at key '%s' is not an object", key)
+		}
+		current = next
+	}
+
+	return nil, nil
 }
