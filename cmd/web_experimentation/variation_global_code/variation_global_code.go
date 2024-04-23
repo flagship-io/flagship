@@ -21,9 +21,9 @@ var CreateFile bool
 // VariationGlobalCodeCmd represents the variation global code command
 var VariationGlobalCodeCmd = &cobra.Command{
 	Use:     "variation-global-code [get-js | get-css]",
-	Short:   "Get variable global code",
+	Short:   "Get variation global code",
 	Aliases: []string{"vgc"},
-	Long:    `Get variable global code`,
+	Long:    `Get variation global code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -54,5 +54,8 @@ func initConfig() {
 }
 
 func initGlobalCodeDir() {
-	config.CheckWorkingDirectory(viper.GetString("working_dir"))
+	_, err := config.CheckWorkingDirectory(viper.GetString("working_dir"))
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
 }

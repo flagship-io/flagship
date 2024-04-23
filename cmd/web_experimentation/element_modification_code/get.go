@@ -33,39 +33,38 @@ var getCmd = &cobra.Command{
 			log.Fatalf("error occurred: %v", err)
 		}
 
-		body, err := httprequest.ModificationRequester.HTTPGetModification(campaignID)
+		body, err := httprequest.ModificationRequester.HTTPGetModificationByID(campaignID, modificationID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
 
 		for _, modification := range body {
-			if modification.Id == modificationID && modification.Type == "customScriptNew" && modification.Selector != "" {
+			if modification.Type == "customScriptNew" && modification.Selector != "" {
 				code = modification.Value
 				selector = modification.Selector
 				variationID = modification.VariationID
 			}
 		}
 
-		fileCode := config.AddHeaderSelectorComment(selector, code)
-
 		if CreateFile {
+			fileCode := config.AddHeaderSelectorComment(selector, code)
 			elementModificationCodeDir := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode)
 			fmt.Fprintln(cmd.OutOrStdout(), "Element code file generated successfully: ", elementModificationCodeDir)
 			return
 		}
 
-		fmt.Fprintln(cmd.OutOrStdout(), string(fileCode))
+		fmt.Fprintln(cmd.OutOrStdout(), string(code))
 	},
 }
 
 func init() {
-	getCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "id of the global code campaign you want to display")
+	getCmd.Flags().StringVarP(&CampaignID, "campaign-id", "", "", "id of the campaign")
 
 	if err := getCmd.MarkFlagRequired("campaign-id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the global code vairation you want to display")
+	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the global code modification you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)

@@ -34,10 +34,18 @@ func TestVariationGlobalCodeHelpCommand(t *testing.T) {
 	assert.Contains(t, output, "Get variation global code")
 }
 
-func TestVariationGlobalCodeGetCommand(t *testing.T) {
-	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get")
+func TestVariationGlobalCodeGetJSCommand(t *testing.T) {
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get-js")
 	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
 
-	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get", "-i=110000", "--campaign-id=100000")
-	assert.Equal(t, "{\"js\":\"console.log(\\\"test modification\\\")\",\"css\":\".id{\\\"color\\\": \\\"black\\\"}\"}\n", successOutput)
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get-js", "-i=110000", "--campaign-id=100000")
+	assert.Equal(t, "console.log(\"test modification\")\n", successOutput)
+}
+
+func TestVariationGlobalCodeGetCSSCommand(t *testing.T) {
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get-css")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get-css", "-i=110000", "--campaign-id=100000")
+	assert.Equal(t, ".id{\"color\": \"black\"}\n", successOutput)
 }

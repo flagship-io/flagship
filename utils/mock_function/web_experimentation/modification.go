@@ -19,11 +19,20 @@ var TestModificationsJS = models.Modification{
 }
 
 var TestModificationsCSS = models.Modification{
-	Id:          120001,
+	Id:          120002,
 	Name:        "modification",
 	Value:       ".id{\"color\": \"black\"}",
 	VariationID: 110000,
 	Type:        "addCSS",
+}
+
+var TestElementModification = models.Modification{
+	Id:          120003,
+	Name:        "modification",
+	Value:       "console.log(\"test modification\")",
+	VariationID: 110000,
+	Selector:    "document.querySelector()",
+	Type:        "customScriptNew",
 }
 
 var TestData = models.ModificationWE{
@@ -31,13 +40,29 @@ var TestData = models.ModificationWE{
 	Modifications:       []models.Modification{TestModificationsJS, TestModificationsCSS},
 }
 
-var TestModification = models.ModificationDataWE{
+var TestModifData = models.ModificationWE{
+	GlobalModifications: []models.Modification{},
+	Modifications:       []models.Modification{TestElementModification},
+}
+
+var TestModifications = models.ModificationDataWE{
 	Data: TestData,
+}
+
+var TestModification = models.ModificationDataWE{
+	Data: TestModifData,
 }
 
 func APIModification() {
 
 	httpmock.RegisterResponder("GET", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id)+"/modifications",
+		func(req *http.Request) (*http.Response, error) {
+			resp, _ := httpmock.NewJsonResponse(200, TestModifications)
+			return resp, nil
+		},
+	)
+
+	httpmock.RegisterResponder("GET", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id)+"/modifications?ids="+strconv.Itoa(TestElementModification.Id),
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestModification)
 			return resp, nil

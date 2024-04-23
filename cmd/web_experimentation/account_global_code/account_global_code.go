@@ -51,5 +51,8 @@ func initConfig() {
 }
 
 func initGlobalCodeDir() {
-	config.CheckWorkingDirectory(viper.GetString("working_dir"))
+	_, err := config.CheckWorkingDirectory(viper.GetString("working_dir"))
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
 }

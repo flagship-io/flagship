@@ -6,24 +6,27 @@ import (
 	"os"
 )
 
-func CheckWorkingDirectory(workingDir string) string {
+func CheckWorkingDirectory(workingDir string) (string, error) {
 
 	if _, err := os.Stat(workingDir); errors.Is(err, os.ErrNotExist) {
 		if err != nil {
-			log.Fatalf("error occurred: %s", err)
+			return "", err
 		}
 	}
 
-	return workingDir
+	return workingDir, nil
 }
 
 func CheckGlobalCodeDirectory(workingDir string) string {
 
-	wd := CheckWorkingDirectory(workingDir)
+	wd, err := CheckWorkingDirectory(workingDir)
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
 
 	gcWorkingDir := wd + "/abtasty"
 
-	err := os.MkdirAll(gcWorkingDir, os.ModePerm)
+	err = os.MkdirAll(gcWorkingDir, os.ModePerm)
 	if err != nil {
 		log.Fatalf("error occurred: %s", err)
 	}

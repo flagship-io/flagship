@@ -59,7 +59,7 @@ func init() {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCSSCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the global code vairation you want to display")
+	getCSSCmd.Flags().StringVarP(&VariationID, "id", "i", "", "id of the global code variation you want to display")
 
 	if err := getCSSCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
