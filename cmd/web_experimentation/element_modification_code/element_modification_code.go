@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package campaign_global_code
+package element_modification_code
 
 import (
 	"log"
@@ -15,13 +15,15 @@ import (
 
 var WorkingDir string
 var CampaignID string
+var ModificationID string
+var CreateFile bool
 
-// CampaignGlobalCodeCmd represents the campaign global code command
-var CampaignGlobalCodeCmd = &cobra.Command{
-	Use:     "campaign-global-code [get]",
-	Short:   "Get campaign global code",
-	Aliases: []string{"cgc"},
-	Long:    `Get campaign global code`,
+// ElementModificationCodeCmd represents the variation global code command
+var ElementModificationCodeCmd = &cobra.Command{
+	Use:     "element-modification-code [get]",
+	Short:   "Get element modification code",
+	Aliases: []string{"emc"},
+	Long:    `Get element modification code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -30,7 +32,7 @@ var CampaignGlobalCodeCmd = &cobra.Command{
 func init() {
 	cobra.OnInitialize(initConfig)
 	cobra.OnInitialize(initGlobalCodeDir)
-	CampaignGlobalCodeCmd.PersistentFlags().StringVarP(&WorkingDir, "working-dir", "", utils.DefaultGlobalCodeWorkingDir(), "Directory where the file will be generated and pushed from")
+	ElementModificationCodeCmd.PersistentFlags().StringVarP(&WorkingDir, "working-dir", "", utils.DefaultGlobalCodeWorkingDir(), "Directory where the file will be generated and pushed from")
 
 }
 
@@ -39,7 +41,7 @@ func initConfig() {
 
 	homeDir, _ := os.UserHomeDir()
 
-	v.BindPFlag("working_dir", CampaignGlobalCodeCmd.PersistentFlags().Lookup("working-dir"))
+	v.BindPFlag("working_dir", ElementModificationCodeCmd.PersistentFlags().Lookup("working-dir"))
 
 	v.SetConfigFile(homeDir + "/.flagship/credentials/" + utils.WEB_EXPERIMENTATION + "/.cli.yaml")
 	v.MergeInConfig()

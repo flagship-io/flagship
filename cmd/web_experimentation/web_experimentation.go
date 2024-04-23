@@ -11,6 +11,7 @@ import (
 	"github.com/flagship-io/flagship/cmd/web_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/campaign"
 	campaign_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/campaign_global_code"
+	"github.com/flagship-io/flagship/cmd/web_experimentation/element_modification_code"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/variation"
 	variation_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/variation_global_code"
 	"github.com/flagship-io/flagship/utils"
@@ -44,6 +45,7 @@ func addSubCommandPalettes() {
 	WebExperimentationCmd.AddCommand(campaign_global_code.CampaignGlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(account_global_code.AccountGlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(variation_global_code.VariationGlobalCodeCmd)
+	WebExperimentationCmd.AddCommand(element_modification_code.ElementModificationCodeCmd)
 }
 
 func init() {

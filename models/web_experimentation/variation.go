@@ -29,6 +29,8 @@ type Modification struct {
 	Type        string       `json:"type"`
 	Value       string       `json:"value"`
 	VariationID int          `json:"variation_id"`
+	Selector    string       `json:"selector"`
+	Engine      string       `json:"engine"`
 	UpdatedBy   UpdatedBy_   `json:"updated_by"`
 	UpdatedAt   DateTemplate `json:"updated_at"`
 }
