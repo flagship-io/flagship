@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
+	models_fe "github.com/flagship-io/flagship/models/feature_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
 	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
-	"github.com/flagship-io/flagship/utils/mock_function/web_experimentation"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,12 +22,14 @@ func TestMain(m *testing.M) {
 
 	mockfunction.SetMock(&http_request.ResourceRequester)
 
-	mockfunction_fe.APIToken()
+	mockfunction_fe.APIAccountEnvironment()
 
 	m.Run()
 }
 
 var testAccount models.AccountJSON
+var testAccountEnvironment models_fe.AccountEnvironmentFE
+var testAccountEnvironmentList []models_fe.AccountEnvironmentFE
 
 func TestAccountEnvironmentCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(AccountEnvironmentCmd)
@@ -56,5 +58,16 @@ func TestAccountEnvironmentCurrentCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, web_experimentation.TestAccount.AccountEnvironmentID, testAccount.AccountEnvironmentID)
+	assert.Equal(t, mockfunction_fe.TestAccountEnvironment.Id, testAccount.AccountEnvironmentID)
+}
+
+func TestAccountEnvironmentListCommand(t *testing.T) {
+
+	output, _ := utils.ExecuteCommand(AccountEnvironmentCmd, "list")
+
+	err := json.Unmarshal([]byte(output), &testAccountEnvironmentList)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction_fe.TestAccountEnvironmentList, testAccountEnvironmentList)
 }

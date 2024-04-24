@@ -43,7 +43,11 @@ var getCSSCmd = &cobra.Command{
 		}
 
 		if CreateFile {
-			campaignCodeDir := config.VariationGlobalCodeDirectoryCSS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, cssCode)
+			campaignCodeDir, err := config.VariationGlobalCodeDirectoryCSS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, cssCode)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
 			fmt.Fprintln(cmd.OutOrStdout(), "Variation code file generated successfully: ", campaignCodeDir)
 			return
 		}

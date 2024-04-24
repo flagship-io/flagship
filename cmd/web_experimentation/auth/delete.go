@@ -20,9 +20,17 @@ var deleteCmd = &cobra.Command{
 	Long:  `Delete an auth`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		config.CheckABTastyHomeDirectory()
+		_, err := config.CheckABTastyHomeDirectory()
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
 
-		if err := os.Remove(config.CredentialPath(utils.WEB_EXPERIMENTATION, Username)); err != nil {
+		credPath, err := config.CredentialPath(utils.WEB_EXPERIMENTATION, Username)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+
+		if err := os.Remove(credPath); err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}
 

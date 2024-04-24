@@ -25,7 +25,12 @@ var currentCmd = &cobra.Command{
 		var accountYaml models.AccountYaml
 		var account models.AccountJSON
 
-		yamlFile, err := os.ReadFile(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, utils.HOME_CLI))
+		credPath, err := config.CredentialPath(utils.FEATURE_EXPERIMENTATION, utils.HOME_CLI)
+		if err != nil {
+			log.Fatalf("error occurred: %s", err)
+		}
+
+		yamlFile, err := os.ReadFile(credPath)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}

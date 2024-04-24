@@ -25,7 +25,12 @@ var getCmd = &cobra.Command{
 		var authYaml models.AuthYaml
 		var auth models.Auth
 
-		yamlFile, err := os.ReadFile(config.CredentialPath(utils.WEB_EXPERIMENTATION, Username))
+		credPath, err := config.CredentialPath(utils.WEB_EXPERIMENTATION, Username)
+		if err != nil {
+			log.Fatalf("error occurred: %s", err)
+		}
+
+		yamlFile, err := os.ReadFile(credPath)
 		if err != nil {
 			log.Fatalf("error occurred: %s", err)
 		}

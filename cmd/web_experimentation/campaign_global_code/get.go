@@ -30,7 +30,10 @@ var getCmd = &cobra.Command{
 		}
 
 		if createFile {
-			campaignCodeDir := config.CampaignGlobalCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, body)
+			campaignCodeDir, err := config.CampaignGlobalCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, body)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Campaign code file generated successfully: ", campaignCodeDir)
 			return
 		}
@@ -42,8 +45,10 @@ var getCmd = &cobra.Command{
 				log.Fatalf("error occurred: %v", err)
 			}
 
-			campaignCodeDir := config.CampaignGlobalCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, body)
-
+			campaignCodeDir, err := config.CampaignGlobalCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, body)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
 			body, err := httprequest.ModificationRequester.HTTPGetModification(campaignID)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)

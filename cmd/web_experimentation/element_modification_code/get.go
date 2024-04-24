@@ -48,7 +48,11 @@ var getCmd = &cobra.Command{
 
 		if CreateFile {
 			fileCode := config.AddHeaderSelectorComment(selector, code)
-			elementModificationCodeDir := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode)
+			elementModificationCodeDir, err := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
 			fmt.Fprintln(cmd.OutOrStdout(), "Element code file generated successfully: ", elementModificationCodeDir)
 			return
 		}

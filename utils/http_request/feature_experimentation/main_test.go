@@ -20,6 +20,7 @@ func TestMain(m *testing.M) {
 
 	mockfunction.APIProject()
 	mockfunction.APICampaign()
+	mockfunction.APIAccountEnvironment()
 	mockfunction.APIFlag()
 	mockfunction.APIGoal()
 	mockfunction.APITargetingKey()

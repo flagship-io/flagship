@@ -28,7 +28,10 @@ var getCmd = &cobra.Command{
 		}
 
 		if createFile {
-			accountCodeDir := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), accountID, body)
+			accountCodeDir, err := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), accountID, body)
+			if err != nil {
+				log.Fatalf("error occurred: %s", err)
+			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Account code file generated successfully: ", accountCodeDir)
 			return
 		}

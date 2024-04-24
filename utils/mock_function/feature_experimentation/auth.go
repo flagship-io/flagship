@@ -1,6 +1,7 @@
 package feature_experimentation
 
 import (
+	"log"
 	"os"
 
 	"github.com/flagship-io/flagship/models"
@@ -17,5 +18,10 @@ var TestAuth = models.Auth{
 }
 
 func InitMockAuth() {
-	os.Remove(config.CredentialPath(utils.FEATURE_EXPERIMENTATION, "test_auth"))
+	credPath, err := config.CredentialPath(utils.FEATURE_EXPERIMENTATION, "test_auth")
+	if err != nil {
+		log.Fatalf("error occurred: %s", err)
+	}
+
+	os.Remove(credPath)
 }

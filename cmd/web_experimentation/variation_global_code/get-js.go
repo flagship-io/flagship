@@ -43,7 +43,10 @@ var getJSCmd = &cobra.Command{
 		}
 
 		if CreateFile {
-			variationCodeDir := config.VariationGlobalCodeDirectoryJS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, jsCode)
+			variationCodeDir, err := config.VariationGlobalCodeDirectoryJS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, jsCode)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Variation code file generated successfully: ", variationCodeDir)
 			return
 		}

@@ -32,7 +32,12 @@ var listCmd = &cobra.Command{
 			if fileName != "" {
 				var authYaml models.AuthYaml
 				var auth models.Auth
-				yamlFile, err := os.ReadFile(config.CredentialPath(utils.WEB_EXPERIMENTATION, fileName))
+				credPath, err := config.CredentialPath(utils.WEB_EXPERIMENTATION, fileName)
+				if err != nil {
+					log.Fatalf("error occurred: %s", err)
+				}
+
+				yamlFile, err := os.ReadFile(credPath)
 				if err != nil {
 					log.Fatalf("error occurred: %s", err)
 				}
