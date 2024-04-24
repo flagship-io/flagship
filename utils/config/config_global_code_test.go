@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"testing"
 
@@ -28,17 +27,6 @@ var (
 	mockElementID   = "300000"
 	mockSelector    = "document.querySelector('main')"
 )
-
-func TestMain(m *testing.M) {
-	currentDir, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("Failed to get current working directory: %v", err)
-	}
-
-	defer os.RemoveAll(currentDir + "/abtasty")
-
-	m.Run()
-}
 
 func TestCheckWorkingDirectory(t *testing.T) {
 	currentDir, err := os.Getwd()
