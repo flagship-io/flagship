@@ -5,6 +5,7 @@ package auth
 
 import (
 	"fmt"
+	"log"
 	"slices"
 
 	"github.com/flagship-io/flagship/utils"
@@ -41,7 +42,11 @@ var loginCmd = &cobra.Command{
 		}
 
 		if credentialsFile != "" {
-			v := config.ReadCredentialsFromFile(credentialsFile)
+			v, err := config.ReadCredentialsFromFile(credentialsFile)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
 			if v.GetString("username") == "" || v.GetString("client_id") == "" || v.GetString("client_secret") == "" || v.GetString("account_id") == "" {
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
 				return
@@ -51,12 +56,29 @@ var loginCmd = &cobra.Command{
 				fmt.Fprintf(cmd.OutOrStderr(), "error occurred: %s", err)
 				return
 			}
-			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, v.GetString("username"), v.GetString("client_id"), v.GetString("client_secret"), authenticationResponse)
-			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("username"))
-			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_id"))
-			if v.GetString("account_environment_id") != "" {
-				config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_environment_id"))
+
+			err = config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, v.GetString("username"), v.GetString("client_id"), v.GetString("client_secret"), authenticationResponse)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
 			}
+
+			err = config.SelectAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("username"))
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SetAccountID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_id"))
+			if err != nil {
+				log.Fatalf("error occurred: %s", err)
+			}
+
+			if v.GetString("account_environment_id") != "" {
+				err := config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, v.GetString("account_environment_id"))
+				if err != nil {
+					log.Fatalf("error occurred: %v", err)
+				}
+			}
+
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 			return
 		}
@@ -69,8 +91,15 @@ var loginCmd = &cobra.Command{
 			}
 			if slices.Contains(existingCredentials, Username) {
 				if AccountId != "" {
-					config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
-					config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
+					err := config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
+					if err != nil {
+						log.Fatalf("error occurred: %v", err)
+					}
+
+					err = config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
+					if err != nil {
+						log.Fatalf("error occurred: %s", err)
+					}
 
 					fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
 					return
@@ -94,9 +123,20 @@ var loginCmd = &cobra.Command{
 				return
 			}
 
-			config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
-			config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
-			config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
+			err = config.CreateAuthFile(utils.FEATURE_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountId)
+			if err != nil {
+				log.Fatalf("error occurred: %s", err)
+			}
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 		}

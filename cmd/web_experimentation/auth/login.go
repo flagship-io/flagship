@@ -121,7 +121,10 @@ var loginCmd = &cobra.Command{
 				log.Fatalf("error occurred: %s", err)
 			}
 			if slices.Contains(existingCredentials, Username) {
-				config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
+				err := config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
+				if err != nil {
+					log.Fatalf("error occurred: %v", err)
+				}
 
 				fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
 				return
@@ -140,8 +143,16 @@ var loginCmd = &cobra.Command{
 			if authenticationResponse.AccessToken == "" {
 				log.Fatal("Credentials not valid.")
 			}
-			config.CreateAuthFile(utils.WEB_EXPERIMENTATION, Username, "", "", authenticationResponse)
-			config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
+
+			err = config.CreateAuthFile(utils.WEB_EXPERIMENTATION, Username, "", "", authenticationResponse)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 		}

@@ -32,9 +32,26 @@ var TestAccountGlobalCode = models.AccountWE{
 
 func APIAccount() {
 
+	resp := utils.HTTPListResponseWE[models.AccountWE]{
+		Data: []models.AccountWE{TestAccountGlobalCode},
+		Pagination: utils.Pagination{
+			Total:      1,
+			Pages:      2,
+			MaxPerPage: 10,
+			Page:       1,
+		},
+	}
+
 	httpmock.RegisterResponder("GET", utils.GetWebExperimentationHost()+"/v1/accounts/"+accountID,
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestAccountGlobalCode)
+			return resp, nil
+		},
+	)
+
+	httpmock.RegisterResponder("GET", utils.GetWebExperimentationHost()+"/v1/accounts",
+		func(req *http.Request) (*http.Response, error) {
+			resp, _ := httpmock.NewJsonResponse(200, resp)
 			return resp, nil
 		},
 	)

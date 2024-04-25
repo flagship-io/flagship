@@ -4,6 +4,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package web_experimentation
 
 import (
+	"log"
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/web_experimentation/account"
@@ -60,7 +61,11 @@ func initConfig() {
 	v.SetConfigFile(homeDir + "/.flagship/credentials/" + utils.WEB_EXPERIMENTATION + "/.cli.yaml")
 	v.MergeInConfig()
 	if v.GetString("current_used_credential") != "" {
-		vL := config.ReadAuth(utils.WEB_EXPERIMENTATION, v.GetString("current_used_credential"))
+		vL, err := config.ReadAuth(utils.WEB_EXPERIMENTATION, v.GetString("current_used_credential"))
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+
 		v.MergeConfigMap(vL.AllSettings())
 	}
 

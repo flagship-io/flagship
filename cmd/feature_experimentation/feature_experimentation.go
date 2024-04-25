@@ -4,6 +4,7 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package feature_experimentation
 
 import (
+	"log"
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/feature_experimentation/account"
@@ -74,7 +75,10 @@ func initConfig() {
 	v.SetConfigFile(homeDir + "/.flagship/credentials/" + utils.FEATURE_EXPERIMENTATION + "/.cli.yaml")
 	v.MergeInConfig()
 	if v.GetString("current_used_credential") != "" {
-		vL := config.ReadAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("current_used_credential"))
+		vL, err := config.ReadAuth(utils.FEATURE_EXPERIMENTATION, v.GetString("current_used_credential"))
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
 		v.MergeConfigMap(vL.AllSettings())
 	}
 

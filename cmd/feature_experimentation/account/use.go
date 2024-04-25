@@ -23,7 +23,10 @@ var useCmd = &cobra.Command{
 			return
 		}
 
-		config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
+		err := config.SetAccountID(utils.FEATURE_EXPERIMENTATION, AccountID)
+		if err != nil {
+			log.Fatalf("error occurred: %s", err)
+		}
 
 		fmt.Fprintln(cmd.OutOrStdout(), "Account ID set to : "+AccountID)
 

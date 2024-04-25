@@ -87,7 +87,10 @@ func regenerateToken(product, configName string) {
 	}
 	cred.RefreshToken = authenticationResponse.RefreshToken
 	cred.Token = authenticationResponse.AccessToken
-	config.WriteToken(product, configName, authenticationResponse)
+	err := config.WriteToken(product, configName, authenticationResponse)
+	if err != nil {
+		log.Fatalf("error occurred: %v", err)
+	}
 
 }
 

@@ -1,11 +1,8 @@
 package config
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -15,49 +12,46 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Unset(key string) error {
-	configMap := viper.AllSettings()
-	delete(configMap, key)
-	encodedConfig, _ := json.MarshalIndent(configMap, "", " ")
-	err := viper.ReadConfig(bytes.NewReader(encodedConfig))
-	if err != nil {
-		return err
-	}
-	viper.WriteConfig()
-	return nil
-}
-
 func CheckABTastyHomeDirectory() (string, error) {
 	homeDir, err := os.UserHomeDir()
 
 	if _, err := os.Stat(homeDir + "/.flagship/credentials/" + utils.FEATURE_EXPERIMENTATION); errors.Is(err, os.ErrNotExist) {
 		err := os.MkdirAll(homeDir+"/.flagship/credentials/"+utils.FEATURE_EXPERIMENTATION, os.ModePerm)
 		if err != nil {
-			log.Fatalf("error occurred: %s", err)
+			return "", err
 		}
 	}
 
 	if _, err := os.Stat(homeDir + "/.flagship/credentials/" + utils.WEB_EXPERIMENTATION); errors.Is(err, os.ErrNotExist) {
 		err := os.MkdirAll(homeDir+"/.flagship/credentials/"+utils.WEB_EXPERIMENTATION, os.ModePerm)
 		if err != nil {
-			log.Fatalf("error occurred: %s", err)
+			return "", err
 		}
 	}
 
 	return homeDir, err
 }
 
-func CredentialPath(product, username string) string {
-	homeDir, _ := CheckABTastyHomeDirectory()
+func CredentialPath(product, username string) (string, error) {
+	homeDir, err := CheckABTastyHomeDirectory()
+	if err != nil {
+		return "", err
+	}
+
 	filepath, err := filepath.Abs(homeDir + "/.flagship/credentials/" + product + "/" + username + ".yaml")
 	if err != nil {
-		log.Fatalf("error occured: %s", err)
+		return "", err
 	}
-	return filepath
+
+	return filepath, nil
 }
 
 func GetUsernames(product string) ([]string, error) {
 	homeDir, err := CheckABTastyHomeDirectory()
+	if err != nil {
+		return nil, err
+	}
+
 	r := regexp.MustCompile(`(?P<Username>[^/]+)\.yaml`)
 	var fileNames []string
 
@@ -77,7 +71,8 @@ func GetUsernames(product string) ([]string, error) {
 		match := r.FindStringSubmatch(v.Name())
 		userName := r.SubexpIndex("Username")
 		if len(match) == 0 {
-			log.Fatalln("Error: File not found")
+			err := errors.New("Error: File not found")
+			return nil, err
 		}
 
 		fileNames = append(fileNames, match[userName])
@@ -85,9 +80,12 @@ func GetUsernames(product string) ([]string, error) {
 	return fileNames, nil
 }
 
-func CreateAuthFile(product, username, clientId, clientSecret string, authenticationResponse models.TokenResponse) {
+func CreateAuthFile(product, username, clientId, clientSecret string, authenticationResponse models.TokenResponse) error {
 	v := viper.New()
-	filepath := CredentialPath(product, username)
+	filepath, err := CredentialPath(product, username)
+	if err != nil {
+		return err
+	}
 
 	v.Set("username", username)
 	v.Set("client_id", clientId)
@@ -95,78 +93,104 @@ func CreateAuthFile(product, username, clientId, clientSecret string, authentica
 	v.Set("token", authenticationResponse.AccessToken)
 	v.Set("refresh_token", authenticationResponse.RefreshToken)
 
-	err := v.WriteConfigAs(filepath)
+	err = v.WriteConfigAs(filepath)
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return err
 	}
+
+	return nil
 }
 
-func ReadAuth(product, AuthName string) *viper.Viper {
+func ReadAuth(product, AuthName string) (*viper.Viper, error) {
 	v := viper.New()
-	configFilepath := CredentialPath(product, AuthName)
+	configFilepath, err := CredentialPath(product, AuthName)
+	if err != nil {
+		return nil, err
+	}
+
 	if _, err := os.Stat(configFilepath); errors.Is(err, os.ErrNotExist) {
 		fmt.Fprintf(os.Stderr, "error occurred: %v \n", err)
 	}
 	v.SetConfigFile(configFilepath)
 	v.MergeInConfig()
-	return v
+	return v, nil
 }
 
-func SelectAuth(product, AuthName string) {
+func SelectAuth(product, AuthName string) error {
 	var v = viper.New()
 
-	filepath := CredentialPath(product, utils.HOME_CLI)
-	v.Set("current_used_credential", AuthName)
-
-	err := v.WriteConfigAs(filepath)
+	filepath, err := CredentialPath(product, utils.HOME_CLI)
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return err
 	}
 
+	v.Set("current_used_credential", AuthName)
+
+	err = v.WriteConfigAs(filepath)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func SetAccountID(product, accountID string) {
+func SetAccountID(product, accountID string) error {
 	var v = viper.New()
-	configFilepath := CredentialPath(product, utils.HOME_CLI)
+	configFilepath, err := CredentialPath(product, utils.HOME_CLI)
+	if err != nil {
+		return err
+	}
+
 	v.SetConfigFile(configFilepath)
 	v.MergeInConfig()
 
 	v.Set("account_id", accountID)
 
-	err := v.WriteConfigAs(configFilepath)
+	err = v.WriteConfigAs(configFilepath)
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return err
 	}
+
+	return nil
 }
 
-func SetAccountEnvID(product, accountEnvID string) {
+func SetAccountEnvID(product, accountEnvID string) error {
 	var v = viper.New()
-	configFilepath := CredentialPath(product, utils.HOME_CLI)
+	configFilepath, err := CredentialPath(product, utils.HOME_CLI)
+	if err != nil {
+		return err
+	}
+
 	v.SetConfigFile(configFilepath)
 	v.MergeInConfig()
 
 	v.Set("account_environment_id", accountEnvID)
 
-	err := v.WriteConfigAs(configFilepath)
+	err = v.WriteConfigAs(configFilepath)
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return err
 	}
+
+	return nil
 }
 
-func ReadCredentialsFromFile(AuthFile string) *viper.Viper {
+func ReadCredentialsFromFile(AuthFile string) (*viper.Viper, error) {
 	var v = viper.New()
 	v.SetConfigFile(AuthFile)
 	err := v.MergeInConfig()
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return nil, err
 	}
 
-	return v
+	return v, nil
 }
 
-func WriteToken(product, AuthName string, authenticationResponse models.TokenResponse) {
+func WriteToken(product, AuthName string, authenticationResponse models.TokenResponse) error {
 	v := viper.New()
-	configFilepath := CredentialPath(product, AuthName)
+	configFilepath, err := CredentialPath(product, AuthName)
+	if err != nil {
+		return err
+	}
 
 	v.SetConfigFile(configFilepath)
 
@@ -174,8 +198,10 @@ func WriteToken(product, AuthName string, authenticationResponse models.TokenRes
 	v.Set("token", authenticationResponse.AccessToken)
 	v.Set("refresh_token", authenticationResponse.RefreshToken)
 
-	err := v.WriteConfigAs(configFilepath)
+	err = v.WriteConfigAs(configFilepath)
 	if err != nil {
-		log.Fatalf("error occurred: %v", err)
+		return err
 	}
+
+	return nil
 }

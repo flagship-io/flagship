@@ -23,7 +23,10 @@ var useCmd = &cobra.Command{
 			return
 		}
 
-		config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, AccountEnvironmentID)
+		err := config.SetAccountEnvID(utils.FEATURE_EXPERIMENTATION, AccountEnvironmentID)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
 
 		fmt.Fprintln(cmd.OutOrStdout(), "Account Environment ID set to : "+AccountEnvironmentID)
 

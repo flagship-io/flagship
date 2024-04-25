@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/flagship-io/flagship/models"
+	models_we "github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
@@ -22,12 +23,13 @@ func TestMain(m *testing.M) {
 
 	mockfunction.SetMock(&http_request.ResourceRequester)
 
-	mockfunction_we.APIToken()
+	mockfunction_we.APIAccount()
 
 	m.Run()
 }
 
 var testAccount models.AccountJSON
+var testAccounts []models_we.AccountWE
 
 func TestAccountCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(AccountCmd)
@@ -57,4 +59,15 @@ func TestAccountCurrentCommand(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, web_experimentation.TestAccount.AccountID, testAccount.AccountID)
+}
+
+func TestAccountListCommand(t *testing.T) {
+
+	output, _ := utils.ExecuteCommand(AccountCmd, "list")
+
+	err := json.Unmarshal([]byte(output), &testAccounts)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, web_experimentation.TestAccountGlobalCode.Id, testAccounts[0].Id)
 }
