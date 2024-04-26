@@ -18,7 +18,7 @@ var infoCmd = &cobra.Command{
 	Short: "Get the information related to your token",
 	Long:  `Get the information related to your token`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := common.HTTPCheckToken()
+		body, err := common.HTTPCheckTokenFE()
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}

@@ -33,7 +33,7 @@ func HTTPRefreshTokenFE(client_id, refresh_token string) (models.TokenResponse, 
 	return authenticationResponse, err
 }
 
-func HTTPRefreshTokenWE(client_id, client_secret, refresh_token string) (models.TokenResponse, error) {
+/* func HTTPRefreshTokenWE(client_id, client_secret, refresh_token string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
 	authRequest := models.RefreshTokenRequestWE{
 		ClientID:     client_id,
@@ -57,7 +57,7 @@ func HTTPRefreshTokenWE(client_id, client_secret, refresh_token string) (models.
 	}
 
 	return authenticationResponse, err
-}
+} */
 
 func HTTPCreateTokenFE(clientId, clientSecret, accountId string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
@@ -111,7 +111,7 @@ func HTTPCreateTokenWE(clientId, clientSecret, accountId string) (models.TokenRe
 	return authenticationResponse, err
 }
 
-func HTTPCreateTokenWEAuthorizationCode(client_id, client_secret, code string) (models.TokenResponse, error) {
+/* func HTTPCreateTokenWEAuthorizationCode(client_id, client_secret, code string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
 	authRequest := models.AuthorizationCodeRequest{
 		ClientID:     client_id,
@@ -135,9 +135,9 @@ func HTTPCreateTokenWEAuthorizationCode(client_id, client_secret, code string) (
 	}
 
 	return authenticationResponse, err
-}
+} */
 
-func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfaCode string) (models.TokenResponse, error) {
+/* func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfaCode string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
 	var mfaResponse models.MfaRequestWE
 	var mfmResponse models.MfaRequestWE
@@ -209,32 +209,8 @@ func HTTPCreateTokenWEPassword(client_id, client_secret, username, password, mfa
 
 	return authenticationResponse, err
 }
+*/
 
-func HTTPRefreshToken_(product, client_id, refresh_token string) (models.TokenResponse, error) {
-	var authenticationResponse models.TokenResponse
-	authRequest := models.RefreshTokenRequestFE{
-		ClientID:     client_id,
-		GrantType:    "refresh_token",
-		RefreshToken: refresh_token,
-	}
-	authRequestJSON, err := json.Marshal(authRequest)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	respBody, err := HTTPRequest[models.TokenWE](http.MethodPost, utils.GetHostFeatureExperimentationAuth()+"/"+cred.AccountID+"/token", authRequestJSON)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	err = json.Unmarshal(respBody, &authenticationResponse)
-	if err != nil {
-		return models.TokenResponse{}, err
-	}
-
-	return authenticationResponse, err
-}
-
-func HTTPCheckToken() (models.TokenFE, error) {
+func HTTPCheckTokenFE() (models.TokenFE, error) {
 	return HTTPGetItem[models.TokenFE](utils.GetHostFeatureExperimentationAuth() + "/token?access_token=" + cred.Token)
 }

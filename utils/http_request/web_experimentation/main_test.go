@@ -20,6 +20,7 @@ func TestMain(m *testing.M) {
 
 	mockfunction.APICampaign()
 	mockfunction.APIModification()
+	mockfunction.APIVariation()
 	mockfunction.APIAccount()
 	mockfunction.APIToken()
 
