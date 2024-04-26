@@ -12,12 +12,12 @@ type ModificationRequester struct {
 	*common.ResourceRequest
 }
 
-func (m *ModificationRequester) HTTPGetModification(campaignID int) ([]models.Modification, error) {
+func (m *ModificationRequester) HTTPListModification(campaignID int) ([]models.Modification, error) {
 	resp, err := common.HTTPGetItem[models.ModificationDataWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + m.AccountID + "/tests/" + strconv.Itoa(campaignID) + "/modifications")
 	return resp.Data.Modifications, err
 }
 
-func (m *ModificationRequester) HTTPGetModificationByID(campaignID int, id int) ([]models.Modification, error) {
+func (m *ModificationRequester) HTTPGetModification(campaignID int, id int) ([]models.Modification, error) {
 	resp, err := common.HTTPGetItem[models.ModificationDataWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + m.AccountID + "/tests/" + strconv.Itoa(campaignID) + "/modifications?ids=" + strconv.Itoa(id))
 	return resp.Data.Modifications, err
 }

@@ -49,7 +49,7 @@ var getCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
-			body, err := httprequest.ModificationRequester.HTTPGetModification(campaignID)
+			body, err := httprequest.ModificationRequester.HTTPListModification(campaignID)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}

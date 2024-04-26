@@ -31,7 +31,7 @@ func GetHostFeatureExperimentationAuth() string {
 
 func GetHostWebExperimentationAuth() string {
 	if os.Getenv("FS_STAGING") == "true" {
-		return "https://api-auth.abtasty.com"
+		return "https://staging-api-auth.abtasty.com"
 	}
 
 	return "https://api-auth.abtasty.com"

@@ -19,6 +19,8 @@ func TestMain(m *testing.M) {
 	common.Init(mockfunction_.Auth)
 
 	mockfunction.APICampaign()
+	mockfunction.APIModification()
+	mockfunction.APIAccount()
 	mockfunction.APIToken()
 
 	m.Run()
