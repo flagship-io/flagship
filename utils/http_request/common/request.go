@@ -75,19 +75,27 @@ func Init(credL RequestConfig) {
 
 func regenerateToken(product, configName string) {
 	var authenticationResponse models.TokenResponse
+	var err error
 
 	if product == utils.FEATURE_EXPERIMENTATION {
-		authenticationResponse, _ = HTTPRefreshTokenFE(cred.ClientID, cred.RefreshToken)
+		authenticationResponse, err = HTTPRefreshTokenFE(cred.ClientID, cred.RefreshToken)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
 	} else {
-		authenticationResponse, _ = HTTPRefreshTokenWE(utils.CLIENT_ID, utils.CLIENT_SECRET, cred.RefreshToken)
+		authenticationResponse, err = HTTPCreateTokenWE(cred.ClientID, cred.ClientSecret, cred.AccountID)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
 	}
 
 	if authenticationResponse.AccessToken == "" {
 		log.Fatal("client_id or client_secret not valid")
 	}
+
 	cred.RefreshToken = authenticationResponse.RefreshToken
 	cred.Token = authenticationResponse.AccessToken
-	err := config.WriteToken(product, configName, authenticationResponse)
+	err = config.WriteToken(product, configName, authenticationResponse)
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}

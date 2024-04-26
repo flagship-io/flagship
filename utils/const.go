@@ -49,5 +49,3 @@ func DefaultGlobalCodeWorkingDir() string {
 const FEATURE_EXPERIMENTATION = "fe"
 const WEB_EXPERIMENTATION = "we"
 const HOME_CLI = ".cli"
-const CLIENT_ID = "590_397jchm4asqo04g0ogcggcoo88wo44sg0c0owk0448gkwck8s8"
-const CLIENT_SECRET = "5xc41rk3etwc404o8scs0s8c0sogcgc48g4sk0ggc44so4w00c"
