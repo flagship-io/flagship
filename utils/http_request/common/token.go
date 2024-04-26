@@ -85,6 +85,32 @@ func HTTPCreateTokenFE(clientId, clientSecret, accountId string) (models.TokenRe
 	return authenticationResponse, err
 }
 
+func HTTPCreateTokenWE(clientId, clientSecret, accountId string) (models.TokenResponse, error) {
+	var authenticationResponse models.TokenResponse
+	authRequest := models.ClientCredentialsRequest{
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
+		GrantType:    "client_credentials",
+	}
+
+	authRequestJSON, err := json.Marshal(authRequest)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	respBody, err := HTTPRequest[models.TokenFE](http.MethodPost, utils.GetHostWebExperimentationAuth()+"/v1/token", authRequestJSON)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	err = json.Unmarshal(respBody, &authenticationResponse)
+	if err != nil {
+		return models.TokenResponse{}, err
+	}
+
+	return authenticationResponse, err
+}
+
 func HTTPCreateTokenWEAuthorizationCode(client_id, client_secret, code string) (models.TokenResponse, error) {
 	var authenticationResponse models.TokenResponse
 	authRequest := models.AuthorizationCodeRequest{

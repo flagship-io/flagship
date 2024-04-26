@@ -20,8 +20,7 @@ func APIToken() {
 	token := "token"
 
 	testAuthenticationResponse := models.TokenResponse{
-		AccessToken:  "testAccessToken",
-		RefreshToken: "testRefreshToken",
+		AccessToken: "testAccessToken",
 	}
 
 	httpmock.RegisterResponder("GET", utils.GetHostWebExperimentationAuth()+"/v1/token?access_token="+token,

@@ -11,10 +11,9 @@ import (
 
 var TestAuth = models.Auth{
 	Username:     "test_auth",
-	ClientID:     "",
-	ClientSecret: "",
+	ClientID:     "CI",
+	ClientSecret: "CS",
 	Token:        "testAccessToken",
-	RefreshToken: "testRefreshToken",
 }
 
 func InitMockAuth() {

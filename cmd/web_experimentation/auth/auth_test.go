@@ -31,17 +31,28 @@ var testAuth models.Auth
 var testAuthList []models.Auth
 
 func TestAuthCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(AuthCmd)
+	output, err := utils.ExecuteCommand(AuthCmd)
+
+	assert.Nil(t, err)
 	assert.Contains(t, output, "Manage your CLI authentication for web experimentation\n\nUsage:\n  authentication [login|get|list|delete]")
 }
 
 func TestAuthHelpCommand(t *testing.T) {
-	output, _ := utils.ExecuteCommand(AuthCmd, "--help")
+	output, err := utils.ExecuteCommand(AuthCmd, "--help")
+
+	assert.Nil(t, err)
 	assert.Contains(t, output, "Manage your CLI authentication for web experimentation\n\nUsage:\n  authentication [login|get|list|delete]")
 }
 
 func TestAuthLoginCommand(t *testing.T) {
-	successOutput, _ := utils.ExecuteCommand(AuthCmd, "login", "-u=test_auth", "--password=password", "--totp=00000")
+
+	failOutput, _ := utils.ExecuteCommand(AuthCmd, "login", "-u=test_auth", "--client-id=CI", "--client-secret=CS")
+
+	assert.Equal(t, "Error while login, required fields (username, client ID, client secret, account id)\n", failOutput)
+
+	successOutput, err := utils.ExecuteCommand(AuthCmd, "login", "-u=test_auth", "--client-id=CI", "--client-secret=CS", "--account-id=AI")
+
+	assert.Nil(t, err)
 	assert.Equal(t, "Credential created successfully\n", successOutput)
 }
 
@@ -70,7 +81,7 @@ func TestAuthGetCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	//assert.Equal(t, feature_experimentation.TestAuth, testAuth)
+	assert.Equal(t, web_experimentation.TestAuth, testAuth)
 }
 
 func TestAuthDeleteCommand(t *testing.T) {

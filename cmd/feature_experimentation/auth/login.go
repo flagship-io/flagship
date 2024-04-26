@@ -32,7 +32,7 @@ func checkSingleFlag(bool1, bool2 bool) bool {
 
 // createCmd represents the create command
 var loginCmd = &cobra.Command{
-	Use:   "login [--credential-file] | [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>]",
+	Use:   "login [--credential-file] | [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>] [-a <accountID> | --account-id=<accountID>]",
 	Short: "login",
 	Long:  `login`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -89,6 +89,7 @@ var loginCmd = &cobra.Command{
 				fmt.Fprintf(cmd.OutOrStderr(), "error occurred: %s", err)
 				return
 			}
+
 			if slices.Contains(existingCredentials, Username) {
 				if AccountId != "" {
 					err := config.SelectAuth(utils.FEATURE_EXPERIMENTATION, Username)

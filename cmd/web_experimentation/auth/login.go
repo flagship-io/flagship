@@ -6,12 +6,7 @@ package auth
 import (
 	"fmt"
 	"log"
-	"net/http"
-	"os"
-	"os/exec"
-	"runtime"
 	"slices"
-	"time"
 
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/config"
@@ -20,10 +15,8 @@ import (
 )
 
 var (
-	browser     bool
-	password    string
-	redirectUri string
-	totp        string
+	credentialsFile string
+	accountId       string
 )
 
 func checkSingleFlag(bool1, bool2 bool) bool {
@@ -38,113 +31,93 @@ func checkSingleFlag(bool1, bool2 bool) bool {
 	return count == 1
 }
 
-func openLink(url string) error {
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case "linux":
-		cmd = exec.Command("xdg-open", url)
-	case "darwin":
-		cmd = exec.Command("open", url)
-	case "windows":
-		cmd = exec.Command("cmd", "/c", "start", url)
-	default:
-		return fmt.Errorf("unsupported operating system")
-	}
-	err := cmd.Run()
-	return err
-}
-
 // createCmd represents the create command
 var loginCmd = &cobra.Command{
-	Use:   "login [--browser] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>] | [-u <username> | --username=<username>] [--password <password>]",
+	Use:   "login [--credential-file] | [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>] [-a <accountID> | --account-id=<accountID>]",
 	Short: "login",
 	Long:  `login`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !checkSingleFlag(browser, Username != "") {
+		if !checkSingleFlag(credentialsFile != "", Username != "") {
 			log.Fatalf("error occurred: %s", "1 flag is required. (browser, username)")
 		}
 
-		if browser {
-			codeChan := make(chan string)
-			clientID := utils.CLIENT_ID
-			clientSecret := utils.CLIENT_SECRET
-
-			if ClientID != "" {
-				clientID = ClientID
+		if credentialsFile != "" {
+			v, err := config.ReadCredentialsFromFile(credentialsFile)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
 			}
 
-			if ClientSecret != "" {
-				clientSecret = ClientSecret
+			if v.GetString("username") == "" || v.GetString("client_id") == "" || v.GetString("client_secret") == "" || v.GetString("account_id") == "" {
+				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
+				return
 			}
-
-			var url = fmt.Sprintf("https://auth.abtasty.com/authorize?client_id=%s&client_secret=%s&redirect_uri=http://localhost:8010/auth/callback", clientID, clientSecret)
-
-			if err := openLink(url); err != nil {
-				log.Fatalf("Error opening link: %s", err)
-			}
-
-			go func() {
-				http.HandleFunc("/auth/callback", func(w http.ResponseWriter, r *http.Request) {
-					handleCallback(w, r, codeChan)
-				})
-
-				if err := http.ListenAndServe("127.0.0.1:8010", nil); err != nil {
-					log.Fatalf("Error starting callback server: %s", err)
-				}
-			}()
-
-			code := <-codeChan
-
-			if code != "" {
-				authenticationResponse, err := common.HTTPCreateTokenWEAuthorizationCode(clientID, clientSecret, code)
-				if err != nil {
-					log.Fatalf("error occurred: %s", err)
-					return
-				}
-
-				if authenticationResponse.AccessToken == "" {
-					log.Fatal("Credentials not valid.")
-				}
-				// Waiting for fix to implemente route to get username "/users/me"
-				// add flag for redirect uri (for vscode etc...)
-
-				fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
+			authenticationResponse, err := common.HTTPCreateTokenWE(v.GetString("client_id"), v.GetString("client_secret"), v.GetString("account_id"))
+			if err != nil {
+				fmt.Fprintf(cmd.OutOrStderr(), "error occurred: %s", err)
 				return
 			}
 
-			fmt.Fprintln(cmd.OutOrStderr(), "Error occurred.")
+			err = config.CreateAuthFile(utils.WEB_EXPERIMENTATION, v.GetString("username"), v.GetString("client_id"), v.GetString("client_secret"), authenticationResponse)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SelectAuth(utils.WEB_EXPERIMENTATION, v.GetString("username"))
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SetAccountID(utils.WEB_EXPERIMENTATION, v.GetString("account_id"))
+			if err != nil {
+				log.Fatalf("error occurred: %s", err)
+			}
+
+			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
+			return
 		}
 
 		if Username != "" {
 			existingCredentials, err := config.GetUsernames(utils.WEB_EXPERIMENTATION)
 			if err != nil {
-				log.Fatalf("error occurred: %s", err)
+				fmt.Fprintf(cmd.OutOrStderr(), "error occurred: %s", err)
+				return
 			}
+
 			if slices.Contains(existingCredentials, Username) {
-				err := config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
-				if err != nil {
-					log.Fatalf("error occurred: %v", err)
+				if accountId != "" {
+					err := config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
+					if err != nil {
+						log.Fatalf("error occurred: %v", err)
+					}
+
+					err = config.SetAccountID(utils.WEB_EXPERIMENTATION, accountId)
+					if err != nil {
+						log.Fatalf("error occurred: %s", err)
+					}
+
+					fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
+					return
 				}
-
-				fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
+				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (account id)")
 				return
 			}
 
-			if password == "" || totp == "" {
-				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (password, totp)")
+			if ClientID == "" || ClientSecret == "" || accountId == "" {
+				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
 				return
 			}
-			authenticationResponse, err := common.HTTPCreateTokenWEPassword(utils.CLIENT_ID, utils.CLIENT_SECRET, Username, password, totp)
+			authenticationResponse, err := common.HTTPCreateTokenWE(ClientID, ClientSecret, accountId)
 			if err != nil {
-				log.Fatalf("error occurred: %s", err)
+				fmt.Fprintln(cmd.OutOrStderr(), err)
 				return
 			}
 
 			if authenticationResponse.AccessToken == "" {
-				log.Fatal("Credentials not valid.")
+				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, client_id or client_secret not valid")
+				return
 			}
 
-			err = config.CreateAuthFile(utils.WEB_EXPERIMENTATION, Username, "", "", authenticationResponse)
+			err = config.CreateAuthFile(utils.WEB_EXPERIMENTATION, Username, ClientID, ClientSecret, authenticationResponse)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
@@ -152,6 +125,11 @@ var loginCmd = &cobra.Command{
 			err = config.SelectAuth(utils.WEB_EXPERIMENTATION, Username)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
+			}
+
+			err = config.SetAccountID(utils.WEB_EXPERIMENTATION, accountId)
+			if err != nil {
+				log.Fatalf("error occurred: %s", err)
 			}
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
@@ -162,32 +140,12 @@ var loginCmd = &cobra.Command{
 
 func init() {
 
+	loginCmd.Flags().StringVarP(&Username, "username", "u", "", "username")
+
 	loginCmd.Flags().StringVarP(&ClientID, "client-id", "i", "", "client ID of an auth")
 	loginCmd.Flags().StringVarP(&ClientSecret, "client-secret", "s", "", "client secret of an auth")
-
-	loginCmd.Flags().BoolVarP(&browser, "browser", "", false, "generate link for browser")
-	loginCmd.Flags().StringVarP(&Username, "username", "u", "", "username")
-	loginCmd.Flags().StringVarP(&redirectUri, "redirect-uri", "", "http://abtasty.com", "redirect uri")
-	loginCmd.Flags().StringVarP(&password, "password", "", "", "password")
-	loginCmd.Flags().StringVarP(&totp, "totp", "", "", "totp")
+	loginCmd.Flags().StringVarP(&accountId, "account-id", "a", "", "account id of an auth")
+	loginCmd.Flags().StringVarP(&credentialsFile, "credential-file", "p", "", "config file to create")
 
 	AuthCmd.AddCommand(loginCmd)
-}
-
-func handleCallback(w http.ResponseWriter, r *http.Request, codeChan chan<- string) {
-	code := r.URL.Query().Get("code")
-	if code == "" {
-		http.Error(w, "No token found in URL", http.StatusBadRequest)
-		os.Exit(0)
-		return
-	}
-
-	codeChan <- code
-
-	http.Redirect(w, r, redirectUri, http.StatusSeeOther)
-
-	go func() {
-		time.Sleep(5 * time.Second)
-		close(codeChan)
-	}()
 }
