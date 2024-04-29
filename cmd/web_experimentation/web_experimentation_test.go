@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/flagship-io/flagship/utils"
-	mockfunction_fe "github.com/flagship-io/flagship/utils/mock_function/feature_experimentation"
+	mockfunction_we "github.com/flagship-io/flagship/utils/mock_function/web_experimentation"
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
@@ -13,7 +13,7 @@ func TestMain(m *testing.M) {
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
-	defer mockfunction_fe.InitMockAuth()
+	defer mockfunction_we.InitMockAuth()
 
 	m.Run()
 }

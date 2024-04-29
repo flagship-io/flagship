@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
-	//defer mockfunction_we.InitMockAuth()
+	defer mockfunction_we.InitMockAuth()
 
 	mockfunction.SetMock(&http_request.ResourceRequester)
 

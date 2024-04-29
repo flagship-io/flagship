@@ -32,7 +32,7 @@ func APIToken() {
 		},
 	)
 
-	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+mockfunction.Auth.AccountID+"/token?expires_in=86400",
+	httpmock.RegisterResponder("POST", utils.GetHostFeatureExperimentationAuth()+"/"+mockfunction.Auth.AccountID+"/token?expires_in=43200",
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, testAuthenticationResponse)
 			return resp, nil
