@@ -92,6 +92,7 @@ func CreateAuthFile(product, username, clientId, clientSecret string, authentica
 	v.Set("client_secret", clientSecret)
 	v.Set("token", authenticationResponse.AccessToken)
 	v.Set("refresh_token", authenticationResponse.RefreshToken)
+	v.Set("scope", authenticationResponse.Scope)
 
 	err = v.WriteConfigAs(filepath)
 	if err != nil {
@@ -185,7 +186,7 @@ func ReadCredentialsFromFile(AuthFile string) (*viper.Viper, error) {
 	return v, nil
 }
 
-func WriteToken(product, AuthName string, authenticationResponse models.TokenResponse) error {
+func RewriteToken(product, AuthName string, authenticationResponse models.TokenResponse) error {
 	v := viper.New()
 	configFilepath, err := CredentialPath(product, AuthName)
 	if err != nil {
@@ -197,6 +198,7 @@ func WriteToken(product, AuthName string, authenticationResponse models.TokenRes
 	v.MergeInConfig()
 	v.Set("token", authenticationResponse.AccessToken)
 	v.Set("refresh_token", authenticationResponse.RefreshToken)
+	v.Set("scope", authenticationResponse.Scope)
 
 	err = v.WriteConfigAs(configFilepath)
 	if err != nil {

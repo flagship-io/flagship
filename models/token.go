@@ -1,12 +1,5 @@
 package models
 
-type TokenWE struct {
-	ClientID  string `json:"client_id"`
-	AccountID string `json:"account"`
-	ExpiresIn int    `json:"expires_in"`
-	Scope     string `json:"scope"`
-}
-
 type MfaRequestWE struct {
 	MfaToken   string   `json:"mfa_token"`
 	MfaMethods []string `json:"mfa_methods"`
@@ -31,7 +24,7 @@ type MultiFactorMethodResponseWE struct {
 	GrantType string `json:"grant_type"`
 }
 
-type TokenFE struct {
+type Token struct {
 	ClientID  string `json:"client_id"`
 	AccountID string `json:"account"`
 	ExpiresIn int    `json:"expires_in"`

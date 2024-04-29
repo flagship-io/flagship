@@ -8,11 +8,11 @@ import (
 	"github.com/jarcoal/httpmock"
 )
 
-var TestToken = models.TokenWE{
+var TestToken = models.Token{
 	ClientID:  "client_id",
 	AccountID: "account_id",
-	ExpiresIn: 0,
-	Scope:     "*",
+	ExpiresIn: 10,
+	Scope:     "scope",
 }
 
 func APIToken() {

@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var _testToken models.TokenFE
+var testToken models.Token
 
 func TestMain(m *testing.M) {
 
@@ -25,8 +25,6 @@ func TestMain(m *testing.M) {
 	mockfunction_fe.APIToken()
 	m.Run()
 }
-
-var testToken models.TokenFE
 
 func TestTokenCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(TokenCmd)
@@ -40,10 +38,10 @@ func TestTokenHelpCommand(t *testing.T) {
 
 func TestTokenInfoCommand(t *testing.T) {
 	successOutput, _ := utils.ExecuteCommand(TokenCmd, "info")
-	err := json.Unmarshal([]byte(successOutput), &_testToken)
+	err := json.Unmarshal([]byte(successOutput), &testToken)
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction_fe.TestToken, _testToken)
+	assert.Equal(t, mockfunction_fe.TestToken, testToken)
 
 }

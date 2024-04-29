@@ -19,12 +19,14 @@ var (
 	clientSecret = "client_secret"
 	accessToken  = "access_token"
 	refreshToken = "refresh_token"
+	scope        = "scope"
 	accountID    = "account_id"
 	accountEnvID = "account_environment_id"
 )
 var authResponse = models.TokenResponse{
 	AccessToken:  accessToken,
 	RefreshToken: refreshToken,
+	Scope:        scope,
 }
 
 func TestMain(m *testing.M) {
@@ -121,9 +123,10 @@ func TestCreateAuthFile(t *testing.T) {
 	expectedContent := fmt.Sprintf(`client_id: %s
 client_secret: %s
 refresh_token: %s
+scope: %s
 token: %s
 username: %s
-`, clientID, clientSecret, refreshToken, accessToken, username)
+`, clientID, clientSecret, refreshToken, scope, accessToken, username)
 
 	assert.Equal(t, expectedContent, string(fileContent))
 
@@ -252,13 +255,13 @@ func TestReadCredentialsFromFile(t *testing.T) {
 	assert.Equal(t, v.GetString("refresh_token"), authResponse.RefreshToken)
 }
 
-func TestWriteToken(t *testing.T) {
+func TestRewriteToken(t *testing.T) {
 	err := CreateAuthFile(product, username, clientID, clientSecret, models.TokenResponse{})
 	if err != nil {
 		t.Fatalf("Failed to get user home directory: %v", err)
 	}
 
-	err = WriteToken(product, username, authResponse)
+	err = RewriteToken(product, username, authResponse)
 	if err != nil {
 		t.Fatalf("Failed to get user home directory: %v", err)
 	}

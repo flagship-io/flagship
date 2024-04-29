@@ -62,6 +62,7 @@ type RequestConfig struct {
 	AccountID             string `mapstructure:"account_id"`
 	AccountEnvironmentID  string `mapstructure:"account_environment_id"`
 	Token                 string `mapstructure:"token"`
+	Scope                 string `mapstructure:"scope"`
 	RefreshToken          string `mapstructure:"refresh_token"`
 	CurrentUsedCredential string `mapstructure:"current_used_credential"`
 	OutputFormat          string `mapstructure:"output_format"`
@@ -95,7 +96,7 @@ func regenerateToken(product, configName string) {
 
 	cred.RefreshToken = authenticationResponse.RefreshToken
 	cred.Token = authenticationResponse.AccessToken
-	err = config.WriteToken(product, configName, authenticationResponse)
+	err = config.RewriteToken(product, configName, authenticationResponse)
 	if err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
@@ -124,7 +125,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	}
 
 	if cred.Product == utils.FEATURE_EXPERIMENTATION {
-		if (cred.Username == "" || cred.AccountID == "") && resourceType != reflect.TypeOf(models.TokenFE{}) {
+		if (cred.Username == "" || cred.AccountID == "") && resourceType != reflect.TypeOf(models.Token{}) {
 			log.Fatalf("username and account_id required, Please authenticate your CLI")
 		}
 		// for resource loader

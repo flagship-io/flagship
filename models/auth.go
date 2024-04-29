@@ -6,6 +6,7 @@ type Auth struct {
 	ClientSecret string `json:"client_secret"`
 	Token        string `json:"token"`
 	RefreshToken string `json:"refresh_token"`
+	Scope        string `json:"scope"`
 }
 
 type AuthYaml struct {
@@ -14,6 +15,7 @@ type AuthYaml struct {
 	ClientSecret string `yaml:"client_secret"`
 	Token        string `yaml:"token"`
 	RefreshToken string `yaml:"refresh_token"`
+	Scope        string `yaml:"scope"`
 }
 
 type AccountYaml struct {
