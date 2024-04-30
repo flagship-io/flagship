@@ -1,8 +1,10 @@
 package variation_global_code
 
 import (
+	"encoding/json"
 	"testing"
 
+	models "github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
@@ -23,6 +25,8 @@ func TestMain(m *testing.M) {
 
 	m.Run()
 }
+
+var testModification models.Modification
 
 func TestVariationGlobalCodeCommand(t *testing.T) {
 	output, _ := utils.ExecuteCommand(VariationGlobalCodeCmd)
@@ -48,4 +52,30 @@ func TestVariationGlobalCodeGetCSSCommand(t *testing.T) {
 
 	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "get-css", "-i=110000", "--campaign-id=100000")
 	assert.Equal(t, ".id{\"color\": \"black\"}\n", successOutput)
+}
+
+func TestVariationGlobalCodeInfoCSSCommand(t *testing.T) {
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "info-css")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "info-css", "-i=110000", "--campaign-id=100000")
+
+	err := json.Unmarshal([]byte(successOutput), &testModification)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction_we.TestModificationsCSS, testModification)
+}
+
+func TestVariationGlobalCodeInfoJSCommand(t *testing.T) {
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "info-js")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "info-js", "-i=110000", "--campaign-id=100000")
+
+	err := json.Unmarshal([]byte(successOutput), &testModification)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction_we.TestModificationsJS, testModification)
 }
