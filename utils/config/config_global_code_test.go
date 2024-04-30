@@ -123,7 +123,7 @@ func TestAccountGlobalCodeDirectory(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := AccountGlobalCodeDirectory(tt.workingDir, tt.accountID, tt.code)
+			got, err := AccountGlobalCodeDirectory(tt.workingDir, tt.accountID, tt.code, true)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("AccountGlobalCodeDirectory() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -164,7 +164,7 @@ func TestCampaignGlobalCodeDirectory(t *testing.T) {
 	for i, tt := range tests {
 		if i == 0 {
 			t.Run(tt.name, func(t *testing.T) {
-				got, err := CampaignGlobalCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.code)
+				got, err := CampaignGlobalCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.code, true)
 				if (err != nil) != tt.wantErr {
 					t.Errorf("CampaignGlobalCodeDirectory() error = %v, wantErr %v", err, tt.wantErr)
 				}
@@ -209,7 +209,7 @@ func TestVariationGlobalCodeDirectoryJS(t *testing.T) {
 	for i, tt := range tests {
 		if i == 0 {
 			t.Run(tt.name, func(t *testing.T) {
-				got, err := VariationGlobalCodeDirectoryJS(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.code)
+				got, err := VariationGlobalCodeDirectoryJS(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.code, true)
 				if (err != nil) != tt.wantErr {
 					t.Errorf("VariationGlobalCodeDirectoryJS() error = %v, wantErr %v", err, tt.wantErr)
 				}
@@ -254,7 +254,7 @@ func TestVariationGlobalCodeDirectoryCSS(t *testing.T) {
 	for i, tt := range tests {
 		if i == 0 {
 			t.Run(tt.name, func(t *testing.T) {
-				got, err := VariationGlobalCodeDirectoryCSS(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.code)
+				got, err := VariationGlobalCodeDirectoryCSS(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.code, true)
 				if (err != nil) != tt.wantErr {
 					t.Errorf("VariationGlobalCodeDirectoryCSS() error = %v, wantErr %v", err, tt.wantErr)
 				}
@@ -303,7 +303,7 @@ func TestElementModificationCodeDirectory(t *testing.T) {
 	for i, tt := range tests {
 		if i == 0 {
 			t.Run(tt.name, func(t *testing.T) {
-				got, err := ElementModificationCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.elementID, tt.selector, []byte(tt.code))
+				got, err := ElementModificationCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.elementID, tt.selector, []byte(tt.code), true)
 				if (err != nil) != tt.wantErr {
 					t.Errorf("ElementModificationCodeDirectory() error = %v, wantErr %v", err, tt.wantErr)
 				}

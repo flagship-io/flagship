@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"github.com/flagship-io/flagship/cmd/web_experimentation/account"
-	account_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/account_global_code"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/auth"
 	"github.com/flagship-io/flagship/cmd/web_experimentation/campaign"
 	campaign_global_code "github.com/flagship-io/flagship/cmd/web_experimentation/campaign_global_code"
@@ -45,7 +44,7 @@ func addSubCommandPalettes() {
 	WebExperimentationCmd.AddCommand(auth.AuthCmd)
 	WebExperimentationCmd.AddCommand(account.AccountCmd)
 	WebExperimentationCmd.AddCommand(campaign_global_code.CampaignGlobalCodeCmd)
-	WebExperimentationCmd.AddCommand(account_global_code.AccountGlobalCodeCmd)
+	//WebExperimentationCmd.AddCommand(account_global_code.AccountGlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(variation_global_code.VariationGlobalCodeCmd)
 	WebExperimentationCmd.AddCommand(element_modification_code.ElementModificationCodeCmd)
 	WebExperimentationCmd.AddCommand(token.TokenCmd)

@@ -17,6 +17,7 @@ var WorkingDir string
 var CampaignID string
 var VariationID string
 var CreateFile bool
+var Override bool
 
 // VariationGlobalCodeCmd represents the variation global code command
 var VariationGlobalCodeCmd = &cobra.Command{

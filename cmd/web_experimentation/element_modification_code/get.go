@@ -14,6 +14,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var override bool
+
 // getCmd represents get command
 var getCmd = &cobra.Command{
 	Use:   "get [-i <modification-id> | --id <modification-id>] [--campaign-id <campaign-id>]",
@@ -48,7 +50,7 @@ var getCmd = &cobra.Command{
 
 		if CreateFile {
 			fileCode := config.AddHeaderSelectorComment(selector, code)
-			elementModificationCodeDir, err := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode)
+			elementModificationCodeDir, err := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode, override)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
@@ -68,13 +70,14 @@ func init() {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the global code modification you want to display")
+	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the element modification code you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains campaign global code")
+	getCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains element modification global code")
+	getCmd.Flags().BoolVarP(&override, "override", "", false, "override existing element modification code file")
 
 	ElementModificationCodeCmd.AddCommand(getCmd)
 }

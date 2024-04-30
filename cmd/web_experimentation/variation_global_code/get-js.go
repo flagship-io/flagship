@@ -43,7 +43,7 @@ var getJSCmd = &cobra.Command{
 		}
 
 		if CreateFile {
-			variationCodeDir, err := config.VariationGlobalCodeDirectoryJS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, jsCode)
+			variationCodeDir, err := config.VariationGlobalCodeDirectoryJS(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, VariationID, jsCode, Override)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
@@ -68,7 +68,8 @@ func init() {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getJSCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains campaign global code")
+	getJSCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains variation global code")
+	getJSCmd.Flags().BoolVarP(&Override, "override", "", false, "override existing variation global code file")
 
 	VariationGlobalCodeCmd.AddCommand(getJSCmd)
 }

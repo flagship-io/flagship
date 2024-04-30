@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
 )
 
@@ -32,11 +33,13 @@ func CheckGlobalCodeDirectory(workingDir string) (string, error) {
 	return gcWorkingDir, nil
 }
 
-func AccountGlobalCodeDirectory(workingDir, accountID, code string) (string, error) {
+func AccountGlobalCodeDirectory(workingDir, accountID, code string, override bool) (string, error) {
+
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
 	}
+
 	accountCodeDir := gcWorkingDir + "/" + accountID
 
 	err = os.MkdirAll(accountCodeDir, os.ModePerm)
@@ -45,18 +48,28 @@ func AccountGlobalCodeDirectory(workingDir, accountID, code string) (string, err
 	}
 
 	jsFilePath := accountCodeDir + "/accountGlobalCode.js"
+	if _, err := os.Stat(jsFilePath); err == nil {
+		if !override {
+			fmt.Fprintln(os.Stderr, "File already exists: "+jsFilePath)
+			return jsFilePath, nil
+		}
+	}
+
 	err = os.WriteFile(jsFilePath, []byte(code), os.ModePerm)
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Fprintln(os.Stdout, "File created: "+jsFilePath)
 	return jsFilePath, nil
 }
 
-func CampaignGlobalCodeDirectory(workingDir, accountID, campaignID, code string) (string, error) {
+func CampaignGlobalCodeDirectory(workingDir, accountID, campaignID, code string, override bool) (string, error) {
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
 	}
+
 	accountCodeDir := gcWorkingDir + "/" + accountID
 	campaignCodeDir := accountCodeDir + "/" + campaignID
 
@@ -66,19 +79,28 @@ func CampaignGlobalCodeDirectory(workingDir, accountID, campaignID, code string)
 	}
 
 	jsFilePath := campaignCodeDir + "/campaignGlobalCode.js"
+	if _, err := os.Stat(jsFilePath); err == nil {
+		if !override {
+			fmt.Fprintln(os.Stderr, "File already exists: "+jsFilePath)
+			return jsFilePath, nil
+		}
+	}
+
 	err = os.WriteFile(jsFilePath, []byte(code), os.ModePerm)
 	if err != nil {
 		return "", err
 	}
 
+	fmt.Fprintln(os.Stdout, "File created: "+jsFilePath)
 	return jsFilePath, nil
 }
 
-func VariationGlobalCodeDirectoryJS(workingDir, accountID, campaignID, variationID, code string) (string, error) {
+func VariationGlobalCodeDirectoryJS(workingDir, accountID, campaignID, variationID, code string, override bool) (string, error) {
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
 	}
+
 	accountCodeDir := gcWorkingDir + "/" + accountID
 	campaignCodeDir := accountCodeDir + "/" + campaignID
 	variationCodeDir := campaignCodeDir + "/" + variationID
@@ -89,14 +111,23 @@ func VariationGlobalCodeDirectoryJS(workingDir, accountID, campaignID, variation
 	}
 
 	jsFilePath := variationCodeDir + "/variationGlobalCode.js"
+	if _, err := os.Stat(jsFilePath); err == nil {
+		if !override {
+			fmt.Fprintln(os.Stderr, "File already exists: "+jsFilePath)
+			return jsFilePath, nil
+		}
+	}
+
 	err = os.WriteFile(jsFilePath, []byte(code), os.ModePerm)
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Fprintln(os.Stdout, "File created: "+jsFilePath)
 	return jsFilePath, nil
 }
 
-func VariationGlobalCodeDirectoryCSS(workingDir, accountID, campaignID, variationID, code string) (string, error) {
+func VariationGlobalCodeDirectoryCSS(workingDir, accountID, campaignID, variationID, code string, override bool) (string, error) {
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
@@ -111,15 +142,24 @@ func VariationGlobalCodeDirectoryCSS(workingDir, accountID, campaignID, variatio
 		return "", err
 	}
 
-	jsFilePath := variationCodeDir + "/variationGlobalCode.css"
-	err = os.WriteFile(jsFilePath, []byte(code), os.ModePerm)
+	filePath := variationCodeDir + "/variationGlobalCode.css"
+	if _, err := os.Stat(filePath); err == nil {
+		if !override {
+			fmt.Fprintln(os.Stderr, "File already exists: "+filePath)
+			return filePath, nil
+		}
+	}
+
+	err = os.WriteFile(filePath, []byte(code), os.ModePerm)
 	if err != nil {
 		return "", err
 	}
-	return jsFilePath, nil
+
+	fmt.Fprintln(os.Stdout, "File created: "+filePath)
+	return filePath, nil
 }
 
-func ElementModificationCodeDirectory(workingDir, accountID, campaignID, variationID, elementID, selector string, code []byte) (string, error) {
+func ElementModificationCodeDirectory(workingDir, accountID, campaignID, variationID, elementID, selector string, code []byte, override bool) (string, error) {
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
@@ -136,11 +176,19 @@ func ElementModificationCodeDirectory(workingDir, accountID, campaignID, variati
 	}
 
 	jsFilePath := elementCodeDir + "/element.js"
+	if _, err := os.Stat(jsFilePath); err == nil {
+		if !override {
+			fmt.Fprintln(os.Stderr, "File already exists: "+jsFilePath)
+			return jsFilePath, nil
+		}
+	}
 
 	err = os.WriteFile(jsFilePath, code, os.ModePerm)
 	if err != nil {
 		return "", err
 	}
+
+	fmt.Fprintln(os.Stdout, "File created: "+jsFilePath)
 	return jsFilePath, nil
 }
 

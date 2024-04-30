@@ -15,6 +15,7 @@ import (
 
 var accountID string
 var createFile bool
+var override bool
 
 // getCmd represents get command
 var getCmd = &cobra.Command{
@@ -28,7 +29,7 @@ var getCmd = &cobra.Command{
 		}
 
 		if createFile {
-			accountCodeDir, err := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), accountID, body)
+			accountCodeDir, err := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), accountID, body, override)
 			if err != nil {
 				log.Fatalf("error occurred: %s", err)
 			}
@@ -45,6 +46,7 @@ func init() {
 		log.Fatalf("error occurred: %v", err)
 	}
 	getCmd.Flags().BoolVarP(&createFile, "create-file", "", false, "create a file that contains account global code")
+	getCmd.Flags().BoolVarP(&override, "override", "", false, "override existing account global code file")
 
 	AccountGlobalCodeCmd.AddCommand(getCmd)
 }
