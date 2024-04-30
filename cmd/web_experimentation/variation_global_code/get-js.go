@@ -26,6 +26,7 @@ var getJSCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
+
 		variationID, err := strconv.Atoi(VariationID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)

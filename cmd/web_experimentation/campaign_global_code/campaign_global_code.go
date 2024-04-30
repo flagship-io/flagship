@@ -31,7 +31,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	cobra.OnInitialize(initGlobalCodeDir)
 	CampaignGlobalCodeCmd.PersistentFlags().StringVarP(&WorkingDir, "working-dir", "", utils.DefaultGlobalCodeWorkingDir(), "Directory where the file will be generated and pushed from")
-
 }
 
 func initConfig() {

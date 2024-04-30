@@ -8,24 +8,24 @@ import (
 )
 
 type TestStruct struct {
-	name        string
-	workingDir  string
-	want        string
-	code        string
-	accountID   string
-	campaignID  string
-	variationID string
-	elementID   string
-	selector    string
-	wantErr     bool
+	name           string
+	workingDir     string
+	want           string
+	code           string
+	accountID      string
+	campaignID     string
+	variationID    string
+	modificationID string
+	selector       string
+	wantErr        bool
 }
 
 var (
-	mockAccountID   = "123456"
-	mockCampaignID  = "100000"
-	mockVariationID = "200000"
-	mockElementID   = "300000"
-	mockSelector    = "document.querySelector('main')"
+	mockAccountID      = "123456"
+	mockCampaignID     = "100000"
+	mockVariationID    = "200000"
+	mockModificationID = "300000"
+	mockSelector       = "document.querySelector('main')"
 )
 
 func TestCheckWorkingDirectory(t *testing.T) {
@@ -267,7 +267,7 @@ func TestVariationGlobalCodeDirectoryCSS(t *testing.T) {
 	}
 }
 
-func TestElementModificationCodeDirectory(t *testing.T) {
+func TestModificationCodeDirectory(t *testing.T) {
 	currentDir, err := os.Getwd()
 	if err != nil {
 		t.Fatalf("Failed to get current working directory: %v", err)
@@ -275,40 +275,40 @@ func TestElementModificationCodeDirectory(t *testing.T) {
 
 	tests := []TestStruct{
 		{
-			name:        "ExistingDirectory",
-			workingDir:  currentDir,
-			code:        "console.log('Hello, World!')",
-			accountID:   mockAccountID,
-			campaignID:  mockCampaignID,
-			variationID: mockVariationID,
-			elementID:   mockElementID,
-			selector:    mockSelector,
-			want:        currentDir + "/abtasty/" + mockAccountID + "/" + mockCampaignID + "/" + mockVariationID + "/" + mockElementID + "/element.js",
-			wantErr:     false,
+			name:           "ExistingDirectory",
+			workingDir:     currentDir,
+			code:           "console.log('Hello, World!')",
+			accountID:      mockAccountID,
+			campaignID:     mockCampaignID,
+			variationID:    mockVariationID,
+			modificationID: mockModificationID,
+			selector:       mockSelector,
+			want:           currentDir + "/abtasty/" + mockAccountID + "/" + mockCampaignID + "/" + mockVariationID + "/" + mockModificationID + "/element.js",
+			wantErr:        false,
 		},
 		{
-			name:        "NonExistingDirectory",
-			workingDir:  "/path/to/nonexistent/directory",
-			code:        "console.log('Hello, World!')",
-			accountID:   mockAccountID,
-			campaignID:  mockCampaignID,
-			variationID: mockVariationID,
-			elementID:   mockElementID,
-			selector:    mockSelector,
-			want:        "",
-			wantErr:     true,
+			name:           "NonExistingDirectory",
+			workingDir:     "/path/to/nonexistent/directory",
+			code:           "console.log('Hello, World!')",
+			accountID:      mockAccountID,
+			campaignID:     mockCampaignID,
+			variationID:    mockVariationID,
+			modificationID: mockModificationID,
+			selector:       mockSelector,
+			want:           "",
+			wantErr:        true,
 		},
 	}
 
 	for i, tt := range tests {
 		if i == 0 {
 			t.Run(tt.name, func(t *testing.T) {
-				got, err := ElementModificationCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.elementID, tt.selector, []byte(tt.code), true)
+				got, err := ModificationCodeDirectory(tt.workingDir, tt.accountID, tt.campaignID, tt.variationID, tt.modificationID, tt.selector, []byte(tt.code), true)
 				if (err != nil) != tt.wantErr {
-					t.Errorf("ElementModificationCodeDirectory() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("ModificationCodeDirectory() error = %v, wantErr %v", err, tt.wantErr)
 				}
 				if got != tt.want {
-					t.Errorf("ElementModificationCodeDirectory() = %v, want %v", got, tt.want)
+					t.Errorf("ModificationCodeDirectory() = %v, want %v", got, tt.want)
 				}
 			})
 

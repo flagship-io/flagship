@@ -159,7 +159,7 @@ func VariationGlobalCodeDirectoryCSS(workingDir, accountID, campaignID, variatio
 	return filePath, nil
 }
 
-func ElementModificationCodeDirectory(workingDir, accountID, campaignID, variationID, elementID, selector string, code []byte, override bool) (string, error) {
+func ModificationCodeDirectory(workingDir, accountID, campaignID, variationID, modificationID, selector string, code []byte, override bool) (string, error) {
 	gcWorkingDir, err := CheckGlobalCodeDirectory(workingDir)
 	if err != nil {
 		return "", err
@@ -168,7 +168,7 @@ func ElementModificationCodeDirectory(workingDir, accountID, campaignID, variati
 	accountCodeDir := gcWorkingDir + "/" + accountID
 	campaignCodeDir := accountCodeDir + "/" + campaignID
 	variationCodeDir := campaignCodeDir + "/" + variationID
-	elementCodeDir := variationCodeDir + "/" + elementID
+	elementCodeDir := variationCodeDir + "/" + modificationID
 
 	err = os.MkdirAll(elementCodeDir, os.ModePerm)
 	if err != nil {

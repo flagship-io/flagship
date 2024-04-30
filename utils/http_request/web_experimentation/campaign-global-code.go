@@ -14,3 +14,8 @@ func (c *CampaignGlobalCodeRequester) HTTPGetCampaignGlobalCode(id string) (stri
 	resp, err := common.HTTPGetItem[models.CampaignWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + c.AccountID + "/tests/" + id)
 	return resp.GlobalCodeCampaign, err
 }
+
+func (c *CampaignGlobalCodeRequester) HTTPGetCampaignGlobalCodeInfo(id string) (models.CampaignWE, error) {
+	resp, err := common.HTTPGetItem[models.CampaignWE](utils.GetWebExperimentationHost() + "/v1/accounts/" + c.AccountID + "/tests/" + id)
+	return resp, err
+}

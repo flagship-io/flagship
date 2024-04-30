@@ -72,7 +72,7 @@ var getCmd = &cobra.Command{
 				}
 
 				fileCode := config.AddHeaderSelectorComment(modification.Selector, modification.Value)
-				config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(modification.VariationID), strconv.Itoa(modification.Id), modification.Selector, fileCode, override)
+				config.ModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(modification.VariationID), strconv.Itoa(modification.Id), modification.Selector, fileCode, override)
 			}
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Sub files code generated successfully: "+viper.GetString("working_dir")+"/abtasty")

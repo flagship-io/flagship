@@ -1,7 +1,7 @@
 /*
 Copyright © 2022 Flagship Team flagship@abtasty.com
 */
-package element_modification_code
+package modification_code
 
 import (
 	"fmt"
@@ -19,8 +19,8 @@ var override bool
 // getCmd represents get command
 var getCmd = &cobra.Command{
 	Use:   "get [-i <modification-id> | --id <modification-id>] [--campaign-id <campaign-id>]",
-	Short: "Get element modification code",
-	Long:  `Get element modification code`,
+	Short: "Get modification code",
+	Long:  `Get modification code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var code string
 		var selector string
@@ -50,12 +50,12 @@ var getCmd = &cobra.Command{
 
 		if CreateFile {
 			fileCode := config.AddHeaderSelectorComment(selector, code)
-			elementModificationCodeDir, err := config.ElementModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode, override)
+			modificationCodeDir, err := config.ModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode, override)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
 
-			fmt.Fprintln(cmd.OutOrStdout(), "Element code file generated successfully: ", elementModificationCodeDir)
+			fmt.Fprintln(cmd.OutOrStdout(), "modification code file generated successfully: ", modificationCodeDir)
 			return
 		}
 
@@ -70,14 +70,14 @@ func init() {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the element modification code you want to display")
+	getCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the  modification code you want to display")
 
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
 
-	getCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains element modification global code")
-	getCmd.Flags().BoolVarP(&override, "override", "", false, "override existing element modification code file")
+	getCmd.Flags().BoolVarP(&CreateFile, "create-file", "", false, "create a file that contains modification global code")
+	getCmd.Flags().BoolVarP(&override, "override", "", false, "override existing modification code file")
 
-	ElementModificationCodeCmd.AddCommand(getCmd)
+	ModificationCodeCmd.AddCommand(getCmd)
 }
