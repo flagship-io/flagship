@@ -148,8 +148,11 @@ func Init(credL common.RequestConfig) {
 }
 
 type ResourceCmdStruct struct {
-	Name string `json:"name,omitempty"`
-	Data string `json:"data,omitempty"`
+	Name             string `json:"name,omitempty"`
+	ResourceVariable string `json:"resource_variable,omitempty"`
+	Response         string `json:"response,omitempty"`
+	Method           string `json:"method,omitempty"`
+	Error            string `json:"error,omitempty"`
 }
 
 func UnmarshalConfig(filePath string) ([]Resource, error) {
@@ -235,6 +238,7 @@ var loadCmd = &cobra.Command{
 				return
 			}
 		}
+
 		jsonBytes := ScriptResource(cmd, gResources, inputParamsMap)
 		if outputFile != "" {
 			os.WriteFile(outputFile, jsonBytes, os.ModePerm)
@@ -333,21 +337,31 @@ func ScriptResource(cmd *cobra.Command, resources []Resource, inputParamsMap map
 			fmt.Fprintf(os.Stderr, "error occurred unmarshall resourceData: %v\n", err)
 		}
 
-		for k, vInterface := range resourceData {
-			v, ok := vInterface.(string)
-			if ok {
-				if strings.Contains(v, "$") {
-					vTrim := strings.Trim(v, "$")
-					if inputParamsMap != nil {
+		if inputParamsMap != nil {
+			for k, vInterface := range resourceData {
+				v, ok := vInterface.(string)
+				if ok {
+					if strings.Contains(v, "$") {
+						vTrim := strings.Trim(v, "$")
 						vTrimL := strings.Split(vTrim, ".")
 						value, err := getNestedValue(inputParamsMap, vTrimL)
 						if err != nil {
 							fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 						}
+
 						if value != nil {
 							resourceData[k] = value
 						}
 					}
+				}
+			}
+		}
+
+		for k, vInterface := range resourceData {
+			v, ok := vInterface.(string)
+			if ok {
+				if strings.Contains(v, "$") {
+					vTrim := strings.Trim(v, "$")
 					for k_, variable := range resourceVariables {
 						script, _ := tengo.Eval(context.Background(), vTrim, map[string]interface{}{
 							k_: variable,
@@ -376,11 +390,17 @@ func ScriptResource(cmd *cobra.Command, resources []Resource, inputParamsMap map
 			}
 
 			resultOutputFile = ResourceCmdStruct{
-				Name: resourceName,
-				Data: string(response),
+				Name:             resourceName,
+				Response:         string(response),
+				ResourceVariable: resource.ResourceVariable,
+				Method:           httpMethod,
 			}
-			loadResultOutputFile = append(loadResultOutputFile, resultOutputFile)
 
+			if err != nil {
+				resultOutputFile.Error = err.Error()
+			}
+
+			loadResultOutputFile = append(loadResultOutputFile, resultOutputFile)
 		}
 
 		if httpMethod == "DELETE" {
@@ -391,13 +411,15 @@ func ScriptResource(cmd *cobra.Command, resources []Resource, inputParamsMap map
 			if resource.Name == Goal || resource.Name == Campaign {
 				_, err = common.HTTPRequest[ResourceData](httpMethod, utils.GetFeatureExperimentationHost()+"/v1/accounts/"+cred.AccountID+"/account_environments/"+cred.AccountEnvironmentID+url+"/"+fmt.Sprintf("%s", resourceData["id"]), nil)
 			}
+
 			if err == nil && viper.GetString("output_format") != "json" {
 				response = []byte("The id: " + fmt.Sprintf("%v", resourceData["id"]) + " deleted successfully")
 			}
 		}
 
 		if err != nil {
-			log.Fatalf("error occurred http call: %v\n", err)
+			fmt.Fprintf(cmd.OutOrStdout(), "%s - %s: %s %s\n", color, resourceName, colorNone, err.Error())
+			continue
 		}
 
 		if viper.GetString("output_format") != "json" {

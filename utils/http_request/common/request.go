@@ -9,7 +9,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"reflect"
 	"regexp"
 	"strings"
@@ -185,8 +184,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	match, _ := regexp.MatchString("4\\d\\d|5\\d\\d", resp.Status)
 	if match {
 		err := errors.New(string(respBody))
-		fmt.Fprintf(os.Stderr, "error occurred: %v", err)
-		os.Exit(1)
+		return nil, err
 	}
 
 	return respBody, err
