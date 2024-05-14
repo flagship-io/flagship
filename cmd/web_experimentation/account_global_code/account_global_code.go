@@ -14,10 +14,11 @@ import (
 )
 
 var WorkingDir string
+var AccountID string
 
 // AccountGlobalCodeCmd represents the account global code command
 var AccountGlobalCodeCmd = &cobra.Command{
-	Use:     "account-global-code [get]",
+	Use:     "account-global-code [get|push]",
 	Short:   "Get account global code",
 	Aliases: []string{"agc"},
 	Long:    `Get account global code`,

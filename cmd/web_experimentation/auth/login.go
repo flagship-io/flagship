@@ -19,25 +19,13 @@ var (
 	accountId       string
 )
 
-func checkSingleFlag(bool1, bool2 bool) bool {
-	count := 0
-	if bool1 {
-		count++
-	}
-	if bool2 {
-		count++
-	}
-
-	return count == 1
-}
-
 // createCmd represents the create command
 var loginCmd = &cobra.Command{
 	Use:   "login [--credential-file] | [-u <username> | --username=<username>] [-i <clientID> | --client-id=<clientID>] [-s <clientSecret> | --client-secret=<clientSecret>] [-a <accountID> | --account-id=<accountID>]",
 	Short: "login",
 	Long:  `login`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !checkSingleFlag(credentialsFile != "", Username != "") {
+		if !utils.CheckSingleFlag(credentialsFile != "", Username != "") {
 			log.Fatalf("error occurred: %s", "1 flag is required. (browser, username)")
 		}
 
@@ -51,6 +39,7 @@ var loginCmd = &cobra.Command{
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
 				return
 			}
+
 			authenticationResponse, err := common.HTTPCreateTokenWE(v.GetString("client_id"), v.GetString("client_secret"), v.GetString("account_id"))
 			if err != nil {
 				fmt.Fprintf(cmd.OutOrStderr(), "error occurred: %s", err)
@@ -98,6 +87,7 @@ var loginCmd = &cobra.Command{
 					fmt.Fprintln(cmd.OutOrStdout(), "Credential changed successfully to "+Username)
 					return
 				}
+
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (account id)")
 				return
 			}
@@ -106,6 +96,7 @@ var loginCmd = &cobra.Command{
 				fmt.Fprintln(cmd.OutOrStderr(), "Error while login, required fields (username, client ID, client secret, account id)")
 				return
 			}
+
 			authenticationResponse, err := common.HTTPCreateTokenWE(ClientID, ClientSecret, accountId)
 			if err != nil {
 				fmt.Fprintln(cmd.OutOrStderr(), err)
@@ -134,7 +125,6 @@ var loginCmd = &cobra.Command{
 
 			fmt.Fprintln(cmd.OutOrStdout(), "Credential created successfully")
 		}
-
 	},
 }
 

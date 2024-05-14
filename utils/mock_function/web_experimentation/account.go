@@ -55,4 +55,11 @@ func APIAccount() {
 			return resp, nil
 		},
 	)
+
+	httpmock.RegisterResponder("PATCH", utils.GetWebExperimentationHost()+"/v1/accounts/"+accountID,
+		func(req *http.Request) (*http.Response, error) {
+			resp, _ := httpmock.NewJsonResponse(200, TestAccountGlobalCode)
+			return resp, nil
+		},
+	)
 }

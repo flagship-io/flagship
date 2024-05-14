@@ -56,4 +56,11 @@ func APICampaign() {
 			return resp, nil
 		},
 	)
+
+	httpmock.RegisterResponder("PATCH", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id),
+		func(req *http.Request) (*http.Response, error) {
+			resp, _ := httpmock.NewJsonResponse(200, TestCampaign)
+			return resp, nil
+		},
+	)
 }

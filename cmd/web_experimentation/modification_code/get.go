@@ -8,6 +8,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils/config"
 	httprequest "github.com/flagship-io/flagship/utils/http_request"
 	"github.com/spf13/cobra"
@@ -22,9 +23,7 @@ var getCmd = &cobra.Command{
 	Short: "Get modification code",
 	Long:  `Get modification code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var code string
-		var selector string
-		var variationID int
+		var modif *web_experimentation.Modification
 
 		campaignID, err := strconv.Atoi(CampaignID)
 		if err != nil {
@@ -42,15 +41,17 @@ var getCmd = &cobra.Command{
 
 		for _, modification := range body {
 			if modification.Type == "customScriptNew" && modification.Selector != "" {
-				code = modification.Value
-				selector = modification.Selector
-				variationID = modification.VariationID
+				modif = &modification
 			}
 		}
 
+		if modif == nil {
+			log.Fatalf("error occurred: no modification found")
+		}
+
 		if CreateFile {
-			fileCode := config.AddHeaderSelectorComment(selector, code)
-			modificationCodeDir, err := config.ModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(variationID), ModificationID, selector, fileCode, override)
+			fileCode := config.AddHeaderSelectorComment(modif.Selector, modif.Value)
+			modificationCodeDir, err := config.ModificationCodeDirectory(viper.GetString("working_dir"), httprequest.CampaignGlobalCodeRequester.AccountID, CampaignID, strconv.Itoa(modif.VariationID), ModificationID, modif.Selector, fileCode, override)
 			if err != nil {
 				log.Fatalf("error occurred: %v", err)
 			}
@@ -59,7 +60,7 @@ var getCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Fprintln(cmd.OutOrStdout(), string(code))
+		fmt.Fprintln(cmd.OutOrStdout(), string(modif.Value))
 	},
 }
 

@@ -13,7 +13,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var accountID string
 var createFile bool
 var override bool
 
@@ -23,28 +22,30 @@ var getCmd = &cobra.Command{
 	Short: "Get account global code",
 	Long:  `Get account global code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		body, err := httprequest.AccountGlobalCodeRequester.HTTPGetAccountGlobalCode(accountID)
+		body, err := httprequest.AccountGlobalCodeRequester.HTTPGetAccountGlobalCode(AccountID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
 
 		if createFile {
-			accountCodeDir, err := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), accountID, body, override)
+			accountCodeDir, err := config.AccountGlobalCodeDirectory(viper.GetString("working_dir"), AccountID, body, override)
 			if err != nil {
 				log.Fatalf("error occurred: %s", err)
 			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Account code file generated successfully: ", accountCodeDir)
 			return
 		}
+
 		fmt.Fprintln(cmd.OutOrStdout(), body)
 	},
 }
 
 func init() {
-	getCmd.Flags().StringVarP(&accountID, "id", "i", "", "id of the global code account you want to display")
+	getCmd.Flags().StringVarP(&AccountID, "id", "i", "", "id of the global code account you want to display")
 	if err := getCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatalf("error occurred: %v", err)
 	}
+
 	getCmd.Flags().BoolVarP(&createFile, "create-file", "", false, "create a file that contains account global code")
 	getCmd.Flags().BoolVarP(&override, "override", "", false, "override existing account global code file")
 
