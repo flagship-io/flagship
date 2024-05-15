@@ -89,4 +89,11 @@ func APIModification() {
 			return resp, nil
 		},
 	)
+
+	httpmock.RegisterResponder("DELETE", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id)+"/modifications/"+strconv.Itoa(TestElementModification.Id),
+		func(req *http.Request) (*http.Response, error) {
+			return httpmock.NewStringResponse(204, ""), nil
+
+		},
+	)
 }

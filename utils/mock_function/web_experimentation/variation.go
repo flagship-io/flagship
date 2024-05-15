@@ -25,4 +25,10 @@ func APIVariation() {
 		},
 	)
 
+	httpmock.RegisterResponder("DELETE", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id)+"/variations/"+strconv.Itoa(TestVariation.Id),
+		func(req *http.Request) (*http.Response, error) {
+			return httpmock.NewStringResponse(204, ""), nil
+		},
+	)
+
 }

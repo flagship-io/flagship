@@ -64,3 +64,12 @@ func TestModificationListCommand(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, []models.Modification{mockfunction_we.TestModificationsJS, mockfunction_we.TestModificationsCSS}, testModificationList)
 }
+
+func TestModificationDeleteCommand(t *testing.T) {
+
+	failOutput, _ := utils.ExecuteCommand(ModificationCmd, "delete")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
+
+	successOutput, _ := utils.ExecuteCommand(ModificationCmd, "delete", "--campaign-id=100000", "--id=120003")
+	assert.Equal(t, "Modification deleted\n", successOutput)
+}

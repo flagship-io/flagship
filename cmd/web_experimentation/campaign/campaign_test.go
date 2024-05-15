@@ -61,5 +61,14 @@ func TestCampaignListCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, mockfunction_we.TestCampaignlist, testCampaignList)
+	assert.Equal(t, mockfunction_we.TestCampaignList, testCampaignList)
+}
+
+func TestCampaignDeleteCommand(t *testing.T) {
+
+	failOutput, _ := utils.ExecuteCommand(CampaignCmd, "delete")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
+
+	successOutput, _ := utils.ExecuteCommand(CampaignCmd, "delete", "--id=100000")
+	assert.Equal(t, "Campaign deleted\n", successOutput)
 }

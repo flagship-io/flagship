@@ -32,3 +32,10 @@ func TestHTTPGetModification(t *testing.T) {
 	assert.Equal(t, []models.Modification{web_experimentation.TestModification.Data.Modifications[0]}, respBody)
 
 }
+
+func TestHTTPDeleteModification(t *testing.T) {
+
+	err := modificationRequester.HTTPDeleteModification(100000, 120003)
+
+	assert.Nil(t, err)
+}

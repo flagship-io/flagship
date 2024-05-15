@@ -26,7 +26,7 @@ var TestCampaign1 = models.CampaignWE{
 	GlobalCodeCampaign: "console.log(\"Hello Earth!\")",
 }
 
-var TestCampaignlist = []models.CampaignWE{
+var TestCampaignList = []models.CampaignWE{
 	TestCampaign,
 	TestCampaign1,
 }
@@ -34,7 +34,7 @@ var TestCampaignlist = []models.CampaignWE{
 func APICampaign() {
 
 	respList := utils.HTTPListResponseWE[models.CampaignWE]{
-		Data: TestCampaignlist,
+		Data: TestCampaignList,
 		Pagination: utils.Pagination{
 			Total:      1,
 			Pages:      2,
@@ -61,6 +61,12 @@ func APICampaign() {
 		func(req *http.Request) (*http.Response, error) {
 			resp, _ := httpmock.NewJsonResponse(200, TestCampaign)
 			return resp, nil
+		},
+	)
+
+	httpmock.RegisterResponder("DELETE", utils.GetWebExperimentationHost()+"/v1/accounts/"+mockfunction.Auth.AccountID+"/tests/"+strconv.Itoa(TestCampaign.Id),
+		func(req *http.Request) (*http.Response, error) {
+			return httpmock.NewStringResponse(204, ""), nil
 		},
 	)
 }

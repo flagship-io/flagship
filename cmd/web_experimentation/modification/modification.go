@@ -18,7 +18,7 @@ var (
 
 // modificationCmd represents the modification command
 var ModificationCmd = &cobra.Command{
-	Use:   "modification [get|list|delete|switch]",
+	Use:   "modification [get|list|delete]",
 	Short: "Manage your modifications",
 	Long:  `Manage your modifications`,
 	Run: func(cmd *cobra.Command, args []string) {

@@ -50,3 +50,12 @@ func TestVariationGetCommand(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, mockfunction_we.TestVariation, testVariation)
 }
+
+func TestVariationDeleteCommand(t *testing.T) {
+
+	failOutput, _ := utils.ExecuteCommand(VariationCmd, "delete")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"id\" not set")
+
+	successOutput, _ := utils.ExecuteCommand(VariationCmd, "delete", "--campaign-id=100000", "--id=110000")
+	assert.Equal(t, "Variation deleted\n", successOutput)
+}

@@ -44,3 +44,10 @@ func TestHTTPListCampaign(t *testing.T) {
 	assert.Equal(t, "ab", respBody[1].Type)
 
 }
+
+func TestHTTPDeleteCampaign(t *testing.T) {
+
+	err := campaignRequester.HTTPDeleteCampaign("100000")
+
+	assert.Nil(t, err)
+}

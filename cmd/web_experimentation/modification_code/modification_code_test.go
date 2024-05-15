@@ -42,7 +42,7 @@ func TestModificationCodeHelpCommand(t *testing.T) {
 
 func TestModificationCodeGetCommand(t *testing.T) {
 	failOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "get")
-	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\n")
 
 	successOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "get", "-i=120003", "--campaign-id=100000")
 	assert.Equal(t, "console.log(\"test modification\")\n", successOutput)
@@ -52,7 +52,7 @@ func TestModificationCodePushCommand(t *testing.T) {
 	var testModification models.Modification
 
 	failOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "push")
-	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\" not set")
 
 	successOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "push", "-i=120003", "--campaign-id=100000", "--code=console.log(\"test modification\")")
 	err := json.Unmarshal([]byte(successOutput), &testModification)

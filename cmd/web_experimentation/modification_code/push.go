@@ -27,7 +27,6 @@ var pushCmd = &cobra.Command{
 	Long:  `push modification code`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var codeByte []byte
-		var modification_ web_experimentation.Modification
 
 		if !utils.CheckSingleFlag(filePath != "", code != "") {
 			log.Fatalf("error occurred: %s", "1 flag is required. (file, code)")
@@ -36,27 +35,6 @@ var pushCmd = &cobra.Command{
 		campaignID, err := strconv.Atoi(CampaignID)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
-		}
-
-		variationID_, err := strconv.Atoi(variationID)
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-
-		modificationID, err := strconv.Atoi(ModificationID)
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-
-		modifList, err := httprequest.ModificationRequester.HTTPGetModification(campaignID, modificationID)
-		if err != nil {
-			log.Fatalf("error occurred: %v", err)
-		}
-
-		for _, modification := range modifList {
-			if modification.Type == "customScriptNew" && modification.Selector != "" {
-				modification_ = modification
-			}
 		}
 
 		if filePath != "" {
@@ -72,14 +50,14 @@ var pushCmd = &cobra.Command{
 			codeByte = []byte(code)
 		}
 
-		selector_ := modification_.Selector
-		if selector != "" {
-			selector_ = selector
-		}
-
-		if modification_ == (web_experimentation.Modification{}) {
-			if variationID_ == 0 && selector == "" {
+		if ModificationID == "" {
+			if variationID == "" && selector == "" {
 				log.Fatalf("error occurred: Flag variation-id and selector are required.")
+			}
+
+			variationID_, err := strconv.Atoi(variationID)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
 			}
 
 			modificationToPush := web_experimentation.ModificationCodeCreateStruct{
@@ -101,16 +79,37 @@ var pushCmd = &cobra.Command{
 			return
 		}
 
-		modificationToPush := web_experimentation.ModificationCodeEditStruct{
-			InputType: "modification",
-			Name:      modification_.Name,
-			Value:     string(codeByte),
-			Selector:  selector_,
-			Type:      modification_.Type,
-			Engine:    modification_.Engine,
+		modificationID, err := strconv.Atoi(ModificationID)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
 		}
 
-		body, err := httprequest.ModificationRequester.HTTPEditModification(campaignID, modification_.Id, modificationToPush)
+		modificationList, err := httprequest.ModificationRequester.HTTPGetModification(campaignID, modificationID)
+		if err != nil {
+			log.Fatalf("error occurred: %v", err)
+		}
+
+		if len(modificationList) == 0 {
+			log.Fatalf("error occurred: Modification not found.")
+		}
+
+		modification := modificationList[0]
+
+		selector_ := modification.Selector
+		if selector != "" {
+			selector_ = selector
+		}
+
+		modificationToPush := web_experimentation.ModificationCodeEditStruct{
+			InputType: "modification",
+			Name:      modification.Name,
+			Value:     string(codeByte),
+			Selector:  selector_,
+			Type:      modification.Type,
+			Engine:    modification.Engine,
+		}
+
+		body, err := httprequest.ModificationRequester.HTTPEditModification(campaignID, modification.Id, modificationToPush)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
@@ -127,11 +126,6 @@ func init() {
 	}
 
 	pushCmd.Flags().StringVarP(&ModificationID, "id", "i", "", "id of the modification code")
-
-	if err := pushCmd.MarkFlagRequired("id"); err != nil {
-		log.Fatalf("error occurred: %v", err)
-	}
-
 	pushCmd.Flags().StringVarP(&variationID, "variation-id", "", "", "id of the variation")
 	pushCmd.Flags().StringVarP(&code, "code", "c", "", "new code to push in the modification")
 	pushCmd.Flags().StringVarP(&selector, "selector", "", "", "new selector to push in the modification")

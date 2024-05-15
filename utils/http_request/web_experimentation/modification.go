@@ -42,3 +42,8 @@ func (m *ModificationRequester) HTTPCreateModification(campaignID int, modificat
 
 	return common.HTTPRequest[models.ModificationDataWE](http.MethodPost, utils.GetWebExperimentationHost()+"/v1/accounts/"+m.AccountID+"/tests/"+strconv.Itoa(campaignID)+"/modifications", data)
 }
+
+func (m *ModificationRequester) HTTPDeleteModification(campaignID int, id int) error {
+	_, err := common.HTTPRequest[models.ModificationDataWE](http.MethodDelete, utils.GetWebExperimentationHost()+"/v1/accounts/"+m.AccountID+"/tests/"+strconv.Itoa(campaignID)+"/modifications/"+strconv.Itoa(id)+"?input_type=modification", nil)
+	return err
+}
