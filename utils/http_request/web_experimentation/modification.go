@@ -25,7 +25,7 @@ func (m *ModificationRequester) HTTPGetModification(campaignID int, id int) ([]m
 	return resp.Data.Modifications, err
 }
 
-func (m *ModificationRequester) HTTPEditModification(campaignID int, id int, modificationData web_experimentation.ModificationCodeStr) ([]byte, error) {
+func (m *ModificationRequester) HTTPEditModification(campaignID int, id int, modificationData web_experimentation.ModificationCodeEditStruct) ([]byte, error) {
 	data, err := json.Marshal(modificationData)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (m *ModificationRequester) HTTPEditModification(campaignID int, id int, mod
 	return common.HTTPRequest[models.ModificationDataWE](http.MethodPatch, utils.GetWebExperimentationHost()+"/v1/accounts/"+m.AccountID+"/tests/"+strconv.Itoa(campaignID)+"/modifications/"+strconv.Itoa(id), data)
 }
 
-func (m *ModificationRequester) HTTPCreateModification(campaignID int, modificationData web_experimentation.ModificationCodeStr) ([]byte, error) {
+func (m *ModificationRequester) HTTPCreateModification(campaignID int, modificationData web_experimentation.ModificationCodeCreateStruct) ([]byte, error) {
 	data, err := json.Marshal(modificationData)
 	if err != nil {
 		return nil, err

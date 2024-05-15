@@ -23,9 +23,10 @@ import (
 )
 
 var (
-	resourceFile string
-	outputFile   string
-	inputParams  string
+	resourceFile    string
+	outputFile      string
+	inputParams     string
+	inputParamsFile string
 )
 
 var inputParamsMap map[string]interface{}
@@ -231,12 +232,30 @@ var loadCmd = &cobra.Command{
 	Short: "Load your resources",
 	Long:  `Load your resources`,
 	Run: func(cmd *cobra.Command, args []string) {
+		var params []byte
+
+		if !utils.CheckSingleFlag(inputParams != "", inputParamsFile != "") {
+			log.Fatalf("error occurred: %s", "1 flag is required. (input-params, input-params-file)")
+		}
+
 		if inputParams != "" {
-			err := json.Unmarshal([]byte(inputParams), &inputParamsMap)
+			params = []byte(inputParams)
+
+		}
+
+		if inputParamsFile != "" {
+			fileContent, err := os.ReadFile(inputParamsFile)
 			if err != nil {
-				fmt.Fprintf(cmd.OutOrStderr(), "Error: %s", err)
-				return
+				log.Fatalf("error occurred: %s", err)
 			}
+
+			params = fileContent
+		}
+
+		err := json.Unmarshal(params, &inputParamsMap)
+		if err != nil {
+			fmt.Fprintf(cmd.OutOrStderr(), "Error: %s", err)
+			return
 		}
 
 		jsonBytes := ScriptResource(cmd, gResources, inputParamsMap)
@@ -264,6 +283,7 @@ func init() {
 	loadCmd.Flags().StringVarP(&outputFile, "output-file", "", "", "result of the command that contains all resource informations")
 
 	loadCmd.Flags().StringVarP(&inputParams, "input-params", "", "", "params to replace resource loader file")
+	loadCmd.Flags().StringVarP(&inputParamsFile, "input-params-file", "", "", "file that contains params to replace resource loader file")
 
 	ResourceCmd.AddCommand(loadCmd)
 }

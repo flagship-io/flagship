@@ -24,7 +24,7 @@ var pushJSCmd = &cobra.Command{
 	Short: "push variation global js code",
 	Long:  `push variation global js code`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var modifId int
+		var modificationId int
 		var codeByte []byte
 
 		if !utils.CheckSingleFlag(jsFilePath != "", jsCode != "") {
@@ -48,12 +48,8 @@ var pushJSCmd = &cobra.Command{
 
 		for _, modification := range modifList {
 			if modification.VariationID == variationID && modification.Type == "customScriptNew" && modification.Selector == "" {
-				modifId = modification.Id
+				modificationId = modification.Id
 			}
-		}
-
-		if modifId == 0 {
-			log.Fatalf("error occurred: no global variation found")
 		}
 
 		if jsFilePath != "" {
@@ -69,12 +65,32 @@ var pushJSCmd = &cobra.Command{
 			codeByte = []byte(jsCode)
 		}
 
-		modifToPush := web_experimentation.ModificationCodeStr{
+		if modificationId == 0 {
+			modificationToPush := web_experimentation.ModificationCodeCreateStruct{
+				InputType:   "modification",
+				Name:        "",
+				Value:       string(codeByte),
+				Selector:    "",
+				Type:        "customScriptNew",
+				Engine:      "",
+				VariationID: variationID,
+			}
+
+			body, err := httprequest.ModificationRequester.HTTPCreateModification(campaignID, modificationToPush)
+			if err != nil {
+				log.Fatalf("error occurred: %v", err)
+			}
+
+			fmt.Fprintln(cmd.OutOrStdout(), string(body))
+			return
+		}
+
+		modificationToPush := web_experimentation.ModificationCodeEditStruct{
 			InputType: "modification",
 			Value:     string(codeByte),
 		}
 
-		body, err := httprequest.ModificationRequester.HTTPEditModification(campaignID, modifId, modifToPush)
+		body, err := httprequest.ModificationRequester.HTTPEditModification(campaignID, modificationId, modificationToPush)
 		if err != nil {
 			log.Fatalf("error occurred: %v", err)
 		}
