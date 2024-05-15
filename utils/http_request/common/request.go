@@ -170,6 +170,7 @@ func HTTPRequest[T any](method string, url string, body []byte) ([]byte, error) 
 	default:
 		reader = resp.Body
 	}
+
 	respBody, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err

@@ -79,3 +79,30 @@ func TestVariationGlobalCodeInfoJSCommand(t *testing.T) {
 
 	assert.Equal(t, mockfunction_we.TestModificationsJS, testModification)
 }
+
+func TestVariationGlobalCodePushJSCommand(t *testing.T) {
+	var testModification models.Modification
+
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "push-js")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "push-js", "-i=110000", "--campaign-id=100000", "--code=console.log(\"test modification\")")
+	err := json.Unmarshal([]byte(successOutput), &testModification)
+
+	assert.Nil(t, err)
+	assert.Equal(t, mockfunction_we.TestModificationsJS, testModification)
+}
+
+func TestVariationGlobalCodePushCSSCommand(t *testing.T) {
+	var testModification models.Modification
+
+	failOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "push-css")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set\nUsage")
+
+	successOutput, _ := utils.ExecuteCommand(VariationGlobalCodeCmd, "push-css", "-i=110000", "--campaign-id=100000", "--code=.id{\"color\": \"black\"}")
+	err := json.Unmarshal([]byte(successOutput), &testModification)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, mockfunction_we.TestModificationsCSS, testModification)
+}

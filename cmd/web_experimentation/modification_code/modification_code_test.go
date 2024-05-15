@@ -5,8 +5,10 @@ Copyright © 2022 Flagship Team flagship@abtasty.com
 package modification_code
 
 import (
+	"encoding/json"
 	"testing"
 
+	models "github.com/flagship-io/flagship/models/web_experimentation"
 	"github.com/flagship-io/flagship/utils"
 	"github.com/flagship-io/flagship/utils/http_request"
 	mockfunction "github.com/flagship-io/flagship/utils/mock_function"
@@ -44,4 +46,17 @@ func TestModificationCodeGetCommand(t *testing.T) {
 
 	successOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "get", "-i=120003", "--campaign-id=100000")
 	assert.Equal(t, "console.log(\"test modification\")\n", successOutput)
+}
+
+func TestModificationCodePushCommand(t *testing.T) {
+	var testModification models.Modification
+
+	failOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "push")
+	assert.Contains(t, failOutput, "Error: required flag(s) \"campaign-id\", \"id\" not set")
+
+	successOutput, _ := utils.ExecuteCommand(ModificationCodeCmd, "push", "-i=120003", "--campaign-id=100000", "--code=console.log(\"test modification\")")
+	err := json.Unmarshal([]byte(successOutput), &testModification)
+
+	assert.Nil(t, err)
+	assert.Equal(t, mockfunction_we.TestElementModification, testModification)
 }

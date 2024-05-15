@@ -43,3 +43,15 @@ func ExecuteCommand(cmd *cobra.Command, args ...string) (output string, err erro
 
 	return buf.String(), err
 }
+
+func CheckSingleFlag(bool1, bool2 bool) bool {
+	count := 0
+	if bool1 {
+		count++
+	}
+	if bool2 {
+		count++
+	}
+
+	return count == 1
+}

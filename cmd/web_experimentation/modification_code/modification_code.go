@@ -20,7 +20,7 @@ var CreateFile bool
 
 // ModificationCodeCmd represents the variation global code command
 var ModificationCodeCmd = &cobra.Command{
-	Use:     "modification-code [get]",
+	Use:     "modification-code [get|push]",
 	Short:   "Get modification code",
 	Aliases: []string{"mc"},
 	Long:    `Get modification code`,
